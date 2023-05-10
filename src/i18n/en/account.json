@@ -1,0 +1,19 @@
+{
+  "title": "Account",
+  "requests": "Requests",
+  "email": "Email",
+  "name": "Name",
+  "phone": "Phone",
+  "role": {
+    "title": "Role",
+    "VOLUNTEER": "Volunteer",
+    "ADMIN": "Administrator",
+    "DONOR": "Donor",
+    "MILITARY": "Military",
+    "REFUGEE": "Refugee"
+  },
+  "interests": "Interests",
+  "created": "Created",
+  "noName": "No name provided",
+  "emptyField": "Was not provided"
+}

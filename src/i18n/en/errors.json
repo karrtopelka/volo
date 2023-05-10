@@ -1,0 +1,12 @@
+{
+  "validation": {
+    "required": "This field is required",
+    "email": "Email is not valid",
+    "passwordLength": "Password must be at least 8 characters",
+    "passwordConfirmation": "Password confirmation does not match password"
+  },
+  "requiredData": {
+    "location": "Permission to access location was denied",
+    "noAccess": "You landed here because maybe you have VPN or proxy enabled. Please disable it and try again. If no luck, then you are not allowed to access this app. If you think it is error please contact us via email: support@volo.com"
+  }
+}
