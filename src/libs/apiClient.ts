@@ -4,7 +4,7 @@ import qs from 'qs'
 
 function getApiClient(): AxiosInstance {
   return axios.create({
-    baseURL: API_URL ?? 'http://localhost:3001',
+    baseURL: API_URL ?? 'http://localhost:3000',
     paramsSerializer: {
       serialize: (params) => qs.stringify(params, { arrayFormat: 'comma' }),
     },

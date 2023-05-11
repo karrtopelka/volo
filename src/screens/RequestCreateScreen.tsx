@@ -78,10 +78,7 @@ export const RequestCreateScreen = ({
   route,
 }: RequestCreateScreenProps): JSX.Element => {
   const { id } = route.params
-
-  console.log('🚀 ~ file: RequestCreateScreen.tsx:81 ~ id:', id)
   const { data, isInitialLoading, isRefetching } = useRequest({ id })
-
   const { i18n } = useTranslation()
   const { data: tags } = useTags()
   const { data: categories } = useCategories()

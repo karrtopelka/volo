@@ -10,8 +10,6 @@ import {
 import { Button } from '@ui-kitten/components'
 import { getValidationErrorMessage } from '@/utils'
 import { Image } from 'react-native'
-// import { useSupabase } from '@/contexts'
-import { useMe } from '@/hooks'
 import { storageClient } from '@/libs'
 import { decode } from 'base64-arraybuffer'
 
@@ -31,7 +29,6 @@ export const ControlledPhotoInput = <T extends FieldValues>({
   ...inputProps
 }: ControlledPhotoInputProps<T>): JSX.Element => {
   const [image, setImage] = useState<null | string>(null)
-  const { data: me } = useMe()
 
   const {
     field: { onChange, value },
@@ -53,12 +50,11 @@ export const ControlledPhotoInput = <T extends FieldValues>({
     })
 
     if (!result.canceled) {
-      const fileName = result.assets[0].uri.split('/')
       const base64 = result.assets[0].base64!
 
       const { data, error } = await storageClient
         .from('avatars')
-        .upload(`${me?.id}-${fileName[fileName.length - 1]}`, decode(base64), {
+        .upload(`${Date.now()}`, decode(base64), {
           cacheControl: '3600',
           upsert: false,
           contentType: 'image/png',

@@ -20,9 +20,13 @@ import { Routes } from '@/constants'
 
 export type RequestCardProps = {
   request: Request
+  maxW?: number | string
 }
 
-export const RequestCard = ({ request }: RequestCardProps): JSX.Element => {
+export const RequestCard = ({
+  request,
+  maxW = 80,
+}: RequestCardProps): JSX.Element => {
   const { i18n } = useTranslation()
   const navigation = useNavigation<NavigationProp<MainTabsParamList>>()
 
@@ -40,7 +44,7 @@ export const RequestCard = ({ request }: RequestCardProps): JSX.Element => {
   return (
     <Pressable onPress={handleCardClick}>
       <Box
-        maxW="80"
+        maxW={maxW}
         rounded="lg"
         overflow="hidden"
         borderColor="coolGray.200"
