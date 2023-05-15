@@ -47,7 +47,7 @@ export type Categories = Category[]
 export type Request = {
   id: number
   title: string
-  description: string | null
+  description: string
   categoryId: number
   category: Category
   type: RequestType
