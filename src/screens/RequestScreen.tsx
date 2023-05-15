@@ -27,28 +27,20 @@ export const RequestScreen = ({ route }: RequestScreenProps): JSX.Element => {
 
   const navigation = useNavigation<NavigationProp<MainTabsParamList>>()
 
-  const handleNavigation = () => {
-    // clear navigation stack
-    navigation.reset({
-      index: 0,
-      routes: [{ name: Routes.REQUEST }],
-    })
-
-    // navigate to REQUEST_CREATE screen
+  const handleNavigateToEditScreen = () =>
     navigation.navigate(Routes.REQUEST_CREATE, { id })
-  }
 
   useEffect(() => {
     if (isSelfRequest) {
       navigation.setOptions({
         headerRight: () => (
-          <Button appearance="ghost" onPress={handleNavigation}>
+          <Button appearance="ghost" onPress={handleNavigateToEditScreen}>
             Змінити
           </Button>
         ),
       })
     }
-  }, [isSelfRequest])
+  }, [isSelfRequest, id])
 
   if (isLoading) {
     return (

@@ -4,7 +4,7 @@ import qs from 'qs'
 
 function getApiClient(): AxiosInstance {
   return axios.create({
-    baseURL: API_URL ?? 'https://c255-91-201-235-235.ngrok-free.app',
+    baseURL: API_URL ?? 'https://93c7-91-201-235-235.ngrok-free.app',
     paramsSerializer: {
       serialize: (params) => qs.stringify(params, { arrayFormat: 'comma' }),
     },
