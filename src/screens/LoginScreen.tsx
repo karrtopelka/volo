@@ -1,4 +1,9 @@
-import { CardAttribute, ControlledInput, SelectLanguage } from '@/components'
+import {
+  CardAttribute,
+  ControlledInput,
+  Layout,
+  SelectLanguage,
+} from '@/components'
 import { useAuthContext, useMutationWrapper, useSignIn } from '@/hooks'
 import { Button, Card, CheckBox, Spinner, Text } from '@ui-kitten/components'
 import { Box, VStack } from 'native-base'
@@ -93,6 +98,22 @@ export const LoginScreen = (): JSX.Element => {
           </Card>
         </VStack>
       </Box>
+    )
+  }
+
+  if (!location) {
+    return (
+      <Layout centered={true}>
+        <VStack space={5} alignItems="center">
+          <Spinner size="medium" />
+          <Text>
+            Отримуємо ваше поточне місцеположення, зачекайте будь ласка
+          </Text>
+          <Text category="c1" style={{ alignSelf: 'flex-start' }}>
+            Безпека понад усе
+          </Text>
+        </VStack>
+      </Layout>
     )
   }
 
