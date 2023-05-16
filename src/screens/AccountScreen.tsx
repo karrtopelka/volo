@@ -1,6 +1,7 @@
 import { CardAttribute, Layout, SelectLanguage } from '@/components'
 import { Routes } from '@/constants'
 import { AccountInformation, MyRequests } from '@/features'
+import MyReviews from '@/features/account/MyReviews/MyReviews'
 import { useAuthContext, useMe } from '@/hooks'
 import { MainTabsParamList } from '@/types'
 import { NavigationProp, useNavigation } from '@react-navigation/native'
@@ -49,7 +50,11 @@ export const AccountScreen = (): JSX.Element => {
               </Box>
             }
           >
-            <></>
+            {data?.receivedReviews ? (
+              <MyReviews reviews={data.receivedReviews} />
+            ) : (
+              <Text>Не має відгуків.</Text>
+            )}
           </Card>
           <Card
             disabled
