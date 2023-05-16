@@ -80,9 +80,14 @@ export const AccountInformation = ({
           )}
         </CardAttribute>
         <Divider />
-        <CardAttribute title={t('created')}>
-          {dayjs(data?.createdAt).fromNow()}
-        </CardAttribute>
+        <HStack space={3}>
+          <CardAttribute title={t('lastLogin')}>
+            {dayjs(data?.lastLogin).fromNow()}
+          </CardAttribute>
+          <CardAttribute title={t('created')}>
+            {dayjs(data?.createdAt).fromNow()}
+          </CardAttribute>
+        </HStack>
       </VStack>
     </HStack>
   )

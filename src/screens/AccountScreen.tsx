@@ -45,6 +45,16 @@ export const AccountScreen = (): JSX.Element => {
             disabled
             header={
               <Box>
+                <Text category="h4">{t('reviews')!}</Text>
+              </Box>
+            }
+          >
+            <></>
+          </Card>
+          <Card
+            disabled
+            header={
+              <Box>
                 <Text category="h4">{t('requests')!}</Text>
               </Box>
             }

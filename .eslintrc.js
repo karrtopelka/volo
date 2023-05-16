@@ -7,6 +7,7 @@ module.exports = {
       jsx: true, // Allows for the parsing of JSX
     },
     project: ['./tsconfig.json'],
+    tsconfigRootDir: __dirname,
   },
   settings: {
     react: {
@@ -22,6 +23,12 @@ module.exports = {
   rules: {
     // Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
     // e.g. "@typescript-eslint/explicit-function-return-type": "off",
+    'prettier/prettier': [
+      'error',
+      {
+        endOfLine: 'auto',
+      },
+    ],
     'react/react-in-jsx-scope': 'off',
     'react/jsx-uses-react': 'off',
     'react/display-name': 'off',
