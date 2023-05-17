@@ -39,7 +39,12 @@ const ReviewCard = ({ review }: ReviewCardProps) => {
     >
       <HStack space={2}>
         <HStack>
-          <Avatar size="md" source={require('@assets/icon.png')} />
+          <Avatar
+            size="md"
+            source={
+              data?.avatar ? { uri: data.avatar } : require('@assets/icon.png')
+            }
+          />
         </HStack>
         <View>
           <HStack space={0.5} alignItems="center">
