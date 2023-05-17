@@ -46,6 +46,16 @@ export const AccountScreen = (): JSX.Element => {
             disabled
             header={
               <Box>
+                <Text category="h4">{t('requests')!}</Text>
+              </Box>
+            }
+          >
+            <MyRequests />
+          </Card>
+          <Card
+            disabled
+            header={
+              <Box>
                 <Text category="h4">{t('reviews')!}</Text>
               </Box>
             }
@@ -55,16 +65,6 @@ export const AccountScreen = (): JSX.Element => {
             ) : (
               <Text>Не має відгуків.</Text>
             )}
-          </Card>
-          <Card
-            disabled
-            header={
-              <Box>
-                <Text category="h4">{t('requests')!}</Text>
-              </Box>
-            }
-          >
-            <MyRequests />
           </Card>
           <Card disabled>
             <CardAttribute title={t('common:language')!}>
