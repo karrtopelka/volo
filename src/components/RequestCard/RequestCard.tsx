@@ -33,12 +33,8 @@ export const RequestCard = ({
   const hasImages = request.attachments.length > 0
 
   const handleCardClick = () =>
-    navigation.navigate(Routes.REQUEST_NAVIGATOR, {
-      screen: Routes.REQUEST,
-      params: {
-        id: request.id,
-        isSelfRequest: true,
-      },
+    navigation.navigate(Routes.REQUEST, {
+      id: request.id,
     })
 
   return (

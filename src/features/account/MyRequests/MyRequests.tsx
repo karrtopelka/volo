@@ -24,12 +24,12 @@ export const MyRequests = (): JSX.Element => {
   return (
     <ScrollView horizontal={true}>
       <HStack space={3}>
-        {data ? (
+        {data && !!data.data.length ? (
           data.data.map((request) => (
             <RequestCard key={request.id} request={request} />
           ))
         ) : (
-          <Text>No requests</Text>
+          <Text>Ви ще не створили жодного запиту</Text>
         )}
         {data?.hasMore && (
           <Button style={{ alignSelf: 'center' }} onPress={handleLimit}>

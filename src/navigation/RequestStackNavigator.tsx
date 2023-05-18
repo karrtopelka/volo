@@ -34,7 +34,7 @@ export const RequestStackNavigator = (): JSX.Element => {
       <Screen
         name={Routes.REQUEST_CREATE}
         component={RequestCreateScreen}
-        options={{ headerTitle: t('request_edit')! }}
+        options={{ headerShown: false }}
       />
     </Navigator>
   )
