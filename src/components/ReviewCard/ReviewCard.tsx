@@ -47,7 +47,8 @@ const ReviewCard = ({ review }: ReviewCardProps) => {
       _light={{
         backgroundColor: 'gray.50',
       }}
-      padding={2}
+      px={2}
+      py={3}
     >
       <ScrollView>
         <HStack space={2} maxW="100%">
@@ -66,7 +67,7 @@ const ReviewCard = ({ review }: ReviewCardProps) => {
               {data?.name ?? data?.email}
             </Text>
             <Box
-              w="73%"
+              w="75%"
               display="flex"
               flexDirection="row"
               justifyContent="space-between"
@@ -76,9 +77,7 @@ const ReviewCard = ({ review }: ReviewCardProps) => {
                   <StarIcon key={i} />
                 ))}
               </HStack>
-              <Text fontSize="sm" justifyContent="end">
-                {dayjs(createdAt).fromNow()}
-              </Text>
+              <Text fontSize="sm">{dayjs(createdAt).fromNow()}</Text>
             </Box>
             <View mt={3} maxW="80%">
               <Text fontSize="sm">{content}</Text>
