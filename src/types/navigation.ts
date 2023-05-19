@@ -13,6 +13,7 @@ export type MainTabsParamList = {
   [Routes.ACCOUNT_NAVIGATOR]: undefined
   [Routes.ACCOUNT]: undefined
   [Routes.ACCOUNT_EDIT]: { user: User }
+  [Routes.USER_ACCOUNT]: { id: number | undefined }
 
   [Routes.REQUEST_NAVIGATOR]: undefined
   [Routes.MY_REQUESTS]: undefined

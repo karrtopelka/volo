@@ -1,13 +1,24 @@
 import { CardAttribute, Layout, SelectLanguage } from '@/components'
+import { Routes } from '@/constants'
 import { AccountInformation, MyRequests } from '@/features'
 import MyReviews from '@/features/account/MyReviews/MyReviews'
 import { useUser } from '@/hooks/api/useUser'
+import { MainTabsParamList } from '@/types'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { Card, Text } from '@ui-kitten/components'
 import { Box, HStack, ScrollView, VStack } from 'native-base'
 import { useTranslation } from 'react-i18next'
 
-export const AccountScreen = ({ id }: any): JSX.Element => {
+type UserAccountScreenProps = NativeStackScreenProps<
+  MainTabsParamList,
+  Routes.USER_ACCOUNT
+>
+
+export const UserAccountScreen = ({
+  route,
+}: UserAccountScreenProps): JSX.Element => {
   const { t } = useTranslation('account')
+  const { id } = route.params
   const { data, isLoading } = useUser({ id })
 
   return (

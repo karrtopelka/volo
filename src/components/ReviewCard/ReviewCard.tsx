@@ -1,7 +1,7 @@
 import { Review } from '@/types'
 import { Icon, IconElement } from '@ui-kitten/components'
 import dayjs from 'dayjs'
-import { Avatar, Box, HStack, ScrollView, Text, VStack } from 'native-base'
+import { Box, HStack, ScrollView, Text, VStack } from 'native-base'
 import { UserAvatar } from '../UserAvatar'
 
 export type ReviewCardProps = {
