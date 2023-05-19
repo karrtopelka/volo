@@ -41,7 +41,12 @@ export const RequestsScreen = (): JSX.Element => {
           <VStack space={5} m={3} alignItems="stretch">
             <>
               {data?.data.map((request) => (
-                <RequestCard key={request.id} request={request} maxW="100%" />
+                <RequestCard
+                  key={request.id}
+                  request={request}
+                  maxW="100%"
+                  isSelfRequest={true}
+                />
               ))}
               {data?.hasMore && (
                 <Button onPress={handleLoadMore}>Load more</Button>

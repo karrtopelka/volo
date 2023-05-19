@@ -3,7 +3,7 @@ import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from '@/constants'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { isValidToken } from '@/utils'
 import { UserAuthInfo } from '@/types'
-import { API_URL } from '@env'
+import { API_ENDPOINT } from '@/constants/env'
 
 const refreshAccessToken = (
   client: AxiosInstance,
@@ -43,7 +43,7 @@ export const configureInterceptors = (
       }
 
       // refresh token is not valid -> logout
-      if (originalRequest?.url === API_URL + '/auth/refresh/') {
+      if (originalRequest?.url === API_ENDPOINT + '/auth/refresh/') {
         clearStorageValue()
 
         return Promise.reject(error)

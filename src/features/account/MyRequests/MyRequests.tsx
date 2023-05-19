@@ -26,7 +26,11 @@ export const MyRequests = (): JSX.Element => {
       <HStack space={3}>
         {data && !!data.data.length ? (
           data.data.map((request) => (
-            <RequestCard key={request.id} request={request} />
+            <RequestCard
+              key={request.id}
+              request={request}
+              isSelfRequest={true}
+            />
           ))
         ) : (
           <Text>Ви ще не створили жодного запиту</Text>

@@ -20,11 +20,13 @@ import { Routes } from '@/constants'
 
 export type RequestCardProps = {
   request: Request
+  isSelfRequest?: boolean
   maxW?: number | string
 }
 
 export const RequestCard = ({
   request,
+  isSelfRequest = false,
   maxW = 80,
 }: RequestCardProps): JSX.Element => {
   const { i18n } = useTranslation()
@@ -35,6 +37,7 @@ export const RequestCard = ({
   const handleCardClick = () =>
     navigation.navigate(Routes.REQUEST, {
       id: request.id,
+      isSelfRequest,
     })
 
   return (
