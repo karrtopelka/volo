@@ -134,6 +134,14 @@ export type Comments = Comment[]
 
 export type Review = {
   id: number
+  rating: number
+  content: string | null
+  reviewerId: number
+  reviewedId: number
+  reviewer: User
+
+  createdAt: string
+  updatedAt: string
 }
 
 export type Reviews = Review[]
