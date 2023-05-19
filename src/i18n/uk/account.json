@@ -12,8 +12,10 @@
     "MILITARY": "Військовий",
     "REFUGEE": "Біженець"
   },
+  "reviews": "Відгуки",
   "interests": "Інтереси",
   "created": "Створений",
+  "lastLogin": "В мережі",
   "noName": "Імʼя не було вказано",
   "emptyField": "Не було вказано"
 }

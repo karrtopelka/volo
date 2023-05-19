@@ -1,6 +1,7 @@
 import { CardAttribute, Layout, SelectLanguage } from '@/components'
 import { Routes } from '@/constants'
 import { AccountInformation, MyRequests } from '@/features'
+import MyReviews from '@/features/account/MyReviews/MyReviews'
 import { useAuthContext, useMe } from '@/hooks'
 import { MainTabsParamList } from '@/types'
 import { NavigationProp, useNavigation } from '@react-navigation/native'
@@ -50,6 +51,20 @@ export const AccountScreen = (): JSX.Element => {
             }
           >
             <MyRequests />
+          </Card>
+          <Card
+            disabled
+            header={
+              <Box>
+                <Text category="h4">{t('reviews')!}</Text>
+              </Box>
+            }
+          >
+            {data?.receivedReviews ? (
+              <MyReviews reviews={data.receivedReviews} />
+            ) : (
+              <Text>Немає відгуків</Text>
+            )}
           </Card>
           <Card disabled>
             <CardAttribute title={t('common:language')!}>
