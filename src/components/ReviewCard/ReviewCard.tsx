@@ -2,6 +2,7 @@ import { Review } from '@/types'
 import { Icon, IconElement } from '@ui-kitten/components'
 import dayjs from 'dayjs'
 import { Avatar, Box, HStack, ScrollView, Text, VStack } from 'native-base'
+import { UserAvatar } from '../UserAvatar'
 
 export type ReviewCardProps = {
   review: Review
@@ -37,14 +38,7 @@ const ReviewCard = ({ review }: ReviewCardProps) => {
       py={3}
     >
       <HStack space={2}>
-        <Avatar
-          size="md"
-          source={
-            reviewer?.avatar
-              ? { uri: reviewer.avatar }
-              : require('@assets/icon.png')
-          }
-        />
+        <UserAvatar size="md" uri={reviewer.avatar} />
         <HStack space={5} justifyContent="space-between" flex={1}>
           <VStack space={0.5} alignItems="flex-start">
             <Text bold fontSize="md">
