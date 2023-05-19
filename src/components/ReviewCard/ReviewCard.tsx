@@ -1,11 +1,10 @@
-import { IReview } from '@/features/account/MyReviews'
-import { useUser } from '@/hooks/api/useUser'
-import { Icon, IconElement, Spinner } from '@ui-kitten/components'
+import { Review } from '@/types'
+import { Icon, IconElement } from '@ui-kitten/components'
 import dayjs from 'dayjs'
-import { Avatar, Box, HStack, ScrollView, Text, View } from 'native-base'
+import { Avatar, Box, HStack, ScrollView, Text, VStack } from 'native-base'
 
-interface ReviewCardProps {
-  review: IReview
+export type ReviewCardProps = {
+  review: Review
 }
 
 const StarIcon = (): IconElement => (
@@ -13,25 +12,12 @@ const StarIcon = (): IconElement => (
 )
 
 const ReviewCard = ({ review }: ReviewCardProps) => {
-  const { content, rating, reviewerId, createdAt } = review
-
-  const { data, isLoading } = useUser({ id: reviewerId })
-
-  if (isLoading) {
-    return (
-      <HStack space={3} alignSelf="center" m={5}>
-        <Box>
-          <Spinner size="small" />
-        </Box>
-        <Text>Loading</Text>
-      </HStack>
-    )
-  }
+  const { content, rating, reviewer, createdAt } = review
 
   return (
     <Box
+      h={185}
       maxW={80}
-      h={150}
       rounded="lg"
       overflow="hidden"
       borderColor="coolGray.200"
@@ -50,21 +36,19 @@ const ReviewCard = ({ review }: ReviewCardProps) => {
       px={2}
       py={3}
     >
-      <ScrollView>
-        <HStack space={2} maxW="100%">
-          <HStack>
-            <Avatar
-              size="md"
-              source={
-                data?.avatar
-                  ? { uri: data.avatar }
-                  : require('@assets/icon.png')
-              }
-            />
-          </HStack>
-          <View>
+      <HStack space={2}>
+        <Avatar
+          size="md"
+          source={
+            reviewer?.avatar
+              ? { uri: reviewer.avatar }
+              : require('@assets/icon.png')
+          }
+        />
+        <HStack space={5} justifyContent="space-between" flex={1}>
+          <VStack space={0.5} alignItems="flex-start">
             <Text bold fontSize="md">
-              {data?.name ?? data?.email}
+              {reviewer?.name ?? reviewer?.email}
             </Text>
             <Box
               w="75%"
@@ -77,13 +61,13 @@ const ReviewCard = ({ review }: ReviewCardProps) => {
                   <StarIcon key={i} />
                 ))}
               </HStack>
-              <Text fontSize="sm">{dayjs(createdAt).fromNow()}</Text>
             </Box>
-            <View mt={3} maxW="80%">
-              <Text fontSize="sm">{content}</Text>
-            </View>
-          </View>
+          </VStack>
+          <Text fontSize="sm">{dayjs(createdAt).fromNow()}</Text>
         </HStack>
+      </HStack>
+      <ScrollView mt={3}>
+        <Box maxW={80}>{content}</Box>
       </ScrollView>
     </Box>
   )

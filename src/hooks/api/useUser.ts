@@ -4,11 +4,11 @@ import { unwrapErrorResponse, unwrapResponse } from '@/utils/unwrapResponse'
 import { REACT_QUERY_KEYS } from '@/constants'
 import { useApiClient } from './useApiClient'
 
-export type UseUsertProps = {
+export type UseUserProps = {
   id: number | undefined
 }
 
-export const useUser = ({ id }: UseUsertProps): UseQueryResult<User, Error> => {
+export const useUser = ({ id }: UseUserProps): UseQueryResult<User, Error> => {
   const client = useApiClient()
 
   return useQuery(

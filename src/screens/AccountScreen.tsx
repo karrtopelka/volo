@@ -63,7 +63,7 @@ export const AccountScreen = (): JSX.Element => {
             {data?.receivedReviews ? (
               <MyReviews reviews={data.receivedReviews} />
             ) : (
-              <Text>Не має відгуків.</Text>
+              <Text>Немає відгуків</Text>
             )}
           </Card>
           <Card disabled>
