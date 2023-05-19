@@ -22,13 +22,13 @@ type RequestScreenProps = NativeStackScreenProps<
 
 export const RequestScreen = ({ route }: RequestScreenProps): JSX.Element => {
   const { id, isSelfRequest } = route.params
-
   const { data, isLoading } = useRequest({ id })
-
   const navigation = useNavigation<NavigationProp<MainTabsParamList>>()
 
   const handleNavigateToEditScreen = () =>
-    navigation.navigate(Routes.REQUEST_CREATE, { id })
+    navigation.navigate(Routes.REQUEST_CREATE, {
+      id,
+    })
 
   useEffect(() => {
     if (isSelfRequest) {

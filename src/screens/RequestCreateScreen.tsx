@@ -50,7 +50,7 @@ type RequestCreateScreenProps = NativeStackScreenProps<
 
 const requestCreateSchema = yup.object({
   title: yup.string().required(),
-  description: yup.string(),
+  description: yup.string().required(),
   categoryId: yup.number().required(),
   type: yup.string().required(),
   status: yup.string(),
@@ -63,7 +63,7 @@ const requestCreateSchema = yup.object({
 
 export type RequestCreateFormData = {
   title: string
-  description: string | null
+  description: string
   categoryId: string
   type: string
   status: string | null
@@ -210,7 +210,7 @@ export const RequestCreateScreen = ({
   }
 
   return (
-    <Box safeAreaTop={id ? undefined : true}>
+    <Box safeAreaTop={true}>
       <ScrollView>
         <Box bg="white" flex={1} position="relative" zIndex={0} p={4}>
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

@@ -23,3 +23,21 @@ export const REQUEST_STATUSES = [
   { labelUk: 'Завершений', labelEn: 'Completed', value: 'COMPLETED' },
   { labelUk: 'Закритий', labelEn: 'Closed', value: 'CLOSED' },
 ]
+
+export const REQUEST_FROM_DATE = [
+  {
+    labelUk: '24 години',
+    labelEn: '24 hours',
+    value: new Date().setDate(new Date().getDate() - 1).toString(),
+  },
+  {
+    labelUk: 'Останній тиждень',
+    labelEn: 'Last week',
+    value: new Date().setDate(new Date().getDate() - 7).toString(),
+  },
+  {
+    labelUk: 'Останній місяць',
+    labelEn: 'Last month',
+    value: new Date().setMonth(new Date().getMonth() - 1).toString(),
+  },
+]

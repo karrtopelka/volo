@@ -1,50 +1,29 @@
 import { Layout, RequestCard } from '@/components'
-import { REQUEST_STATUSES, REQUEST_TYPES } from '@/constants'
+import { Routes } from '@/constants'
+import { RequestsFilterContainer } from '@/features'
 import { useMyRequests } from '@/hooks'
-import { RequestType, SearchRequestParams } from '@/types'
+import { MainTabsParamList, RequestSearchRequestParams } from '@/types'
+import { NavigationProp, useNavigation } from '@react-navigation/native'
 import { Button, Spinner, Text } from '@ui-kitten/components'
-import {
-  Box,
-  CheckIcon,
-  HStack,
-  ScrollView,
-  Select,
-  VStack,
-  View,
-} from 'native-base'
+import { ScrollView, VStack, View } from 'native-base'
 import { useState } from 'react'
-import { useTranslation } from 'react-i18next'
 
 export const RequestsScreen = (): JSX.Element => {
-  const { i18n } = useTranslation()
-  const [params, setParams] = useState<SearchRequestParams>({
+  const [params, setParams] = useState<RequestSearchRequestParams>({
     limit: 3,
     offset: 0,
-    type: '',
-    status: '',
   })
   const { data, isLoading } = useMyRequests(params)
+  const navigation = useNavigation<NavigationProp<MainTabsParamList>>()
 
   const handleLoadMore = () => {
-    setParams({
-      ...params,
-      limit: (params.limit ?? 10) + 10,
-    })
+    setParams((prev) => ({ ...prev, limit: (prev.limit ?? 10) + 10 }))
   }
 
-  const handleSelectType = (item: string) => {
-    setParams({
-      ...params,
-      type: item,
+  const handleAddRequest = () =>
+    navigation.navigate(Routes.REQUEST_CREATE, {
+      id: undefined,
     })
-  }
-
-  const handleSelectStatus = (item: string) => {
-    setParams({
-      ...params,
-      status: item,
-    })
-  }
 
   if (isLoading) {
     return (
@@ -56,67 +35,39 @@ export const RequestsScreen = (): JSX.Element => {
 
   return (
     <View>
-      <Box m={3}>
-        <Text category="h4">Фільтр</Text>
-        <HStack space={3} py={2}>
-          <Select
-            selectedValue={params.type?.toString()}
-            placeholder="Type"
-            onValueChange={(itemValue) => handleSelectType(itemValue)}
-            _selectedItem={{
-              bg: 'green.300',
-              endIcon: <CheckIcon size="5" />,
-            }}
-            flex={1}
-          >
-            <Select.Item
-              label={i18n.language === 'uk' ? 'Всі' : 'All'}
-              value=""
-            />
-            {REQUEST_TYPES.map(({ labelEn, labelUk, value }) => (
-              <Select.Item
-                key={value}
-                label={i18n.language === 'uk' ? labelUk : labelEn}
-                value={value}
-              />
-            ))}
-          </Select>
-          <Select
-            selectedValue={params.status?.toString()}
-            placeholder="Status"
-            onValueChange={(itemValue) => handleSelectStatus(itemValue)}
-            _selectedItem={{
-              bg: 'teal.600',
-              endIcon: <CheckIcon size="5" />,
-            }}
-            flex={1}
-          >
-            <Select.Item
-              label={i18n.language === 'uk' ? 'Всі' : 'All'}
-              value=""
-            />
-            {REQUEST_STATUSES.map(({ labelEn, labelUk, value }) => (
-              <Select.Item
-                key={value}
-                label={i18n.language === 'uk' ? labelUk : labelEn}
-                value={value}
-              />
-            ))}
-          </Select>
-        </HStack>
-      </Box>
-      <ScrollView>
-        <VStack space={5} m={3} alignItems="stretch">
-          <>
-            {data?.data.map((request) => (
-              <RequestCard key={request.id} request={request} maxW="100%" />
-            ))}
-            {data?.hasMore && (
-              <Button onPress={handleLoadMore}>Load more</Button>
-            )}
-          </>
-        </VStack>
-      </ScrollView>
+      <RequestsFilterContainer params={params} setParams={setParams} />
+      {!!data?.data.length ? (
+        <ScrollView>
+          <VStack space={5} m={3} alignItems="stretch">
+            <>
+              {data?.data.map((request) => (
+                <RequestCard
+                  key={request.id}
+                  request={request}
+                  maxW="100%"
+                  isSelfRequest={true}
+                />
+              ))}
+              {data?.hasMore && (
+                <Button onPress={handleLoadMore}>Load more</Button>
+              )}
+            </>
+          </VStack>
+        </ScrollView>
+      ) : (
+        <>
+          {params.type ?? params.status ?? params.fromDate ? (
+            <VStack space={5} mx={15} mt={15} alignItems="center">
+              <Text>За заданими параметрами нічого не знайдено</Text>
+            </VStack>
+          ) : (
+            <VStack space={5} mx={15} mt={15} alignItems="center">
+              <Text>Ви ще не створили жодного запиту</Text>
+              <Button onPress={handleAddRequest}>Створити</Button>
+            </VStack>
+          )}
+        </>
+      )}
     </View>
   )
 }

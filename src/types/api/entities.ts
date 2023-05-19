@@ -56,7 +56,7 @@ export type Request = {
   user: User
   viewsCount: number
   contributionsCount: number
-  totalCollected: number | null
+  totalCollected: number
   monobankBucketLink: string | null
   goalAmount: number | null
   contributions: Contributions
