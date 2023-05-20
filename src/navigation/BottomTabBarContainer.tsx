@@ -1,10 +1,6 @@
 import { MainTabsParamList } from '@/types'
-import {
-  NavigationProp,
-  ParamListBase,
-  TabNavigationState,
-  useNavigation,
-} from '@react-navigation/native'
+import { BottomTabBarProps } from '@react-navigation/bottom-tabs/lib/typescript/src/types'
+import { NavigationProp, useNavigation } from '@react-navigation/native'
 import { BottomNavigation, BottomNavigationTab } from '@ui-kitten/components'
 import { RenderProp } from '@ui-kitten/components/devsupport'
 import { ImageProps } from 'react-native'
@@ -16,13 +12,15 @@ export type TabBarTabProps = {
 
 export type TabBarContainerProps = {
   tabs: TabBarTabProps[]
-  state: TabNavigationState<ParamListBase>
 }
+
+export type BottomTabBarContainerProps = TabBarContainerProps &
+  BottomTabBarProps
 
 export const BottomTabBarContainer = ({
   tabs,
   state,
-}: TabBarContainerProps): JSX.Element => {
+}: BottomTabBarContainerProps): JSX.Element | null => {
   const navigation = useNavigation<NavigationProp<MainTabsParamList>>()
 
   return (

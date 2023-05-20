@@ -11,6 +11,7 @@ import { ApiProvider } from './ApiContext'
 import { AuthProvider } from './AuthContext'
 import { NativeBaseProvider } from 'native-base'
 import { SupabaseProvider } from './SupabaseContext'
+import { OnlineUsersContextProvider } from './OnlineUsersContext'
 
 const Providers = ({ children }: ReactChildren) => (
   <>
@@ -22,7 +23,11 @@ const Providers = ({ children }: ReactChildren) => (
             <SupabaseProvider>
               <NavigationContainer ref={navigationRef}>
                 <ApiProvider>
-                  <AuthProvider>{children}</AuthProvider>
+                  <AuthProvider>
+                    <OnlineUsersContextProvider>
+                      {children}
+                    </OnlineUsersContextProvider>
+                  </AuthProvider>
                 </ApiProvider>
               </NavigationContainer>
             </SupabaseProvider>

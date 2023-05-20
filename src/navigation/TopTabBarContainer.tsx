@@ -3,8 +3,15 @@ import { TabBarContainerProps } from './BottomTabBarContainer'
 import { NavigationProp, useNavigation } from '@react-navigation/native'
 import { AllNavigatorsParamList } from '@/types'
 import { Routes } from '@/constants'
+import { MaterialTopTabBarProps } from '@react-navigation/material-top-tabs'
 
-export const TopTabBarContainer = ({ tabs, state }: TabBarContainerProps) => {
+export type TopTabBarContainerProps = TabBarContainerProps &
+  MaterialTopTabBarProps
+
+export const TopTabBarContainer = ({
+  tabs,
+  state,
+}: TopTabBarContainerProps) => {
   const navigation = useNavigation<NavigationProp<AllNavigatorsParamList>>()
 
   return (

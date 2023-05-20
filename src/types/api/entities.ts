@@ -18,10 +18,13 @@ export type User = {
   views: RequestViews
   notifications: Notifications
   messages: Messages
+  chats: Chats
 
   createdAt: string
   updatedAt: string
 }
+
+export type Users = User[]
 
 export type UserPost = Pick<
   User,
@@ -181,13 +184,53 @@ export type Notification = {
 
 export type Notifications = Notification[]
 
+export type Chat = {
+  id: number
+  users: [
+    Pick<
+      User,
+      | 'id'
+      | 'email'
+      | 'name'
+      | 'avatar'
+      | 'role'
+      | 'phoneNumber'
+      | 'reputation'
+      | 'createdAt'
+      | 'updatedAt'
+    >
+  ]
+  messages: Messages
+
+  createdAt: string
+  updatedAt: string
+}
+
+export type Chats = Chat[]
+
+export type ChatPost = {
+  message: string
+  recipientId: number
+}
+
 export type Message = {
   id: number
   content: string
   senderId: number
-  sender: User
-  requestId: number
-  request: Request
+  sender: Pick<
+    User,
+    | 'id'
+    | 'email'
+    | 'name'
+    | 'avatar'
+    | 'role'
+    | 'phoneNumber'
+    | 'reputation'
+    | 'createdAt'
+    | 'updatedAt'
+  >
+  chatId: number
+  chat: Chat
 
   createdAt: string
 }

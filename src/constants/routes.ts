@@ -21,5 +21,10 @@ export enum Routes {
   REQUEST_EDIT = 'RequestEdit',
   REQUEST_ADD_COMMENT = 'RequestAddComment',
 
+  CHAT_NAVIGATOR = 'ChatNavigator',
+  CHATS = 'Chats',
+  CHAT = 'Chat',
+  CREATE_CHAT = 'CreateChat',
+
   NO_ACCESS = 'NoAccess',
 }
