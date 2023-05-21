@@ -1,10 +1,11 @@
 import { RequestStatus, RequestType } from './entities'
 
+export type LimitedSearchRequestParams = { limit?: number; offset?: number }
+
 export type SearchRequestParams = {
-  limit?: number
-  offset?: number
   search?: string
-} & Partial<Record<string, string | number>>
+} & Partial<Record<string, string | number>> &
+  LimitedSearchRequestParams
 
 export type RequestSearchRequestParams = {
   status?: RequestStatus

@@ -20,6 +20,11 @@ export type MainTabsParamList = {
   [Routes.REQUEST_CREATE]: { id: number | undefined }
   [Routes.REQUEST_ADD_COMMENT]: { id: number }
 
+  [Routes.CHAT_NAVIGATOR]: undefined
+  [Routes.CHATS]: undefined
+  [Routes.CHAT]: { id: number; recipientName: string; recipientId: number }
+  [Routes.CREATE_CHAT]: undefined
+
   [Routes.FEED]: undefined
   [Routes.FEED_ALL]: undefined
   [Routes.FEED_DONATION]: undefined
