@@ -11,14 +11,14 @@ export const FeedTabsNavigator = (): JSX.Element => {
 
   return (
     <Navigator
-      tabBar={({ state }) => (
+      tabBar={(props) => (
         <TopTabBarContainer
           tabs={[
             { title: t('feed_all')! },
             { title: t('feed_donation')! },
             { title: t('feed_support')! },
           ]}
-          state={state}
+          {...props}
         />
       )}
       initialRouteName={Routes.FEED_ALL}
