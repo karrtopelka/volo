@@ -30,6 +30,9 @@ export const RequestScreen = ({ route }: RequestScreenProps): JSX.Element => {
       id,
     })
 
+  const handleNavigateToUserAccount = () =>
+    navigation.navigate(Routes.USER_ACCOUNT, { id })
+
   useEffect(() => {
     if (isSelfRequest) {
       navigation.setOptions({
@@ -63,7 +66,7 @@ export const RequestScreen = ({ route }: RequestScreenProps): JSX.Element => {
                 : require('@assets/icon.png')
             }
             largeTitleTextStyle={{ fontSize: 24, lineHeight: 32 }}
-            onPress={() => {}}
+            onPress={handleNavigateToUserAccount}
           />
           <VStack space={4}>
             {data.attachments.length > 0 && (

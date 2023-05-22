@@ -6,6 +6,7 @@ import {
   RequestCreateScreen,
   RequestScreen,
   RequestsScreen,
+  UserAccountScreen,
 } from '@/screens'
 import { useTranslation } from 'react-i18next'
 
@@ -35,6 +36,11 @@ export const RequestStackNavigator = (): JSX.Element => {
         name={Routes.REQUEST_CREATE}
         component={RequestCreateScreen}
         options={{ headerShown: false }}
+      />
+      <Screen
+        name={Routes.USER_ACCOUNT}
+        component={UserAccountScreen}
+        options={{ headerTitle: t('account')! }}
       />
     </Navigator>
   )

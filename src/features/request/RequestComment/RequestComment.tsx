@@ -1,3 +1,4 @@
+import { UserAvatar } from '@/components/UserAvatar'
 import { Comment } from '@/types'
 import { Text } from '@ui-kitten/components'
 import dayjs from 'dayjs'
@@ -11,14 +12,7 @@ export const RequestComment = ({
   comment,
 }: RequestCommentProps): JSX.Element => (
   <HStack space={3} flex={1}>
-    <Avatar
-      size="md"
-      source={
-        comment.author?.avatar
-          ? { uri: comment.author.avatar }
-          : require('@assets/icon.png')
-      }
-    />
+    <UserAvatar size="md" uri={comment.author.avatar} id={comment.authorId} />
     <VStack flex={1} space={2}>
       <HStack justifyContent="space-between">
         <Text category="s1">
