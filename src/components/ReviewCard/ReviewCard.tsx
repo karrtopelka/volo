@@ -38,7 +38,7 @@ const ReviewCard = ({ review }: ReviewCardProps) => {
       py={3}
     >
       <HStack space={2}>
-        <UserAvatar size="md" uri={reviewer.avatar} />
+        <UserAvatar size="md" uri={reviewer.avatar} id={reviewer.id} />
         <HStack space={5} justifyContent="space-between" flex={1}>
           <VStack space={0.5} alignItems="flex-start">
             <Text bold fontSize="md">
