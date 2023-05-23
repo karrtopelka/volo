@@ -3,8 +3,7 @@ import { Button, Card, Spinner } from '@ui-kitten/components'
 import * as yup from 'yup'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { Routes, USER_ROLES } from '@/constants'
+import { USER_ROLES } from '@/constants'
 import { MainTabsParamList, UserRole } from '@/types'
 import { Keyboard, TouchableWithoutFeedback } from 'react-native'
 import {
@@ -16,7 +15,7 @@ import {
   ControlledTagSelect,
   TagSelectOption,
 } from '@/components'
-import { useInterests, useMutationWrapper, usePatchUsers } from '@/hooks'
+import { useInterests, useMe, useMutationWrapper, usePatchUsers } from '@/hooks'
 import { useTranslation } from 'react-i18next'
 import { useEffect, useState } from 'react'
 import { NavigationProp, useNavigation } from '@react-navigation/native'
@@ -39,21 +38,14 @@ export type AccountEditFormData = {
   interests: number[]
 }
 
-type AccountEditScreenProps = NativeStackScreenProps<
-  MainTabsParamList,
-  Routes.ACCOUNT_EDIT
->
-
-export const AccountEditScreen = ({
-  route,
-}: AccountEditScreenProps): JSX.Element => {
-  const { user } = route.params
+export const AccountEditScreen = (): JSX.Element => {
   const { i18n } = useTranslation('account')
   const { data: interests } = useInterests()
   const [interestsSelect, setInterestsSelect] = useState<TagSelectOption[]>([])
   const { mutateAsync: updateUser, isLoading: isUpdateUserLoading } =
     useMutationWrapper(usePatchUsers)
   const navigation = useNavigation<NavigationProp<MainTabsParamList>>()
+  const { data: user } = useMe()
 
   const { control, handleSubmit } = useForm<AccountEditFormData>({
     resolver: yupResolver(accountEditSchema),

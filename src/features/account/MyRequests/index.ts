@@ -1,1 +1,1 @@
-export * from './MyRequests'
+export * from './AccountRequestsContainer'

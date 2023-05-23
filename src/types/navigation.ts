@@ -11,12 +11,13 @@ export type RootStackParamList = {
 
 export type MainTabsParamList = {
   [Routes.ACCOUNT_NAVIGATOR]: undefined
-  [Routes.ACCOUNT]: undefined
+  [Routes.ACCOUNT]: { id: number }
   [Routes.ACCOUNT_EDIT]: { user: User }
-  [Routes.USER_ACCOUNT]: { id: number | undefined }
+  [Routes.ACCOUNT_VIEW]: { id: number }
 
   [Routes.REQUEST_NAVIGATOR]: undefined
-  [Routes.MY_REQUESTS]: undefined
+  [Routes.REQUESTS]: undefined
+  [Routes.ACCOUNT_REQUESTS]: { id: number }
   [Routes.REQUEST]: { id: number; isSelfRequest: boolean }
   [Routes.REQUEST_CREATE]: { id: number | undefined }
   [Routes.REQUEST_ADD_COMMENT]: { id: number }

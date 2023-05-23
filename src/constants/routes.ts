@@ -13,10 +13,11 @@ export enum Routes {
   ACCOUNT_NAVIGATOR = 'AccountNavigator',
   ACCOUNT = 'Account',
   ACCOUNT_EDIT = 'AccountEdit',
-  USER_ACCOUNT = 'UserAccount',
+  ACCOUNT_VIEW = 'AccountView',
 
   REQUEST_NAVIGATOR = 'RequestNavigator',
-  MY_REQUESTS = 'MyRequests',
+  REQUESTS = 'Requests',
+  ACCOUNT_REQUESTS = 'AccountRequests',
   REQUEST = 'Request',
   REQUEST_CREATE = 'RequestCreate',
   REQUEST_EDIT = 'RequestEdit',

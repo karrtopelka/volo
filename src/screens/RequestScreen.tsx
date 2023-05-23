@@ -31,7 +31,7 @@ export const RequestScreen = ({ route }: RequestScreenProps): JSX.Element => {
     })
 
   const handleNavigateToUserAccount = () =>
-    navigation.navigate(Routes.USER_ACCOUNT, { id })
+    navigation.navigate(Routes.ACCOUNT, { id: data!.user.id })
 
   useEffect(() => {
     if (isSelfRequest) {

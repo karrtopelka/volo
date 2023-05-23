@@ -2,11 +2,11 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { MainTabsParamList } from '@/types'
 import { Routes } from '@/constants'
 import {
+  AccountScreen,
   RequestAddCommentScreen,
   RequestCreateScreen,
   RequestScreen,
   RequestsScreen,
-  UserAccountScreen,
 } from '@/screens'
 import { useTranslation } from 'react-i18next'
 
@@ -16,9 +16,9 @@ export const RequestStackNavigator = (): JSX.Element => {
   const { t } = useTranslation('tabs')
 
   return (
-    <Navigator initialRouteName={Routes.MY_REQUESTS}>
+    <Navigator initialRouteName={Routes.REQUESTS}>
       <Screen
-        name={Routes.MY_REQUESTS}
+        name={Routes.REQUESTS}
         component={RequestsScreen}
         options={{ headerTitle: t('my_requests')! }}
       />
@@ -37,11 +37,7 @@ export const RequestStackNavigator = (): JSX.Element => {
         component={RequestCreateScreen}
         options={{ headerShown: false }}
       />
-      <Screen
-        name={Routes.USER_ACCOUNT}
-        component={UserAccountScreen}
-        options={{ headerTitle: t('account')! }}
-      />
+      <Screen name={Routes.ACCOUNT} component={AccountScreen} />
     </Navigator>
   )
 }
