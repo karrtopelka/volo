@@ -29,7 +29,7 @@ export type Users = User[]
 export type UserPost = Pick<
   User,
   'email' | 'avatar' | 'name' | 'role' | 'phoneNumber'
-> & { interests: number[] }
+>
 
 export type Location = {
   id: number

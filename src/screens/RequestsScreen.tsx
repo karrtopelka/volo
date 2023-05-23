@@ -1,11 +1,10 @@
-import { Layout, RequestCard } from '@/components'
+import { Card, Layout, RequestCard } from '@/components'
 import { Routes } from '@/constants'
 import { RequestsFilterContainer } from '@/features'
 import { useMyRequests } from '@/hooks'
 import { MainTabsParamList, RequestSearchRequestParams } from '@/types'
 import { NavigationProp, useNavigation } from '@react-navigation/native'
-import { Button, Spinner, Text } from '@ui-kitten/components'
-import { ScrollView, VStack, View } from 'native-base'
+import { Button, ScrollView, Spinner, VStack, View, Text } from 'native-base'
 import { useState } from 'react'
 
 export const RequestsScreen = (): JSX.Element => {
@@ -28,7 +27,7 @@ export const RequestsScreen = (): JSX.Element => {
   if (isLoading) {
     return (
       <Layout centered={true}>
-        <Spinner />
+        <Spinner size="sm" />
       </Layout>
     )
   }
@@ -55,18 +54,18 @@ export const RequestsScreen = (): JSX.Element => {
           </VStack>
         </ScrollView>
       ) : (
-        <>
-          {params.type ?? params.status ?? params.fromDate ? (
-            <VStack space={5} mx={15} mt={15} alignItems="center">
+        <Card mx={3}>
+          <VStack space={5} alignItems="center">
+            {params.type ?? params.status ?? params.fromDate ? (
               <Text>За заданими параметрами нічого не знайдено</Text>
-            </VStack>
-          ) : (
-            <VStack space={5} mx={15} mt={15} alignItems="center">
-              <Text>Ви ще не створили жодного запиту</Text>
-              <Button onPress={handleAddRequest}>Створити</Button>
-            </VStack>
-          )}
-        </>
+            ) : (
+              <>
+                <Text>Ви ще не створили жодного запиту</Text>
+                <Button onPress={handleAddRequest}>Створити</Button>
+              </>
+            )}
+          </VStack>
+        </Card>
       )}
     </View>
   )

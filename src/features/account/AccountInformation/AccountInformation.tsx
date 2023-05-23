@@ -1,19 +1,18 @@
 import { CardAttribute, Tag } from '@/components'
 import { User } from '@/types'
-import {
-  Divider,
-  Icon,
-  IconElement,
-  Spinner,
-  Text,
-} from '@ui-kitten/components'
+import { MaterialIcons } from '@expo/vector-icons'
 import dayjs from 'dayjs'
-import { Avatar, HStack, ScrollView, VStack } from 'native-base'
+import {
+  Avatar,
+  HStack,
+  Icon,
+  Spinner,
+  VStack,
+  Text,
+  Divider,
+  Box,
+} from 'native-base'
 import { useTranslation } from 'react-i18next'
-
-const StarIcon = (): IconElement => (
-  <Icon style={{ width: 15, height: 15 }} fill="#FFC107" name="star" />
-)
 
 export type AccountInformationProps = {
   data: User | undefined
@@ -27,7 +26,7 @@ export const AccountInformation = ({
   const { t, i18n } = useTranslation('account')
 
   if (isLoading) {
-    return <Spinner />
+    return <Spinner size="sm" />
   }
 
   return (
@@ -41,7 +40,7 @@ export const AccountInformation = ({
         />
         {data?.reputation ? (
           <HStack space={2} alignItems="center">
-            <StarIcon />
+            <Icon as={MaterialIcons} name="star" color="#FFC107" size="sm" />
             <Text>{data.reputation} / 5</Text>
           </HStack>
         ) : (
@@ -65,16 +64,14 @@ export const AccountInformation = ({
         <Divider />
         <CardAttribute title={t('interests')}>
           {data?.interests && data.interests.length ? (
-            <ScrollView horizontal={true} directionalLockEnabled={true} w="72">
-              <HStack space={3}>
-                {data.interests.map(({ nameUk, nameEn }) => (
-                  <Tag
-                    key={nameUk}
-                    name={i18n.language === 'uk' ? nameUk : nameEn}
-                  />
-                ))}
-              </HStack>
-            </ScrollView>
+            <Box flexWrap="wrap" style={{ gap: 4 }}>
+              {data.interests.map(({ nameUk, nameEn }) => (
+                <Tag
+                  key={nameUk}
+                  name={i18n.language === 'uk' ? nameUk : nameEn}
+                />
+              ))}
+            </Box>
           ) : (
             t('emptyField')
           )}

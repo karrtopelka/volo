@@ -12,7 +12,9 @@ export enum Routes {
   FEED_SUPPORT = 'FeedSupport',
   ACCOUNT_NAVIGATOR = 'AccountNavigator',
   ACCOUNT = 'Account',
-  ACCOUNT_EDIT = 'AccountEdit',
+  ACCOUNT_EDIT_NAVIGATOR = 'AccountEditNavigator',
+  ACCOUNT_EDIT_PERSONAL_DATA = 'AccountEditPersonalData',
+  ACCOUNT_EDIT_INTERESTS = 'AccountEditInterests',
   ACCOUNT_VIEW = 'AccountView',
 
   REQUEST_NAVIGATOR = 'RequestNavigator',

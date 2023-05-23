@@ -1,8 +1,15 @@
 import { REQUEST_FROM_DATE, REQUEST_STATUSES, REQUEST_TYPES } from '@/constants'
 import { RequestSearchRequestParams, RequestStatus, RequestType } from '@/types'
-import { Box, CheckIcon, HStack, Select, VStack } from 'native-base'
+import {
+  Box,
+  CheckIcon,
+  HStack,
+  Heading,
+  Select,
+  VStack,
+  Text,
+} from 'native-base'
 import { Dispatch, SetStateAction } from 'react'
-import { Text } from '@ui-kitten/components'
 import { useTranslation } from 'react-i18next'
 
 export type RequestsFilterContainerProps = {
@@ -66,10 +73,12 @@ export const RequestsFilterContainer = ({
 
   return (
     <Box m={3}>
-      <Text category="h4">Фільтр</Text>
+      <Heading size="sm">Фільтр</Heading>
       <HStack space={3} py={2}>
         <VStack space={2} flex={1}>
-          <Text category="c1">Тип</Text>
+          <Text size="sm" h="auto">
+            Тип
+          </Text>
           <Select
             selectedValue={params.type?.toString()}
             placeholder="Type"
@@ -93,7 +102,9 @@ export const RequestsFilterContainer = ({
           </Select>
         </VStack>
         <VStack space={2} flex={1}>
-          <Text category="c1">Статус</Text>
+          <Text size="sm" h="auto">
+            Статус
+          </Text>
           <Select
             selectedValue={params.status?.toString()}
             placeholder="Status"
@@ -117,7 +128,9 @@ export const RequestsFilterContainer = ({
           </Select>
         </VStack>
         <VStack space={2} flex={1}>
-          <Text category="c1">Дата</Text>
+          <Text size="sm" h="auto">
+            Дата
+          </Text>
           <Select
             selectedValue={params.fromDate?.toString()}
             placeholder="From date"

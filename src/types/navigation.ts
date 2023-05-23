@@ -1,6 +1,5 @@
 import { Routes } from '@/constants'
 import { LocationObject } from 'expo-location'
-import { User } from './api'
 
 export type RootStackParamList = {
   [Routes.LOGIN]: undefined
@@ -12,8 +11,10 @@ export type RootStackParamList = {
 export type MainTabsParamList = {
   [Routes.ACCOUNT_NAVIGATOR]: undefined
   [Routes.ACCOUNT]: { id: number }
-  [Routes.ACCOUNT_EDIT]: { user: User }
   [Routes.ACCOUNT_VIEW]: { id: number }
+  [Routes.ACCOUNT_EDIT_NAVIGATOR]: undefined
+  [Routes.ACCOUNT_EDIT_PERSONAL_DATA]: undefined
+  [Routes.ACCOUNT_EDIT_INTERESTS]: undefined
 
   [Routes.REQUEST_NAVIGATOR]: undefined
   [Routes.REQUESTS]: undefined

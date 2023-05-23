@@ -1,8 +1,10 @@
 import {
+  Card,
   CardAttribute,
   ControlledInput,
   ControlledSelect,
   ControlledTagSelect,
+  ControlledTextArea,
   Layout,
   SelectOption,
   TagSelectOption,
@@ -22,26 +24,20 @@ import { isUrl, uploadImageToStorage } from '@/utils'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { NavigationProp, useNavigation } from '@react-navigation/native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { Button, Card, Spinner, Text } from '@ui-kitten/components'
-import { Box, HStack, ScrollView, VStack } from 'native-base'
+import {
+  Box,
+  HStack,
+  ScrollView,
+  Spinner,
+  VStack,
+  Heading,
+  Button,
+} from 'native-base'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { Keyboard, TouchableWithoutFeedback, View } from 'react-native'
+import { Keyboard, TouchableWithoutFeedback } from 'react-native'
 import * as yup from 'yup'
-
-const LoadingIndicator = (): React.ReactElement => (
-  <View
-    style={[
-      {
-        justifyContent: 'center',
-        alignItems: 'center',
-      },
-    ]}
-  >
-    <Spinner size="small" status="basic" />
-  </View>
-)
 
 type RequestCreateScreenProps = NativeStackScreenProps<
   MainTabsParamList,
@@ -216,19 +212,12 @@ export const RequestCreateScreen = ({
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <VStack space={5} h="100%">
               {!id && (
-                <Text category="h4" style={{ alignSelf: 'center' }}>
+                <Heading size="xl" style={{ alignSelf: 'center' }}>
                   Створити запит
-                </Text>
+                </Heading>
               )}
 
-              <Card
-                disabled={true}
-                header={
-                  <Box>
-                    <Text category="h5">Основна інформація</Text>
-                  </Box>
-                }
-              >
+              <Card title="Основна інформація">
                 <VStack space={5}>
                   <CardAttribute title="Назва" isRequired={true}>
                     <ControlledInput
@@ -239,13 +228,13 @@ export const RequestCreateScreen = ({
                     />
                   </CardAttribute>
                   <CardAttribute title="Опис">
-                    <ControlledInput
+                    <ControlledTextArea
                       control={control}
                       name="description"
                       returnKeyType="next"
                       placeholder="Опис"
+                      numberOfLines={6}
                       multiline={true}
-                      textStyle={{ minHeight: 64 }}
                     />
                   </CardAttribute>
                   <CardAttribute title="Категорія" isRequired={true}>
@@ -285,24 +274,10 @@ export const RequestCreateScreen = ({
                   </CardAttribute>
                 </VStack>
               </Card>
-              <Card
-                disabled={true}
-                header={
-                  <Box>
-                    <Text category="h5">Фотознимки</Text>
-                  </Box>
-                }
-              >
+              <Card title="Фотознимки">
                 <RequestManagePhotos control={control} name="attachments" />
               </Card>
-              <Card
-                disabled={true}
-                header={
-                  <Box>
-                    <Text category="h5">Додаткова інформація</Text>
-                  </Box>
-                }
-              >
+              <Card title="Додаткова інформація">
                 <VStack space={5}>
                   <CardAttribute title="Стан запиту">
                     <ControlledSelect
@@ -331,19 +306,13 @@ export const RequestCreateScreen = ({
                 </VStack>
               </Card>
               <HStack justifyContent="space-between" space={3}>
-                <Button
-                  onPress={() => navigation.goBack()}
-                  appearance="outline"
-                >
+                <Button onPress={() => navigation.goBack()} variant="outline">
                   Скасувати
                 </Button>
                 <Button
                   style={{ flex: 1 }}
                   onPress={handleSubmit(onSubmit)}
-                  disabled={isPosting || isPatching}
-                  accessoryLeft={
-                    isPosting || isPatching ? LoadingIndicator : undefined
-                  }
+                  isLoading={isPosting || isPatching}
                 >
                   {id ? 'Оновити' : 'Створити'}
                 </Button>

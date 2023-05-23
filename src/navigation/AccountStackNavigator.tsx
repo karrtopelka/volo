@@ -1,9 +1,10 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { MainTabsParamList } from '@/types'
 import { Routes } from '@/constants'
-import { AccountScreen, AccountEditScreen } from '@/screens'
+import { AccountScreen } from '@/screens'
 import { useTranslation } from 'react-i18next'
 import { useMe } from '@/hooks'
+import { AccountEditTabsNavigator } from './AccountEditTabsNavigator'
 
 const { Screen, Navigator } = createNativeStackNavigator<MainTabsParamList>()
 
@@ -20,8 +21,8 @@ export const AccountStackNavigator = (): JSX.Element => {
         initialParams={{ id: me?.id }}
       />
       <Screen
-        name={Routes.ACCOUNT_EDIT}
-        component={AccountEditScreen}
+        name={Routes.ACCOUNT_EDIT_NAVIGATOR}
+        component={AccountEditTabsNavigator}
         options={{ headerTitle: t('account_edit')! }}
       />
       <Screen

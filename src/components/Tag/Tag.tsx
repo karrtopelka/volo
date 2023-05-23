@@ -7,13 +7,12 @@ export type TagProps = {
 export const Tag = ({ name }: TagProps): JSX.Element => (
   <Box
     _text={{
-      fontSize: 'md',
+      fontSize: 'sm',
       fontWeight: 'medium',
-      color: 'warmGray.50',
-      letterSpacing: 'lg',
+      color: 'gray.500',
       alignSelf: 'center',
     }}
-    bg={['gray.400']}
+    bg={['gray.300']}
     style={{ borderRadius: 4 }}
     px={2}
     py={1}

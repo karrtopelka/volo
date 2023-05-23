@@ -1,6 +1,5 @@
 import { CardAttribute } from '@/components'
-import { VStack, Progress, Center } from 'native-base'
-import { Text } from '@ui-kitten/components'
+import { VStack, Progress, Center, Heading } from 'native-base'
 
 export type RequestCollectedAmountProps = {
   totalCollected: number
@@ -12,12 +11,14 @@ const renderCollectedAmount = (
   goalAmount: number | null
 ) => {
   if (goalAmount) {
-    return <Text category="s1">{`UAH ${totalCollected} / ${goalAmount}`}</Text>
+    return (
+      <Heading size="xs">{`UAH ${totalCollected} / ${goalAmount}`}</Heading>
+    )
   }
 
   return (
     <Center>
-      <Text category="s1">{`UAH ${totalCollected}`}</Text>
+      <Heading size="xs">{`UAH ${totalCollected}`}</Heading>
     </Center>
   )
 }

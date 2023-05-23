@@ -9,9 +9,8 @@ import { useRequest } from '@/hooks'
 import { MainTabsParamList } from '@/types'
 import { NavigationProp, useNavigation } from '@react-navigation/native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { Button, Spinner } from '@ui-kitten/components'
 import dayjs from 'dayjs'
-import { Box, ScrollView, VStack } from 'native-base'
+import { Box, Button, ScrollView, Spinner, VStack } from 'native-base'
 import { useEffect } from 'react'
 import AppleHeader from 'react-native-apple-header'
 
@@ -37,7 +36,7 @@ export const RequestScreen = ({ route }: RequestScreenProps): JSX.Element => {
     if (isSelfRequest) {
       navigation.setOptions({
         headerRight: () => (
-          <Button appearance="ghost" onPress={handleNavigateToEditScreen}>
+          <Button variant="ghost" onPress={handleNavigateToEditScreen}>
             Змінити
           </Button>
         ),
@@ -48,7 +47,7 @@ export const RequestScreen = ({ route }: RequestScreenProps): JSX.Element => {
   if (isLoading) {
     return (
       <Layout centered={true}>
-        <Spinner />
+        <Spinner size="sm" />
       </Layout>
     )
   }

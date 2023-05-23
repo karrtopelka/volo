@@ -1,51 +1,22 @@
 import { ControlledFieldProps } from '@/types'
 import { isUrl } from '@/utils'
-import { Button, Icon, IconElement, Spinner } from '@ui-kitten/components'
+import { MaterialIcons } from '@expo/vector-icons'
 import { MediaTypeOptions, launchImageLibraryAsync } from 'expo-image-picker'
-import { Box, HStack, Image, Pressable } from 'native-base'
+import {
+  Box,
+  Button,
+  HStack,
+  Icon,
+  IconButton,
+  Image,
+  Pressable,
+} from 'native-base'
 import { useEffect, useState } from 'react'
 import { FieldValues, useController } from 'react-hook-form'
-import { View } from 'react-native'
 import ImageView from 'react-native-image-viewing'
 
 export type RequestManagePhotosProps<T extends FieldValues> =
   ControlledFieldProps<T>
-
-const PlusIcon = (): IconElement => (
-  <Icon
-    style={{
-      height: 36,
-      marginHorizontal: 10,
-      tintColor: '#222021',
-      width: 36,
-    }}
-    name="plus-circle-outline"
-  />
-)
-
-const LoadingIndicator = (): React.ReactElement => (
-  <View
-    style={[
-      {
-        justifyContent: 'center',
-        alignItems: 'center',
-      },
-    ]}
-  >
-    <Spinner size="small" status="basic" />
-  </View>
-)
-
-const RemoveIcon = (): IconElement => (
-  <Icon
-    style={{
-      height: 12,
-      tintColor: 'white',
-      width: 12,
-    }}
-    name="minus-circle-outline"
-  />
-)
 
 export const RequestManagePhotos = <T extends FieldValues>({
   name,
@@ -117,9 +88,9 @@ export const RequestManagePhotos = <T extends FieldValues>({
 
   const renderAddButton = () => (
     <Button
-      disabled={isImageLoading}
-      accessoryLeft={isImageLoading ? LoadingIndicator : PlusIcon}
-      appearance="ghost"
+      isLoading={isImageLoading}
+      leftIcon={<Icon as={MaterialIcons} name="add-circle-outline" size="xl" />}
+      variant="ghost"
       style={{ height: 80, width: 80, marginVertical: 10 }}
       onPress={handleAddImage}
     />
@@ -141,22 +112,20 @@ export const RequestManagePhotos = <T extends FieldValues>({
                 />
               </Box>
             </Pressable>
-            <Button
-              accessoryLeft={RemoveIcon}
-              status="danger"
-              style={{
-                height: 24,
-                width: 24,
-                position: 'absolute',
-                right: 0,
-                top: 0,
-                marginTop: -8,
-                marginRight: -8,
-                minWidth: undefined,
-                minHeight: undefined,
-                paddingHorizontal: 0,
-                paddingVertical: 0,
+            <IconButton
+              zIndex={999}
+              size="xs"
+              variant="solid"
+              _icon={{
+                as: MaterialIcons,
+                name: 'remove-circle-outline',
               }}
+              right={0}
+              top={0}
+              position="absolute"
+              mt={-3}
+              mr={-3}
+              backgroundColor="red.500"
               onPress={() => handleImageRemove(uri)}
             />
           </Box>

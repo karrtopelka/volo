@@ -1,5 +1,5 @@
 import { ControlledFieldProps } from '@/types'
-import { FormControl, HStack, WarningOutlineIcon } from 'native-base'
+import { Button, FormControl, HStack, WarningOutlineIcon } from 'native-base'
 import { ComponentProps, useEffect, useState } from 'react'
 import { FieldValues, useController } from 'react-hook-form'
 import {
@@ -7,7 +7,6 @@ import {
   ImagePickerOptions,
   MediaTypeOptions,
 } from 'expo-image-picker'
-import { Button } from '@ui-kitten/components'
 import { getValidationErrorMessage } from '@/utils'
 import { Image } from 'react-native'
 import { storageClient } from '@/libs'
@@ -39,7 +38,6 @@ export const ControlledPhotoInput = <T extends FieldValues>({
   })
 
   const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
     const result = await launchImageLibraryAsync({
       mediaTypes: MediaTypeOptions.Images,
       allowsEditing: true,
@@ -88,10 +86,10 @@ export const ControlledPhotoInput = <T extends FieldValues>({
         <Button
           onPress={pickImage}
           style={{ width: '50%', flexGrow: 0, flexShrink: 0 }}
-          appearance="ghost"
-          size="tiny"
+          variant="ghost"
+          size="xs"
         >
-          Pick an image from camera roll
+          Натисніть, щоб завантажити фото
         </Button>
         {image && (
           <Image
