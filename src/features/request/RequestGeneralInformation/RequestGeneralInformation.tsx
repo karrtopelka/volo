@@ -42,7 +42,7 @@ export const RequestGeneralInformation = ({
         <RequestCategory category={data.category} />
         <Divider />
         <CardAttribute title="Теги">
-          <HStack space={2} flexWrap="wrap">
+          <HStack space={2} style={{ rowGap: 8 }} flexWrap="wrap">
             {data.tags.map((tag) => (
               <Tag
                 key={tag.id}

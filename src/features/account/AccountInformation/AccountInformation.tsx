@@ -1,4 +1,5 @@
 import { CardAttribute, Tag } from '@/components'
+import { useOnlineUsers } from '@/contexts'
 import { User } from '@/types'
 import { MaterialIcons } from '@expo/vector-icons'
 import dayjs from 'dayjs'
@@ -11,6 +12,7 @@ import {
   Text,
   Divider,
   Box,
+  Circle,
 } from 'native-base'
 import { useTranslation } from 'react-i18next'
 
@@ -24,6 +26,9 @@ export const AccountInformation = ({
   isLoading,
 }: AccountInformationProps): JSX.Element => {
   const { t, i18n } = useTranslation('account')
+  const { userIds } = useOnlineUsers()
+
+  const isUserOnline = userIds.includes(data!.id)
 
   if (isLoading) {
     return <Spinner size="sm" />
@@ -32,12 +37,24 @@ export const AccountInformation = ({
   return (
     <HStack space={5} alignItems="center">
       <VStack space={2.5}>
-        <Avatar
-          size="lg"
-          source={
-            data?.avatar ? { uri: data.avatar } : require('@assets/icon.png')
-          }
-        />
+        <VStack position="relative">
+          <Circle
+            bgColor={isUserOnline ? 'green.500' : 'gray.300'}
+            rounded="full"
+            position="absolute"
+            bottom={0}
+            zIndex={1}
+            alignSelf="flex-end"
+            w={3}
+            h={3}
+          />
+          <Avatar
+            size="lg"
+            source={
+              data?.avatar ? { uri: data.avatar } : require('@assets/icon.png')
+            }
+          />
+        </VStack>
         {data?.reputation ? (
           <HStack space={2} alignItems="center">
             <Icon as={MaterialIcons} name="star" color="#FFC107" size="sm" />
@@ -47,7 +64,7 @@ export const AccountInformation = ({
           <></>
         )}
       </VStack>
-      <VStack space={2.5}>
+      <VStack space={2.5} flex={1}>
         <CardAttribute title={t('email')}>{data?.email}</CardAttribute>
         <Divider />
         <CardAttribute title={t('name')}>
@@ -77,14 +94,14 @@ export const AccountInformation = ({
           )}
         </CardAttribute>
         <Divider />
-        <HStack space={3}>
-          <CardAttribute title={t('lastLogin')}>
-            {dayjs(data?.lastLogin).fromNow()}
-          </CardAttribute>
-          <CardAttribute title={t('created')}>
-            {dayjs(data?.createdAt).fromNow()}
-          </CardAttribute>
-        </HStack>
+        <CardAttribute title={t('lastLogin')}>
+          {isUserOnline ? 'В мережі' : dayjs(data?.lastLogin).fromNow()}
+        </CardAttribute>
+        <Divider />
+
+        <CardAttribute title={t('created')}>
+          {dayjs(data?.createdAt).fromNow()}
+        </CardAttribute>
       </VStack>
     </HStack>
   )

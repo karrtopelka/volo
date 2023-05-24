@@ -20,9 +20,7 @@ export const RequestsScreen = (): JSX.Element => {
   }
 
   const handleAddRequest = () =>
-    navigation.navigate(Routes.REQUEST_CREATE, {
-      id: undefined,
-    })
+    navigation.navigate(Routes.REQUEST_CREATE_NAVIGATOR)
 
   if (isLoading) {
     return (
@@ -34,10 +32,10 @@ export const RequestsScreen = (): JSX.Element => {
 
   return (
     <View>
-      <RequestsFilterContainer params={params} setParams={setParams} />
-      {!!data?.data.length ? (
-        <ScrollView>
-          <VStack space={5} m={3} alignItems="stretch">
+      <ScrollView>
+        <RequestsFilterContainer params={params} setParams={setParams} />
+        {!!data?.data.length ? (
+          <VStack space={5} m={3}>
             <>
               {data?.data.map((request) => (
                 <RequestCard
@@ -52,21 +50,21 @@ export const RequestsScreen = (): JSX.Element => {
               )}
             </>
           </VStack>
-        </ScrollView>
-      ) : (
-        <Card mx={3}>
-          <VStack space={5} alignItems="center">
-            {params.type ?? params.status ?? params.fromDate ? (
-              <Text>За заданими параметрами нічого не знайдено</Text>
-            ) : (
-              <>
-                <Text>Ви ще не створили жодного запиту</Text>
-                <Button onPress={handleAddRequest}>Створити</Button>
-              </>
-            )}
-          </VStack>
-        </Card>
-      )}
+        ) : (
+          <Card mx={3}>
+            <VStack space={5} alignItems="center">
+              {params.type ?? params.status ?? params.fromDate ? (
+                <Text>За заданими параметрами нічого не знайдено</Text>
+              ) : (
+                <>
+                  <Text>Ви ще не створили жодного запиту</Text>
+                  <Button onPress={handleAddRequest}>Створити</Button>
+                </>
+              )}
+            </VStack>
+          </Card>
+        )}
+      </ScrollView>
     </View>
   )
 }

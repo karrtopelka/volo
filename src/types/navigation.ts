@@ -1,5 +1,10 @@
 import { Routes } from '@/constants'
 import { LocationObject } from 'expo-location'
+import {
+  RequestPostCategory,
+  RequestPostGeneralInformation,
+  RequestPostPhotos,
+} from './api'
 
 export type RootStackParamList = {
   [Routes.LOGIN]: undefined
@@ -23,10 +28,21 @@ export type MainTabsParamList = {
   [Routes.REQUEST_CREATE]: { id: number | undefined }
   [Routes.REQUEST_ADD_COMMENT]: { id: number }
 
+  [Routes.REQUEST_CREATE_NAVIGATOR]: undefined
+  [Routes.REQUEST_CREATE_INITIAL]: undefined
+  [Routes.REQUEST_CREATE_GENERAL_INFORMATION]: undefined
+  [Routes.REQUEST_CREATE_CATEGORY]: { data: RequestPostGeneralInformation }
+  [Routes.REQUEST_CREATE_PHOTOS]: {
+    data: RequestPostCategory
+  }
+  [Routes.REQUEST_CREATE_ADDITIONAL_INFORMATION]: {
+    data: RequestPostPhotos
+  }
+
   [Routes.CHAT_NAVIGATOR]: undefined
   [Routes.CHATS]: undefined
   [Routes.CHAT]: { id: number; recipientName: string; recipientId: number }
-  [Routes.CREATE_CHAT]: undefined
+  [Routes.CREATE_CHAT]: { recipientId: number }
 
   [Routes.FEED]: undefined
   [Routes.FEED_ALL]: undefined

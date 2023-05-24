@@ -6,7 +6,11 @@ import {
   Pressable,
 } from 'native-base'
 import { BottomTabBarProps as BottomTabBarPropsRN } from '@react-navigation/bottom-tabs'
-import { NavigationProp, useNavigation } from '@react-navigation/native'
+import {
+  CommonActions,
+  NavigationProp,
+  useNavigation,
+} from '@react-navigation/native'
 import { MainTabsParamList } from '@/types'
 import { MaterialIcons } from '@expo/vector-icons'
 
@@ -26,6 +30,15 @@ export const BottomTabBar = ({
 }: BottomTabBarProps): JSX.Element => {
   const navigation = useNavigation<NavigationProp<MainTabsParamList>>()
 
+  const moveToInitialPage = (index: number) => {
+    navigation.dispatch({
+      ...CommonActions.reset({
+        index: 0,
+        routes: [{ name: state.routeNames[index] }],
+      }),
+    })
+  }
+
   return (
     <Box width="100%">
       <HStack bg="gray.200" alignItems="center" safeAreaBottom shadow={6}>
@@ -35,11 +48,7 @@ export const BottomTabBar = ({
             opacity={state.index === index ? 1 : 0.5}
             py="3"
             flex={1}
-            onPress={() =>
-              navigation.navigate(
-                state.routeNames[index] as keyof MainTabsParamList
-              )
-            }
+            onPress={() => moveToInitialPage(index)}
           >
             <Center>
               <MaterialIcon

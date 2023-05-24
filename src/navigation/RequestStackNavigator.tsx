@@ -3,8 +3,8 @@ import { MainTabsParamList } from '@/types'
 import { Routes } from '@/constants'
 import {
   AccountScreen,
+  CreateChatScreen,
   RequestAddCommentScreen,
-  RequestCreateScreen,
   RequestScreen,
   RequestsScreen,
 } from '@/screens'
@@ -28,11 +28,25 @@ export const RequestStackNavigator = (): JSX.Element => (
       component={RequestAddCommentScreen}
       options={{ headerTitle: 'Додати коментар' }}
     />
-    <Screen
+    {/* <Screen
       name={Routes.REQUEST_CREATE}
       component={RequestCreateScreen}
       options={{ headerShown: false }}
+    /> */}
+    <Screen
+      name={Routes.ACCOUNT}
+      component={AccountScreen}
+      options={{ headerTitle: 'Автор запиту' }}
     />
-    <Screen name={Routes.ACCOUNT} component={AccountScreen} />
+    <Screen
+      name={Routes.ACCOUNT_VIEW}
+      component={AccountScreen}
+      options={{ headerTitle: 'Коментатор' }}
+    />
+    <Screen
+      name={Routes.CREATE_CHAT}
+      component={CreateChatScreen}
+      options={{ headerTitle: 'Новий чат' }}
+    />
   </Navigator>
 )

@@ -1,4 +1,4 @@
-import { Layout } from '@/components'
+import { Layout, RequestSkeleton } from '@/components'
 import { Routes } from '@/constants'
 import {
   RequestAttachments,
@@ -10,7 +10,7 @@ import { MainTabsParamList } from '@/types'
 import { NavigationProp, useNavigation } from '@react-navigation/native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import dayjs from 'dayjs'
-import { Box, Button, ScrollView, Spinner, VStack } from 'native-base'
+import { Box, Button, ScrollView, VStack } from 'native-base'
 import { useEffect } from 'react'
 import AppleHeader from 'react-native-apple-header'
 
@@ -24,13 +24,17 @@ export const RequestScreen = ({ route }: RequestScreenProps): JSX.Element => {
   const { data, isLoading } = useRequest({ id })
   const navigation = useNavigation<NavigationProp<MainTabsParamList>>()
 
-  const handleNavigateToEditScreen = () =>
-    navigation.navigate(Routes.REQUEST_CREATE, {
-      id,
-    })
+  const handleNavigateToEditScreen = () => {
+    // return navigation.navigate(Routes.REQUEST_CREATE, {
+    //   id,
+    // })
+  }
 
   const handleNavigateToUserAccount = () =>
     navigation.navigate(Routes.ACCOUNT, { id: data!.user.id })
+
+  const handleCreateChat = () =>
+    navigation.navigate(Routes.CREATE_CHAT, { recipientId: data!.user.id })
 
   useEffect(() => {
     if (isSelfRequest) {
@@ -46,8 +50,8 @@ export const RequestScreen = ({ route }: RequestScreenProps): JSX.Element => {
 
   if (isLoading) {
     return (
-      <Layout centered={true}>
-        <Spinner size="sm" />
+      <Layout>
+        <RequestSkeleton />
       </Layout>
     )
   }
@@ -72,6 +76,9 @@ export const RequestScreen = ({ route }: RequestScreenProps): JSX.Element => {
               <RequestAttachments attachments={data.attachments} />
             )}
             <RequestGeneralInformation data={data} />
+            {!isSelfRequest && (
+              <Button onPress={handleCreateChat}>Звʼязатись з людиною</Button>
+            )}
             <RequestComments comments={data.comments} requestId={id} />
           </VStack>
         </VStack>

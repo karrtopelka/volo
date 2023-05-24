@@ -1,144 +1,127 @@
-import { ControlledFieldProps } from '@/types'
+import { useImagePicker } from '@/hooks'
 import { isUrl } from '@/utils'
 import { MaterialIcons } from '@expo/vector-icons'
-import { MediaTypeOptions, launchImageLibraryAsync } from 'expo-image-picker'
+import { ImagePickerAsset } from 'expo-image-picker'
 import {
   Box,
   Button,
   HStack,
   Icon,
-  IconButton,
-  Image,
   Pressable,
+  useToast,
+  Text,
+  Center,
 } from 'native-base'
-import { useEffect, useState } from 'react'
-import { FieldValues, useController } from 'react-hook-form'
+import { useState } from 'react'
 import ImageView from 'react-native-image-viewing'
+import { Image } from 'expo-image'
+import { RemovePhotoButton } from './RemovePhotoButton'
 
-export type RequestManagePhotosProps<T extends FieldValues> =
-  ControlledFieldProps<T>
+export type EntityPhoto = {
+  id: number
+  link: string
+}
 
-export const RequestManagePhotos = <T extends FieldValues>({
-  name,
-  control,
-}: RequestManagePhotosProps<T>): JSX.Element => {
-  const [internalState, setInternalState] = useState<string[]>([])
-  const [isImageLoading, setIsImageLoading] = useState<boolean>(false)
-  const [activePhotoIndex, setActivePhotoIndex] = useState<number>(0)
-  const [visible, setIsVisible] = useState<boolean>(false)
+export type RequestManagePhotosProps = {
+  photos: EntityPhoto[]
+  onPickImage: (attachments: ImagePickerAsset[]) => void
+  onRemove: (photoId: number) => void
+  isLoading?: boolean
+}
 
-  const handleImagePress = (index: number) => {
-    setActivePhotoIndex(index)
-    setIsVisible(true)
-  }
+export const RequestManagePhotos = ({
+  photos,
+  onPickImage,
+  onRemove,
+  isLoading,
+}: RequestManagePhotosProps): JSX.Element => {
+  const { show } = useToast()
+  const pickImage = useImagePicker()
+  const [isImageLoading, setIsImageLoading] = useState(false)
 
-  const handleAddImage = async () => {
+  const handleAddImage = async (): Promise<void> => {
     try {
-      const result = await launchImageLibraryAsync({
-        mediaTypes: MediaTypeOptions.Images,
-        aspect: [16, 9],
-        base64: true,
-        quality: 0.5,
-        allowsMultipleSelection: true,
-        selectionLimit: 5,
-      })
+      setIsImageLoading(true)
+      const result = await pickImage()
 
-      if (!result.canceled) {
-        setIsImageLoading(true)
-        const files: string[] = []
-        const { assets } = result
-
-        assets.forEach((asset) => {
-          files.push(asset.base64!)
-        })
-
-        const newInternalState = [...internalState, ...files]
-
-        setInternalState(newInternalState)
-        onChange(newInternalState)
+      if (!result) {
+        return
       }
+
+      onPickImage(result)
     } catch (error) {
       console.error(error)
+      show({
+        render: () => (
+          <Box bg="danger.300" px="4" py="3" rounded="sm">
+            <Text color="white">Під час вибору фотографій сталася помилка</Text>
+          </Box>
+        ),
+        placement: 'top',
+        variant: 'subtle',
+      })
     } finally {
       setIsImageLoading(false)
     }
   }
 
-  const handleImageRemove = (url: string) => {
-    const newInternalState = internalState.filter(
-      (attachment) => attachment !== url
-    )
+  const [visible, setIsVisible] = useState(false)
+  const [imageIndex, setImageIndex] = useState(0)
 
-    setInternalState(newInternalState)
-    onChange(newInternalState)
+  const handleImagePress = (imageIndex: number) => {
+    setImageIndex(imageIndex)
+    setIsVisible(true)
   }
 
-  const {
-    field: { onChange, value },
-  } = useController<T>({
-    name,
-    control,
-  })
-
-  useEffect(() => {
-    if (value !== internalState) {
-      setInternalState(value)
-    }
-  }, [value])
-
-  const renderAddButton = () => (
-    <Button
-      isLoading={isImageLoading}
-      leftIcon={<Icon as={MaterialIcons} name="add-circle-outline" size="xl" />}
-      variant="ghost"
-      style={{ height: 80, width: 80, marginVertical: 10 }}
-      onPress={handleAddImage}
-    />
-  )
-
   return (
-    <Box>
-      <HStack space={3} flexWrap="wrap">
-        {internalState.map((uri, index) => (
-          <Box key={uri} position="relative" my={2}>
-            <Pressable onPress={() => handleImagePress(index)}>
-              <Box>
-                <Image
-                  source={{
-                    uri: isUrl(uri) ? uri : `data:image/jpeg;base64,${uri}`,
-                  }}
-                  size="md"
-                  alt={uri}
-                />
-              </Box>
-            </Pressable>
-            <IconButton
-              zIndex={999}
-              size="xs"
-              variant="solid"
-              _icon={{
-                as: MaterialIcons,
-                name: 'remove-circle-outline',
+    <HStack flexWrap="wrap">
+      {photos?.map(({ id, link }, index) => (
+        <Box key={id} width="27%" height={24} mb={4} mr={4} position="relative">
+          <Pressable
+            onPress={() => handleImagePress(index)}
+            style={{ flex: 1, width: '100%' }}
+          >
+            <Image
+              source={{
+                uri: isUrl(link) ? link : `data:image/jpeg;base64,${link}`,
               }}
-              right={0}
-              top={0}
-              position="absolute"
-              mt={-3}
-              mr={-3}
-              backgroundColor="red.500"
-              onPress={() => handleImageRemove(uri)}
+              contentFit="cover"
+              transition={500}
+              style={{ flex: 1, width: '100%' }}
             />
-          </Box>
-        ))}
-        {renderAddButton()}
-      </HStack>
+          </Pressable>
+          <RemovePhotoButton id={id} onRemove={onRemove} />
+        </Box>
+      ))}
+
+      <Center width="30%" height={24}>
+        <Button
+          py={0}
+          px={0}
+          height="40px"
+          width="40px"
+          startIcon={
+            <Icon
+              color="white"
+              as={MaterialIcons}
+              size={8}
+              name="add-circle-outline"
+            />
+          }
+          isLoading={isLoading ?? isImageLoading}
+          onPress={handleAddImage}
+        />
+        <Text fontSize={11} color="gray.500">
+          {isLoading ?? isImageLoading ? 'Завантажується' : 'Завантажити фото'}
+        </Text>
+      </Center>
+
       <ImageView
-        images={internalState.map((uri) => ({ uri })) ?? []}
-        imageIndex={activePhotoIndex}
+        images={photos?.map(({ link }) => ({ uri: link })) ?? []}
+        imageIndex={imageIndex}
         visible={visible}
         onRequestClose={() => setIsVisible(false)}
-        onLongPress={() => undefined}
       />
-    </Box>
+    </HStack>
   )
 }

@@ -10,6 +10,7 @@ import {
   Text,
   VStack,
 } from 'native-base'
+import { IVStackProps } from 'native-base/lib/typescript/components/primitives/Stack/VStack'
 
 export type CardProps = {
   title?: string
@@ -18,7 +19,8 @@ export type CardProps = {
   shortDescription?: string
   shortDescriptionProps?: ITextProps
   footerActions?: React.ReactNode
-  sectionsPadding?: number | string
+  sectionsPadding?: IVStackProps['p']
+  sectionSpace?: IVStackProps['space']
   status?: 'info' | 'success' | 'warning' | 'error'
 } & ReactChildren &
   IBoxProps
@@ -79,7 +81,8 @@ export const Card = ({
   shortDescription,
   shortDescriptionProps,
   footerActions,
-  sectionsPadding = 6,
+  sectionsPadding = '6',
+  sectionSpace = '5',
   status,
   children,
   ...rest
@@ -106,7 +109,7 @@ export const Card = ({
     }
     {...rest}
   >
-    <VStack p={sectionsPadding} space={5}>
+    <VStack p={sectionsPadding} space={sectionSpace}>
       {renderCardHeader({
         title,
         titleProps,

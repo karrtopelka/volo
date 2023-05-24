@@ -5,13 +5,14 @@ import { FeedTabsNavigator } from './FeedTabsNavigator'
 import { useTranslation } from 'react-i18next'
 import { AccountStackNavigator } from './AccountStackNavigator'
 import { RequestStackNavigator } from './RequestStackNavigator'
-import { RequestCreateScreen } from '@/screens'
 import { ChatStackNavigator } from './ChatStackNavigator'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { socketUser } from '@/utils'
 import { useMe } from '@/hooks'
 import { useOnlineUsers } from '@/contexts'
 import { BottomTabBar } from './BottomTabBar'
+import { RequestCreateStackNavigator } from './RequestCreateStackNavigator'
+import { AppState, AppStateStatus } from 'react-native'
 
 const { Screen, Navigator } = createBottomTabNavigator<MainTabsParamList>()
 
@@ -20,7 +21,11 @@ export const MainTabsNavigator = (): JSX.Element => {
   const { data: me } = useMe()
   const { updateUserIds } = useOnlineUsers()
 
+  const [appState, setAppState] = useState(AppState.currentState)
+
   useEffect(() => {
+    const appState = AppState.addEventListener('change', _handleAppStateChange)
+
     socketUser.on('users', (data) => {
       if (!Array.isArray(data[0])) {
         updateUserIds(data)
@@ -30,9 +35,22 @@ export const MainTabsNavigator = (): JSX.Element => {
     socketUser.emit('check-in', me!.id)
 
     return () => {
+      appState.remove()
       socketUser.off('users')
     }
   }, [])
+
+  const _handleAppStateChange = (nextAppState: AppStateStatus) => {
+    if (appState === 'active' && nextAppState.match(/inactive|background/)) {
+      socketUser.emit('check-out', me!.id)
+    } else if (
+      appState.match(/inactive|background/) &&
+      nextAppState === 'active'
+    ) {
+      socketUser.emit('check-in', me!.id)
+    }
+    setAppState(nextAppState)
+  }
 
   return (
     <Navigator
@@ -61,9 +79,8 @@ export const MainTabsNavigator = (): JSX.Element => {
         options={{ headerShown: false }}
       />
       <Screen
-        name={Routes.REQUEST_CREATE}
-        component={RequestCreateScreen}
-        initialParams={{ id: undefined }}
+        name={Routes.REQUEST_CREATE_NAVIGATOR}
+        component={RequestCreateStackNavigator}
         options={{ headerShown: false }}
       />
       <Screen

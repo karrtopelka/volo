@@ -15,7 +15,12 @@ export const UserAvatar = ({ uri, size, userId, ...rest }: UserAvatarProps) => {
     navigation.navigate(Routes.ACCOUNT_VIEW, { id: userId })
 
   return (
-    <Pressable onPress={handleUserAvatarPress}>
+    <Pressable
+      onPress={handleUserAvatarPress}
+      _pressed={{
+        opacity: 0.5,
+      }}
+    >
       <Avatar
         size={size}
         source={uri ? { uri } : require('@assets/icon.png')}

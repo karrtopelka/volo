@@ -21,7 +21,15 @@ export enum Routes {
   REQUESTS = 'Requests',
   ACCOUNT_REQUESTS = 'AccountRequests',
   REQUEST = 'Request',
+
   REQUEST_CREATE = 'RequestCreate',
+  REQUEST_CREATE_NAVIGATOR = 'RequestCreateNavigator',
+  REQUEST_CREATE_INITIAL = 'RequestCreateGeneralInitial',
+  REQUEST_CREATE_GENERAL_INFORMATION = 'RequestCreateGeneralInformation',
+  REQUEST_CREATE_CATEGORY = 'RequestCreateCategory',
+  REQUEST_CREATE_PHOTOS = 'RequestCreatePhotos',
+  REQUEST_CREATE_ADDITIONAL_INFORMATION = 'RequestCreateAdditionalInformation',
+
   REQUEST_EDIT = 'RequestEdit',
   REQUEST_ADD_COMMENT = 'RequestAddComment',
 

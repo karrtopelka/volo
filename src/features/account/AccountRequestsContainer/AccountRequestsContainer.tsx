@@ -76,7 +76,7 @@ export const AccountRequestsContainer = ({
             variant="filled"
             _icon={{
               as: MaterialIcons,
-              name: 'plus-circle-outline',
+              name: 'add-circle-outline',
             }}
             onPress={handleLimit}
             disabled={isLoading}

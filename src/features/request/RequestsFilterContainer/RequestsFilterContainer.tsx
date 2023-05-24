@@ -1,14 +1,7 @@
+import { Card } from '@/components'
 import { REQUEST_FROM_DATE, REQUEST_STATUSES, REQUEST_TYPES } from '@/constants'
 import { RequestSearchRequestParams, RequestStatus, RequestType } from '@/types'
-import {
-  Box,
-  CheckIcon,
-  HStack,
-  Heading,
-  Select,
-  VStack,
-  Text,
-} from 'native-base'
+import { CheckIcon, HStack, Select, VStack, Text } from 'native-base'
 import { Dispatch, SetStateAction } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -72,8 +65,7 @@ export const RequestsFilterContainer = ({
   }
 
   return (
-    <Box m={3}>
-      <Heading size="sm">Фільтр</Heading>
+    <Card m={3} title="Фільтр" sectionsPadding={3} sectionSpace={1}>
       <HStack space={3} py={2}>
         <VStack space={2} flex={1}>
           <Text size="sm" h="auto">
@@ -81,7 +73,7 @@ export const RequestsFilterContainer = ({
           </Text>
           <Select
             selectedValue={params.type?.toString()}
-            placeholder="Type"
+            placeholder="Тип"
             onValueChange={(itemValue) => handleSelectType(itemValue)}
             _selectedItem={{
               bg: 'green.300',
@@ -107,7 +99,7 @@ export const RequestsFilterContainer = ({
           </Text>
           <Select
             selectedValue={params.status?.toString()}
-            placeholder="Status"
+            placeholder="Стан"
             onValueChange={(itemValue) => handleSelectStatus(itemValue)}
             _selectedItem={{
               bg: 'teal.600',
@@ -133,7 +125,7 @@ export const RequestsFilterContainer = ({
           </Text>
           <Select
             selectedValue={params.fromDate?.toString()}
-            placeholder="From date"
+            placeholder="За"
             onValueChange={(itemValue) => handleSelectFromDate(itemValue)}
             _selectedItem={{
               bg: 'teal.600',
@@ -154,6 +146,6 @@ export const RequestsFilterContainer = ({
           </Select>
         </VStack>
       </HStack>
-    </Box>
+    </Card>
   )
 }
