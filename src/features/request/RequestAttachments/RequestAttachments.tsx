@@ -1,8 +1,7 @@
 import { Attachment, Attachments } from '@/types'
-import { AspectRatio, Image, Pressable, VStack } from 'native-base'
+import { AspectRatio, Image, Pressable, VStack, Text } from 'native-base'
 import { useState } from 'react'
 import Carousel from 'react-native-reanimated-carousel'
-import { Text } from '@ui-kitten/components'
 import ImageView from 'react-native-image-viewing'
 import { Dimensions } from 'react-native'
 

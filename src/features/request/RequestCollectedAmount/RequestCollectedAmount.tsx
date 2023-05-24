@@ -1,23 +1,32 @@
 import { CardAttribute } from '@/components'
-import { VStack, Progress, Center } from 'native-base'
-import { Text } from '@ui-kitten/components'
+import { VStack, Progress, Center, Heading, Text } from 'native-base'
 
 export type RequestCollectedAmountProps = {
-  totalCollected: number
+  totalCollected: number | null
   goalAmount: number | null
 }
 
 const renderCollectedAmount = (
-  totalCollected: number,
+  totalCollected: number | null,
   goalAmount: number | null
 ) => {
   if (goalAmount) {
-    return <Text category="s1">{`UAH ${totalCollected} / ${goalAmount}`}</Text>
+    if (!totalCollected) {
+      return <Heading size="xs">{`UAH ${goalAmount}`}</Heading>
+    }
+
+    return (
+      <Heading size="xs">{`UAH ${totalCollected} / ${goalAmount}`}</Heading>
+    )
+  }
+
+  if (!totalCollected) {
+    return <Heading size="xs">-</Heading>
   }
 
   return (
     <Center>
-      <Text category="s1">{`UAH ${totalCollected}`}</Text>
+      <Heading size="xs">{`UAH ${totalCollected}`}</Heading>
     </Center>
   )
 }
@@ -29,12 +38,14 @@ export const RequestCollectedAmount = ({
   <CardAttribute title="Зібрано">
     <VStack space={3}>
       {renderCollectedAmount(totalCollected, goalAmount)}
-      {goalAmount && (
+      {goalAmount && totalCollected ? (
         <Progress
           colorScheme="emerald"
           size="md"
           value={(totalCollected / goalAmount) * 100}
         />
+      ) : (
+        <Text>Цей запит не збирає фінанси</Text>
       )}
     </VStack>
   </CardAttribute>

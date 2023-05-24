@@ -3,6 +3,11 @@ export type PaginatedListResponse<T extends Record<string, unknown>> = {
   data: T[]
 }
 
+export type PaginatedCursorResponse<T extends Record<string, unknown>> = {
+  next: number | null
+  data: T[]
+}
+
 export type APIErrorResponse = {
   error: string
   message: string[] | string

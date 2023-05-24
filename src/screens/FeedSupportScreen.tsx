@@ -1,5 +1,5 @@
 import { Layout } from '@/components'
-import { Text } from '@ui-kitten/components'
+import { Text } from 'native-base'
 
 export const FeedSupportScreen = (): JSX.Element => (
   <Layout centered={true}>

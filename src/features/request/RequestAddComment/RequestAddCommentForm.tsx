@@ -1,11 +1,9 @@
-import { CardAttribute, ControlledInput } from '@/components'
+import { Card, CardAttribute, ControlledInput } from '@/components'
 import { useMutationWrapper, usePostComment } from '@/hooks'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useNavigation } from '@react-navigation/native'
-import { Button, Card, Spinner } from '@ui-kitten/components'
-import { HStack } from 'native-base'
+import { Button, HStack } from 'native-base'
 import { useForm } from 'react-hook-form'
-import { View } from 'react-native'
 import * as yup from 'yup'
 
 const schema = yup.object({
@@ -19,19 +17,6 @@ type RequestAddCommentFormData = {
 export type RequestAddCommentFormProps = {
   requestId: number
 }
-
-const LoadingIndicator = (): React.ReactElement => (
-  <View
-    style={[
-      {
-        justifyContent: 'center',
-        alignItems: 'center',
-      },
-    ]}
-  >
-    <Spinner size="small" status="basic" />
-  </View>
-)
 
 export const RequestAddCommentForm = ({
   requestId,
@@ -57,21 +42,16 @@ export const RequestAddCommentForm = ({
 
   return (
     <Card
-      disabled={true}
-      footer={
+      footerActions={
         <HStack justifyContent="space-between">
           <Button
-            disabled={isLoading}
-            appearance="ghost"
+            isLoading={isLoading}
+            variant="ghost"
             onPress={() => navigation.goBack()}
           >
             Відміна
           </Button>
-          <Button
-            disabled={isLoading}
-            onPress={handleSubmit(onSubmit)}
-            accessoryRight={isLoading ? LoadingIndicator : undefined}
-          >
+          <Button isLoading={isLoading} onPress={handleSubmit(onSubmit)}>
             Додати
           </Button>
         </HStack>

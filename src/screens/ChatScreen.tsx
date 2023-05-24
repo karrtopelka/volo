@@ -1,21 +1,12 @@
 import { Layout } from '@/components'
 import { Routes } from '@/constants'
-import { useMe } from '@/hooks'
-import {
-  Chat,
-  MainTabsParamList,
-  Message,
-  PaginatedListResponse,
-} from '@/types'
+import { useChat, useMe } from '@/hooks'
+import { MainTabsParamList, Message, PaginatedListResponse } from '@/types'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { Spinner, View } from 'native-base'
-import { useEffect, useLayoutEffect, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { NavigationProp, useNavigation } from '@react-navigation/native'
-import {
-  socketChat,
-  transformMessageToGiftedChat,
-  transformMultipleMessagesToGiftedChat,
-} from '@/utils'
+import { socketChat, transformMultipleMessagesToGiftedChat } from '@/utils'
 import { GiftedChat, IMessage } from 'react-native-gifted-chat'
 import {
   ScrollToBottomComponent,
@@ -24,45 +15,61 @@ import {
 } from '@/features'
 import { Platform } from 'react-native'
 import { useOnlineUsers } from '@/contexts'
+import { useQueryClient } from '@tanstack/react-query'
 
 type ChatScreenProps = NativeStackScreenProps<MainTabsParamList, Routes.CHAT>
 
 export const ChatScreen = ({ route }: ChatScreenProps): JSX.Element => {
-  const [isLoadingEarlier, setIsLoadingEarlier] = useState(false)
-  const [offset, setOffset] = useState(3000)
+  const { id, recipientName, recipientId } = route.params
   const [inputText, setInputText] = useState('')
   const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout | null>(
     null
   )
+  const isInitialRender = useRef(true)
+  const queryClient = useQueryClient()
 
-  const { id, recipientName, recipientId } = route.params
+  const {
+    data: messages,
+    isLoading,
+    fetchNextPage,
+  } = useChat({ id, params: { offset: 0 } })
 
-  const [messages, setMessages] = useState<IMessage[]>([])
   const { data: me } = useMe()
   const { userIds } = useOnlineUsers()
 
   const navigation = useNavigation<NavigationProp<MainTabsParamList>>()
 
-  const handleLoadMore = () => {
-    setIsLoadingEarlier(true)
-    socketChat.emit('loadMoreMessages', {
-      room: id,
-      offset,
-    })
-  }
+  const handleLoadMore = () => fetchNextPage()
 
   useEffect(() => {
     socketChat.emit('joinRoom', id)
-    socketChat.on('joinedRoom', (data: PaginatedListResponse<Chat>) => {
-      setMessages(transformMultipleMessagesToGiftedChat(data.data[0].messages))
-    })
-    socketChat.on('chatToClient', (data: Message) => {
-      setMessages((prev) => [...prev, transformMessageToGiftedChat(data)!])
+    socketChat.on('chatToClient', (newMessage: Message) => {
+      queryClient.setQueryData(['chat', id.toString()], (oldData: unknown) => {
+        const oldDataTyped = oldData as {
+          pageParams: Array<unknown>
+          pages: Array<PaginatedListResponse<Message>>
+        }
+
+        if (
+          oldDataTyped &&
+          Array.isArray(oldDataTyped.pageParams) &&
+          Array.isArray(oldDataTyped.pages)
+        ) {
+          const updatedPages = [...oldDataTyped.pages]
+
+          updatedPages[0].data = [newMessage, ...updatedPages[0].data]
+
+          return { ...oldDataTyped, pages: updatedPages }
+        } else {
+          return oldData
+        }
+      })
+
+      queryClient.invalidateQueries(['chat', id.toString()])
     })
     socketChat.on('typing', () => {
       navigation.setOptions({
-        headerRight: () =>
-          renderHeaderRight(true, userIds.includes(recipientId)),
+        headerRight: () => renderHeaderRight(true),
       })
     })
     socketChat.on('stopTyping', () => {
@@ -71,17 +78,6 @@ export const ChatScreen = ({ route }: ChatScreenProps): JSX.Element => {
           renderHeaderRight(false, userIds.includes(recipientId)),
       })
     })
-    socketChat.on(
-      'loadedMoreMessages',
-      (data: PaginatedListResponse<Message>) => {
-        setMessages((prev) => [
-          ...transformMultipleMessagesToGiftedChat(data.data),
-          ...prev,
-        ])
-        setOffset((prev) => prev + 50)
-        setIsLoadingEarlier(false)
-      }
-    )
 
     return () => {
       socketChat.emit('leaveRoom', id)
@@ -94,7 +90,10 @@ export const ChatScreen = ({ route }: ChatScreenProps): JSX.Element => {
   }, [socketChat])
 
   useLayoutEffect(() => {
-    navigation.setOptions({ title: recipientName })
+    if (isInitialRender.current) {
+      isInitialRender.current = false
+      navigation.setOptions({ title: recipientName })
+    }
     navigation.setOptions({
       headerRight: () =>
         renderHeaderRight(false, userIds.includes(recipientId)),
@@ -113,22 +112,16 @@ export const ChatScreen = ({ route }: ChatScreenProps): JSX.Element => {
   const handleTextChange = (inputText: string) => {
     setInputText(inputText)
 
-    if (!inputText) {
-      socketChat.emit('stopTyping', id)
-
-      return
-    }
-
-    socketChat.emit('typing', id)
-
     if (typingTimeout) {
       clearTimeout(typingTimeout)
     }
 
+    socketChat.emit('typing', id)
+
     setTypingTimeout(
       setTimeout(() => {
         socketChat.emit('stopTyping', id)
-      }, 3000)
+      }, 1000)
     )
   }
 
@@ -140,7 +133,7 @@ export const ChatScreen = ({ route }: ChatScreenProps): JSX.Element => {
     })
   }
 
-  if (messages.length === 0) {
+  if (isLoading) {
     return (
       <Layout centered={true}>
         <Spinner size="sm" />
@@ -150,19 +143,21 @@ export const ChatScreen = ({ route }: ChatScreenProps): JSX.Element => {
 
   return (
     <GiftedChat
-      messages={messages}
-      onSend={(text) => onSend(text)}
-      loadEarlier={true}
+      messages={transformMultipleMessagesToGiftedChat(
+        messages?.pages.map((page) => page.data).flat()
+      )}
+      onSend={onSend}
+      loadEarlier={messages?.pages[messages.pages.length - 1]?.next !== null}
+      infiniteScroll={true}
       onLoadEarlier={handleLoadMore}
-      isLoadingEarlier={isLoadingEarlier}
+      isLoadingEarlier={isLoading}
       user={{
         _id: me!.id,
         name: me?.name ?? me?.email,
+        avatar: me?.avatar ?? '@assets/icon.png',
       }}
       scrollToBottom={true}
       keyboardShouldPersistTaps="never"
-      inverted={false}
-      showUserAvatar={false}
       showAvatarForEveryMessage={true}
       renderAvatar={() => null}
       messagesContainerStyle={{ backgroundColor: 'white' }}
@@ -170,7 +165,7 @@ export const ChatScreen = ({ route }: ChatScreenProps): JSX.Element => {
       scrollToBottomComponent={ScrollToBottomComponent}
       dateFormat="DD.MM.YYYY"
       timeFormat="HH:mm"
-      bottomOffset={Platform.OS === 'ios' ? 75 : 0}
+      bottomOffset={Platform.OS === 'ios' ? 80 : 0}
       onInputTextChanged={(text) => handleTextChange(text)}
       shouldUpdateMessage={() => true}
       text={inputText}

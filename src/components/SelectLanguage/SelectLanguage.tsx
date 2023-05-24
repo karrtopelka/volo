@@ -1,30 +1,33 @@
 import { LANGUAGES } from '@/constants'
-import { IndexPath, Select, SelectItem } from '@ui-kitten/components'
 import dayjs from 'dayjs'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Select, ChevronDownIcon } from 'native-base'
 
 export const SelectLanguage = () => {
   const { i18n } = useTranslation('common')
-
-  const [selectedIndex, setSelectedIndex] = useState(
-    new IndexPath(i18n.languages.findIndex((item) => item === i18n.language))
+  const [selectedLanguageCode, setSelectedLanguageCode] = useState(
+    i18n.language
   )
 
-  const changeLanguage = (language: IndexPath) => {
-    setSelectedIndex(language as IndexPath)
-    i18n.changeLanguage(LANGUAGES[language.row].code)
-    dayjs.locale(LANGUAGES[language.row].code)
+  const handleChangeLanguage = (language: string): void => {
+    setSelectedLanguageCode(language)
+    i18n.changeLanguage(language)
+    dayjs.locale(language)
   }
 
   return (
     <Select
-      selectedIndex={selectedIndex}
-      value={LANGUAGES.find((item) => item.code === i18n.language)?.title}
-      onSelect={(index) => changeLanguage(index as IndexPath)}
+      selectedValue={selectedLanguageCode}
+      onValueChange={(itemValue) => handleChangeLanguage(itemValue)}
+      _selectedItem={{
+        endIcon: <ChevronDownIcon size="5" />,
+      }}
+      w="full"
+      h={12}
     >
-      {LANGUAGES.map(({ title }) => (
-        <SelectItem key={title} title={title} />
+      {LANGUAGES.map(({ title, code }) => (
+        <Select.Item key={title} label={title} value={code} />
       ))}
     </Select>
   )

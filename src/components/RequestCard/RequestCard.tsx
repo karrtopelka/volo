@@ -15,7 +15,11 @@ import { MainTabsParamList, Request } from '@/types'
 import { useTranslation } from 'react-i18next'
 import dayjs from 'dayjs'
 import { RequestTypeTag } from '../RequestTypeTag'
-import { NavigationProp, useNavigation } from '@react-navigation/native'
+import {
+  CommonActions,
+  NavigationProp,
+  useNavigation,
+} from '@react-navigation/native'
 import { Routes } from '@/constants'
 
 export type RequestCardProps = {
@@ -35,10 +39,18 @@ export const RequestCard = ({
   const hasImages = request.attachments.length > 0
 
   const handleCardClick = () =>
-    navigation.navigate(Routes.REQUEST, {
-      id: request.id,
-      isSelfRequest,
-    })
+    navigation.dispatch(
+      CommonActions.navigate({
+        name: Routes.REQUEST_NAVIGATOR,
+        params: {
+          screen: Routes.REQUEST,
+          params: {
+            id: request.id,
+            isSelfRequest,
+          },
+        },
+      })
+    )
 
   return (
     <Pressable onPress={handleCardClick}>
@@ -78,22 +90,24 @@ export const RequestCard = ({
             />
           </AspectRatio>
           <RequestTypeTag typeTag={request.type} />
-          <Center
-            bg="green.500"
-            _dark={{
-              bg: `green.400`,
-            }}
-            position="absolute"
-            top="0"
-            right="0"
-            px="3"
-            py="1.5"
-            borderBottomLeftRadius={4}
-          >
-            <Text color="warmGray.50" fontWeight={700} fontSize="xs">
-              Collected {request.totalCollected} / {request.goalAmount}
-            </Text>
-          </Center>
+          {request.totalCollected && request.goalAmount && (
+            <Center
+              bg="green.500"
+              _dark={{
+                bg: `green.400`,
+              }}
+              position="absolute"
+              top="0"
+              right="0"
+              px="3"
+              py="1.5"
+              borderBottomLeftRadius={4}
+            >
+              <Text color="warmGray.50" fontWeight={700} fontSize="xs">
+                Зібрано {request.totalCollected} / {request.goalAmount}
+              </Text>
+            </Center>
+          )}
         </Box>
         <Stack p="4" space={3} justifyContent="space-between" flex="1">
           <VStack space={2}>
@@ -130,7 +144,7 @@ export const RequestCard = ({
                     fontWeight="400"
                   >
                     {' '}
-                    Read More
+                    Читати далі
                   </Text>
                 </>
               ) : (

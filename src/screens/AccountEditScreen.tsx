@@ -1,25 +1,20 @@
-import { Box, ScrollView, VStack } from 'native-base'
-import { Button, Card, Spinner } from '@ui-kitten/components'
+import { Box, VStack, Button, Spinner, KeyboardAvoidingView } from 'native-base'
 import * as yup from 'yup'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { Routes, USER_ROLES } from '@/constants'
-import { MainTabsParamList, UserRole } from '@/types'
+import { USER_ROLES } from '@/constants'
+import { UserRole } from '@/types'
 import { Keyboard, TouchableWithoutFeedback } from 'react-native'
 import {
+  Card,
   CardAttribute,
   ControlledInput,
   ControlledPhoneInput,
   ControlledPhotoInput,
   ControlledSelect,
-  ControlledTagSelect,
-  TagSelectOption,
 } from '@/components'
-import { useInterests, useMutationWrapper, usePatchUsers } from '@/hooks'
+import { useMe, useMutationWrapper, usePatchUsers } from '@/hooks'
 import { useTranslation } from 'react-i18next'
-import { useEffect, useState } from 'react'
-import { NavigationProp, useNavigation } from '@react-navigation/native'
 
 const accountEditSchema = yup.object({
   email: yup.string().email().required(),
@@ -27,7 +22,6 @@ const accountEditSchema = yup.object({
   avatar: yup.string(),
   role: yup.string(),
   phoneNumber: yup.string(),
-  interests: yup.array().of(yup.number()),
 })
 
 export type AccountEditFormData = {
@@ -36,24 +30,14 @@ export type AccountEditFormData = {
   avatar: string
   role: string
   phoneNumber: string
-  interests: number[]
 }
 
-type AccountEditScreenProps = NativeStackScreenProps<
-  MainTabsParamList,
-  Routes.ACCOUNT_EDIT
->
-
-export const AccountEditScreen = ({
-  route,
-}: AccountEditScreenProps): JSX.Element => {
-  const { user } = route.params
+export const AccountEditScreen = (): JSX.Element => {
   const { i18n } = useTranslation('account')
-  const { data: interests } = useInterests()
-  const [interestsSelect, setInterestsSelect] = useState<TagSelectOption[]>([])
+
   const { mutateAsync: updateUser, isLoading: isUpdateUserLoading } =
     useMutationWrapper(usePatchUsers)
-  const navigation = useNavigation<NavigationProp<MainTabsParamList>>()
+  const { data: user } = useMe()
 
   const { control, handleSubmit } = useForm<AccountEditFormData>({
     resolver: yupResolver(accountEditSchema),
@@ -63,44 +47,30 @@ export const AccountEditScreen = ({
       avatar: user?.avatar ?? '',
       role: user?.role ?? '',
       phoneNumber: user?.phoneNumber ?? '',
-      interests: user?.interests.map(({ id }) => id) ?? [],
     },
   })
 
-  useEffect(() => {
-    if (interests) {
-      const isUkrainian = i18n.language === 'uk'
-      const interestsSelect = interests.map(({ nameUk, nameEn, id }) => ({
-        name: isUkrainian ? nameUk : nameEn,
-        id,
-      }))
-
-      setInterestsSelect(interestsSelect)
-    }
-
-    return () => setInterestsSelect([])
-  }, [interests])
-
   const onSubmit = async (data: AccountEditFormData) => {
-    await updateUser(
-      { ...data, role: data.role as UserRole },
-      {
-        onSuccess: () => navigation.goBack(),
-      }
-    )
+    await updateUser({ ...data, role: data.role as UserRole })
   }
 
   return (
-    <ScrollView>
+    <KeyboardAvoidingView
+      behavior="padding"
+      h={{
+        base: '200px',
+        lg: 'auto',
+      }}
+    >
       <Box bg="white" flex={1} position="relative" zIndex={0} p={4}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           {isUpdateUserLoading ? (
-            <Spinner size="small" status="basic" />
+            <Spinner size="sm" />
           ) : (
             <VStack space={5} h="100%">
-              <Card disabled={true}>
+              <Card>
                 <VStack space={5}>
-                  <CardAttribute title="email">
+                  <CardAttribute title="Електронна пошта">
                     <ControlledInput
                       control={control}
                       name="email"
@@ -111,7 +81,7 @@ export const AccountEditScreen = ({
                       placeholder="email@email.com"
                     />
                   </CardAttribute>
-                  <CardAttribute title="name">
+                  <CardAttribute title="Імʼя (та прізвище)">
                     <ControlledInput
                       control={control}
                       name="name"
@@ -120,10 +90,10 @@ export const AccountEditScreen = ({
                       placeholder="Ryan Gosling"
                     />
                   </CardAttribute>
-                  <CardAttribute title="photo">
+                  <CardAttribute title="Аватар">
                     <ControlledPhotoInput control={control} name="avatar" />
                   </CardAttribute>
-                  <CardAttribute title="role">
+                  <CardAttribute title="Роль">
                     <ControlledSelect
                       control={control}
                       name="role"
@@ -136,7 +106,7 @@ export const AccountEditScreen = ({
                       )}
                     />
                   </CardAttribute>
-                  <CardAttribute title="phone">
+                  <CardAttribute title="Телефон">
                     <ControlledPhoneInput
                       control={control}
                       name="phoneNumber"
@@ -145,23 +115,13 @@ export const AccountEditScreen = ({
                       placeholder="+380672080558"
                     />
                   </CardAttribute>
-                  <CardAttribute title="interests">
-                    <ControlledTagSelect
-                      control={control}
-                      name="interests"
-                      label="Interests"
-                      options={interestsSelect}
-                    />
-                  </CardAttribute>
                 </VStack>
               </Card>
-              <Button style={{ flex: 1.5 }} onPress={handleSubmit(onSubmit)}>
-                Save
-              </Button>
+              <Button onPress={handleSubmit(onSubmit)}>Оновити</Button>
             </VStack>
           )}
         </TouchableWithoutFeedback>
       </Box>
-    </ScrollView>
+    </KeyboardAvoidingView>
   )
 }

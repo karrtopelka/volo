@@ -1,6 +1,5 @@
-import { CardAttribute, Layout, SelectLanguage } from '@/components'
-import { Card, Text } from '@ui-kitten/components'
-import { VStack } from 'native-base'
+import { SelectLanguageContainer } from '@/components'
+import { VStack, Text, Box } from 'native-base'
 import { useTranslation } from 'react-i18next'
 
 export const NoAccessScreen = (): JSX.Element => {
@@ -9,19 +8,21 @@ export const NoAccessScreen = (): JSX.Element => {
   const text = t('requiredData.noAccess')!.split('. ')
 
   return (
-    <Layout centered={true}>
-      <VStack space={10}>
-        <VStack space={2}>
+    <Box
+      safeArea={true}
+      alignItems="center"
+      justifyContent="center"
+      h="full"
+      p={2}
+    >
+      <VStack space="md" w="sm">
+        <VStack space="sm" w="full">
           {text.map((item, index) => (
             <Text key={index}>{item}</Text>
           ))}
         </VStack>
-        <Card disabled={true}>
-          <CardAttribute title={t('common:language')!}>
-            <SelectLanguage />
-          </CardAttribute>
-        </Card>
+        <SelectLanguageContainer />
       </VStack>
-    </Layout>
+    </Box>
   )
 }
