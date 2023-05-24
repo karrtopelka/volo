@@ -1,7 +1,14 @@
-import { CheckIcon, FormControl, Select, WarningOutlineIcon } from 'native-base'
+import {
+  CheckIcon,
+  FormControl,
+  Icon,
+  Select,
+  WarningOutlineIcon,
+} from 'native-base'
 import { ComponentProps, useEffect, useState } from 'react'
 import { FieldValues, useController } from 'react-hook-form'
 import { ControlledFieldProps } from '@/types/ControlledFieldProps'
+import { MaterialIcons } from '@expo/vector-icons'
 
 export type SelectOption = { label: string; value: string }
 
@@ -42,6 +49,9 @@ export const ControlledSelect = <T extends FieldValues>({
         h={10}
         accessibilityLabel={label}
         placeholder={label}
+        dropdownIcon={
+          <Icon as={<MaterialIcons name="expand-more" />} size="2xl" mr={1} />
+        }
         _selectedItem={{
           bg: 'gray.200',
           endIcon: <CheckIcon size="5" />,

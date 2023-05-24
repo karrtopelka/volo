@@ -1,14 +1,22 @@
 import {
+  Card,
   CardAttribute,
   ControlledInput,
   Layout,
-  SelectLanguage,
+  SelectLanguageContainer,
 } from '@/components'
 import { useAuthContext, useMutationWrapper, useSignIn } from '@/hooks'
-import { Button, Card, CheckBox, Spinner, Text } from '@ui-kitten/components'
-import { Box, VStack } from 'native-base'
+import {
+  Box,
+  Heading,
+  Spinner,
+  VStack,
+  Text,
+  Button,
+  Checkbox,
+} from 'native-base'
 import { useTranslation } from 'react-i18next'
-import { Image, Keyboard, TouchableWithoutFeedback, View } from 'react-native'
+import { Image, Keyboard, TouchableWithoutFeedback } from 'react-native'
 import { useForm, Controller } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -17,12 +25,6 @@ import { AuthStackParamList } from '@/types'
 import { Routes } from '@/constants'
 import * as Location from 'expo-location'
 import { useEffect, useState } from 'react'
-
-const LoadingIndicator = () => (
-  <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-    <Spinner status="basic" size="small" />
-  </View>
-)
 
 const loginSchema = yup.object({
   email: yup.string().email().required(),
@@ -90,12 +92,8 @@ export const LoginScreen = (): JSX.Element => {
     return (
       <Box bg="white" flex={1} safeArea={true} position="relative" zIndex={0}>
         <VStack space="5" justifyContent="center" h="100%" mx={5}>
-          <Text category="h4">{errorMsg}</Text>
-          <Card disabled={true}>
-            <CardAttribute title={t('common:language')!}>
-              <SelectLanguage />
-            </CardAttribute>
-          </Card>
+          <Heading ml={2}>{errorMsg}</Heading>
+          <SelectLanguageContainer />
         </VStack>
       </Box>
     )
@@ -105,11 +103,11 @@ export const LoginScreen = (): JSX.Element => {
     return (
       <Layout centered={true}>
         <VStack space={5} alignItems="center">
-          <Spinner size="medium" />
+          <Spinner size="sm" />
           <Text>
             Отримуємо ваше поточне місцеположення, зачекайте будь ласка
           </Text>
-          <Text category="c1" style={{ alignSelf: 'flex-start' }}>
+          <Text size="sm" style={{ alignSelf: 'flex-start' }}>
             Безпека понад усе
           </Text>
         </VStack>
@@ -131,21 +129,13 @@ export const LoginScreen = (): JSX.Element => {
             resizeMode="contain"
           />
           <Card
-            disabled={true}
-            header={
-              <Box alignSelf="center">
-                <Text category="h4">{t('login.title')!}</Text>
-              </Box>
-            }
-            footer={
+            title={t('login.title')!}
+            footerActions={
               <VStack space={1}>
-                <Button
-                  onPress={handleSubmit(onSubmit)}
-                  accessoryLeft={isLoading ? LoadingIndicator : undefined}
-                >
-                  {isLoading ? '' : t('login.submit')!}
+                <Button onPress={handleSubmit(onSubmit)} isLoading={isLoading}>
+                  {t('login.submit')!}
                 </Button>
-                <Button onPress={onRegisterClick} appearance="ghost">
+                <Button onPress={onRegisterClick} variant="ghost">
                   {t('shared.register')!}
                 </Button>
               </VStack>
@@ -177,19 +167,18 @@ export const LoginScreen = (): JSX.Element => {
               <Controller
                 control={control}
                 name="isRemember"
-                render={({ field: { onChange, value } }) => (
-                  <CheckBox checked={value} onChange={() => onChange(!value)}>
+                render={({ field: { onChange } }) => (
+                  <Checkbox
+                    value="Remember me"
+                    onChange={(isSelected) => onChange(isSelected)}
+                  >
                     {t('isRemember')!}
-                  </CheckBox>
+                  </Checkbox>
                 )}
               />
             </VStack>
           </Card>
-          <Card disabled={true}>
-            <CardAttribute title={t('common:language')!}>
-              <SelectLanguage />
-            </CardAttribute>
-          </Card>
+          <SelectLanguageContainer />
         </VStack>
       </TouchableWithoutFeedback>
     </Box>

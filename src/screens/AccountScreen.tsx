@@ -1,79 +1,91 @@
-import { CardAttribute, Layout, SelectLanguage } from '@/components'
+import { Card, Layout, SelectLanguageContainer } from '@/components'
 import { Routes } from '@/constants'
-import { AccountInformation, MyRequests } from '@/features'
+import { AccountInformation, AccountRequestsContainer } from '@/features'
 import MyReviews from '@/features/account/MyReviews/MyReviews'
 import { useAuthContext, useMe } from '@/hooks'
+import { useUser } from '@/hooks/api/useUser'
 import { MainTabsParamList } from '@/types'
 import { NavigationProp, useNavigation } from '@react-navigation/native'
-import { Button, Card, Text } from '@ui-kitten/components'
-import { Box, HStack, ScrollView, VStack } from 'native-base'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import { Button, ScrollView, Spinner, VStack } from 'native-base'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-export const AccountScreen = (): JSX.Element => {
+type AccountScreenProps = NativeStackScreenProps<
+  MainTabsParamList,
+  Routes.ACCOUNT | Routes.ACCOUNT_VIEW
+>
+
+export const AccountScreen = ({ route }: AccountScreenProps): JSX.Element => {
+  const { id } = route.params
+  const { data: me } = useMe()
+  const isOwnAccount = me?.id === id
+
   const navigation = useNavigation<NavigationProp<MainTabsParamList>>()
   const { t } = useTranslation('account')
   const { logout } = useAuthContext()
-  const { data, isLoading } = useMe()
+  const { data: guestUser, isLoading: isGuestUserLoading } = useUser({
+    id: isOwnAccount ? undefined : id,
+  })
 
   const handleAccountEditPress = () =>
-    navigation.navigate(Routes.ACCOUNT_EDIT, { user: data! })
+    navigation.navigate(Routes.ACCOUNT_EDIT_NAVIGATOR)
+
+  useEffect(() => {
+    if (!isOwnAccount) {
+      navigation.setOptions({
+        title: guestUser?.name ?? guestUser?.email ?? 'Акаунт користувача',
+      })
+    }
+
+    return () => {
+      navigation.setOptions({
+        title: 'Акаунт',
+      })
+    }
+  }, [id])
+
+  const data = isOwnAccount ? me : guestUser
+
+  if (!isOwnAccount && isGuestUserLoading) {
+    return (
+      <Layout centered={true}>
+        <Spinner size="sm" />
+      </Layout>
+    )
+  }
 
   return (
-    <ScrollView>
-      <Layout
-        style={{
-          flex: 1,
-          justifyContent: 'space-between',
-          gap: 12,
-          padding: 12,
-        }}
-      >
+    <ScrollView nestedScrollEnabled={true}>
+      <VStack space={5} p={3}>
         <VStack space={5}>
           <Card
-            disabled
-            header={
-              <HStack justifyContent="space-between">
-                <Text category="h4">{t('title')!}</Text>
-                <Button appearance="ghost" onPress={handleAccountEditPress}>
+            title={t('personalData')!}
+            titleAction={
+              isOwnAccount && (
+                <Button variant="ghost" onPress={handleAccountEditPress}>
                   {t('common:edit')!}
                 </Button>
-              </HStack>
+              )
             }
           >
-            <AccountInformation data={data} isLoading={isLoading} />
+            <AccountInformation
+              data={data}
+              isLoading={!isOwnAccount && isGuestUserLoading}
+            />
           </Card>
-          <Card
-            disabled
-            header={
-              <Box>
-                <Text category="h4">{t('requests')!}</Text>
-              </Box>
-            }
-          >
-            <MyRequests />
+          <Card title={t('requests')!}>
+            <AccountRequestsContainer userId={data?.id} />
           </Card>
-          <Card
-            disabled
-            header={
-              <Box>
-                <Text category="h4">{t('reviews')!}</Text>
-              </Box>
-            }
-          >
-            {data?.receivedReviews ? (
+          {!!data?.receivedReviews.length && (
+            <Card title={t('reviews')!}>
               <MyReviews reviews={data.receivedReviews} />
-            ) : (
-              <Text>Немає відгуків</Text>
-            )}
-          </Card>
-          <Card disabled>
-            <CardAttribute title={t('common:language')!}>
-              <SelectLanguage />
-            </CardAttribute>
-          </Card>
+            </Card>
+          )}
+          <SelectLanguageContainer />
         </VStack>
-        <Button onPress={logout}>{t('auth:logOut')!}</Button>
-      </Layout>
+        {isOwnAccount && <Button onPress={logout}>{t('auth:logOut')!}</Button>}
+      </VStack>
     </ScrollView>
   )
 }

@@ -1,16 +1,12 @@
 import { Review } from '@/types'
-import { Icon, IconElement } from '@ui-kitten/components'
 import dayjs from 'dayjs'
-import { Box, HStack, ScrollView, Text, VStack } from 'native-base'
+import { Box, HStack, Icon, ScrollView, Text, VStack } from 'native-base'
 import { UserAvatar } from '../UserAvatar'
+import { MaterialIcons } from '@expo/vector-icons'
 
 export type ReviewCardProps = {
   review: Review
 }
-
-const StarIcon = (): IconElement => (
-  <Icon style={{ width: 15, height: 15 }} fill="#FFC107" name="star" />
-)
 
 const ReviewCard = ({ review }: ReviewCardProps) => {
   const { content, rating, reviewer, createdAt } = review
@@ -38,7 +34,7 @@ const ReviewCard = ({ review }: ReviewCardProps) => {
       py={3}
     >
       <HStack space={2}>
-        <UserAvatar size="md" uri={reviewer.avatar} id={reviewer.id} />
+        <UserAvatar size="md" uri={reviewer.avatar} userId={reviewer.id} />
         <HStack space={5} justifyContent="space-between" flex={1}>
           <VStack space={0.5} alignItems="flex-start">
             <Text bold fontSize="md">
@@ -52,7 +48,13 @@ const ReviewCard = ({ review }: ReviewCardProps) => {
             >
               <HStack space={0.5} alignItems="center">
                 {[...Array(rating)].map((_, i) => (
-                  <StarIcon key={i} />
+                  <Icon
+                    key={i}
+                    as={MaterialIcons}
+                    name="star"
+                    color="#FFC107"
+                    size="sm"
+                  />
                 ))}
               </HStack>
             </Box>

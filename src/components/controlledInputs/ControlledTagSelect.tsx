@@ -1,6 +1,5 @@
 import { ControlledFieldProps } from '@/types'
-import { Spinner } from '@ui-kitten/components'
-import { FormControl, VStack, WarningOutlineIcon } from 'native-base'
+import { FormControl, Spinner, VStack, WarningOutlineIcon } from 'native-base'
 import { ComponentProps, useEffect, useState } from 'react'
 import { FieldValues, useController } from 'react-hook-form'
 import MultiSelect from 'react-native-multiple-select'
@@ -51,7 +50,7 @@ export const ControlledTagSelect = <T extends FieldValues>({
       <VStack space="5">
         <VStack space="2">
           {isLoading ? (
-            <Spinner status="basic" size="small" />
+            <Spinner size="sm" />
           ) : (
             <MultiSelect
               hideTags
@@ -70,8 +69,9 @@ export const ControlledTagSelect = <T extends FieldValues>({
               searchInputStyle={{ color: '#CCC', height: 50 }}
               submitButtonColor="#1b1b1b"
               hideSubmitButton={true}
-              submitButtonText="Submit"
-              noItemsText="No items found"
+              submitButtonText="Підтвердити"
+              noItemsText="Нічого не знайдено"
+              selectedText="вибрано"
             />
           )}
 

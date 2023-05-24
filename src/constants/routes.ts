@@ -12,13 +12,24 @@ export enum Routes {
   FEED_SUPPORT = 'FeedSupport',
   ACCOUNT_NAVIGATOR = 'AccountNavigator',
   ACCOUNT = 'Account',
-  ACCOUNT_EDIT = 'AccountEdit',
-  USER_ACCOUNT = 'UserAccount',
+  ACCOUNT_EDIT_NAVIGATOR = 'AccountEditNavigator',
+  ACCOUNT_EDIT_PERSONAL_DATA = 'AccountEditPersonalData',
+  ACCOUNT_EDIT_INTERESTS = 'AccountEditInterests',
+  ACCOUNT_VIEW = 'AccountView',
 
   REQUEST_NAVIGATOR = 'RequestNavigator',
-  MY_REQUESTS = 'MyRequests',
+  REQUESTS = 'Requests',
+  ACCOUNT_REQUESTS = 'AccountRequests',
   REQUEST = 'Request',
+
   REQUEST_CREATE = 'RequestCreate',
+  REQUEST_CREATE_NAVIGATOR = 'RequestCreateNavigator',
+  REQUEST_CREATE_INITIAL = 'RequestCreateGeneralInitial',
+  REQUEST_CREATE_GENERAL_INFORMATION = 'RequestCreateGeneralInformation',
+  REQUEST_CREATE_CATEGORY = 'RequestCreateCategory',
+  REQUEST_CREATE_PHOTOS = 'RequestCreatePhotos',
+  REQUEST_CREATE_ADDITIONAL_INFORMATION = 'RequestCreateAdditionalInformation',
+
   REQUEST_EDIT = 'RequestEdit',
   REQUEST_ADD_COMMENT = 'RequestAddComment',
 

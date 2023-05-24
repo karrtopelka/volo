@@ -29,7 +29,7 @@ export type Users = User[]
 export type UserPost = Pick<
   User,
   'email' | 'avatar' | 'name' | 'role' | 'phoneNumber'
-> & { interests: number[] }
+>
 
 export type Location = {
   id: number
@@ -59,7 +59,7 @@ export type Request = {
   user: User
   viewsCount: number
   contributionsCount: number
-  totalCollected: number
+  totalCollected: number | null
   monobankBucketLink: string | null
   goalAmount: number | null
   contributions: Contributions
@@ -75,6 +75,23 @@ export type Request = {
 }
 
 export type Requests = Request[]
+
+export type RequestPostGeneralInformation = Pick<
+  Request,
+  'title' | 'description' | 'goalAmount' | 'totalCollected'
+>
+
+export type RequestPostCategory = RequestPostGeneralInformation &
+  Pick<Request, 'categoryId' | 'type' | 'status'>
+
+export type RequestPostPhotos = RequestPostCategory & {
+  attachments: string[]
+}
+
+export type RequestPostAdditionalInformation = RequestPostPhotos &
+  Pick<Request, 'monobankBucketLink'> & {
+    tags: number[]
+  }
 
 export type RequestPost = Pick<
   Request,

@@ -1,6 +1,10 @@
 import { Routes } from '@/constants'
 import { LocationObject } from 'expo-location'
-import { User } from './api'
+import {
+  RequestPostCategory,
+  RequestPostGeneralInformation,
+  RequestPostPhotos,
+} from './api'
 
 export type RootStackParamList = {
   [Routes.LOGIN]: undefined
@@ -11,20 +15,34 @@ export type RootStackParamList = {
 
 export type MainTabsParamList = {
   [Routes.ACCOUNT_NAVIGATOR]: undefined
-  [Routes.ACCOUNT]: undefined
-  [Routes.ACCOUNT_EDIT]: { user: User }
-  [Routes.USER_ACCOUNT]: { id: number | undefined }
+  [Routes.ACCOUNT]: { id: number }
+  [Routes.ACCOUNT_VIEW]: { id: number }
+  [Routes.ACCOUNT_EDIT_NAVIGATOR]: undefined
+  [Routes.ACCOUNT_EDIT_PERSONAL_DATA]: undefined
+  [Routes.ACCOUNT_EDIT_INTERESTS]: undefined
 
   [Routes.REQUEST_NAVIGATOR]: undefined
-  [Routes.MY_REQUESTS]: undefined
+  [Routes.REQUESTS]: undefined
+  [Routes.ACCOUNT_REQUESTS]: { id: number }
   [Routes.REQUEST]: { id: number; isSelfRequest: boolean }
   [Routes.REQUEST_CREATE]: { id: number | undefined }
   [Routes.REQUEST_ADD_COMMENT]: { id: number }
 
+  [Routes.REQUEST_CREATE_NAVIGATOR]: undefined
+  [Routes.REQUEST_CREATE_INITIAL]: undefined
+  [Routes.REQUEST_CREATE_GENERAL_INFORMATION]: undefined
+  [Routes.REQUEST_CREATE_CATEGORY]: { data: RequestPostGeneralInformation }
+  [Routes.REQUEST_CREATE_PHOTOS]: {
+    data: RequestPostCategory
+  }
+  [Routes.REQUEST_CREATE_ADDITIONAL_INFORMATION]: {
+    data: RequestPostPhotos
+  }
+
   [Routes.CHAT_NAVIGATOR]: undefined
   [Routes.CHATS]: undefined
   [Routes.CHAT]: { id: number; recipientName: string; recipientId: number }
-  [Routes.CREATE_CHAT]: undefined
+  [Routes.CREATE_CHAT]: { recipientId: number }
 
   [Routes.FEED]: undefined
   [Routes.FEED_ALL]: undefined

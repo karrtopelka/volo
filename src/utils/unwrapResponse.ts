@@ -12,6 +12,5 @@ export const unwrapErrorResponse = (error: AxiosError): never => {
     throw { data }
   }
 
-  console.log('error', error)
   throw error
 }

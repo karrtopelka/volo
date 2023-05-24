@@ -1,6 +1,5 @@
 import { ReactChildren } from '@/types'
-import { Text } from '@ui-kitten/components'
-import { HStack } from 'native-base'
+import { HStack, Heading, Text } from 'native-base'
 import { View } from 'react-native'
 
 export type CardAttributeProps = {
@@ -8,9 +7,9 @@ export type CardAttributeProps = {
   isRequired?: boolean
 } & ReactChildren
 
-const renderChildren = (children: any) => {
+const renderChildren = (children: string | number | React.ReactNode) => {
   if (typeof children === 'string' || typeof children === 'number') {
-    return <Text category="p1">{children}</Text>
+    return <Text>{children}</Text>
   }
 
   return children
@@ -23,13 +22,13 @@ export const CardAttribute = ({
 }: CardAttributeProps): JSX.Element => (
   <View>
     <HStack>
-      <Text category="s1" style={{ marginBottom: 12 }}>
+      <Heading size="sm" mb={2}>
         {title}
-      </Text>
+      </Heading>
       {isRequired && (
-        <Text category="s1" style={{ marginBottom: 12, color: 'red' }}>
+        <Heading size="xs" color="red.500" mb={2}>
           *
-        </Text>
+        </Heading>
       )}
     </HStack>
     {renderChildren(children)}

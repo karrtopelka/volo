@@ -1,63 +1,31 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { MainTabsParamList } from '@/types'
 import { Routes } from '@/constants'
-import { BottomTabBarContainer } from './BottomTabBarContainer'
-import { Icon, IconProps } from '@ui-kitten/components'
 import { FeedTabsNavigator } from './FeedTabsNavigator'
 import { useTranslation } from 'react-i18next'
 import { AccountStackNavigator } from './AccountStackNavigator'
 import { RequestStackNavigator } from './RequestStackNavigator'
-import { RequestCreateScreen } from '@/screens'
 import { ChatStackNavigator } from './ChatStackNavigator'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { socketUser } from '@/utils'
 import { useMe } from '@/hooks'
 import { useOnlineUsers } from '@/contexts'
+import { BottomTabBar } from './BottomTabBar'
+import { RequestCreateStackNavigator } from './RequestCreateStackNavigator'
+import { AppState, AppStateStatus } from 'react-native'
 
 const { Screen, Navigator } = createBottomTabNavigator<MainTabsParamList>()
-
-export const HomeIcon = (props: IconProps) => (
-  <Icon style={{ width: 28, height: 28 }} name="home-outline" {...props} />
-)
-
-export const RequestIcon = (props: IconProps) => (
-  <Icon
-    style={{ width: 28, height: 28 }}
-    name="shopping-bag-outline"
-    {...props}
-  />
-)
-
-export const AccountIcon = (props: IconProps) => (
-  <Icon style={{ width: 28, height: 28 }} name="person-outline" {...props} />
-)
-
-export const MessageIcon = (props: IconProps) => (
-  <Icon
-    style={{ width: 28, height: 28 }}
-    name="message-square-outline"
-    {...props}
-  />
-)
-
-// export const NotificationIcon = (props: IconProps) => (
-//   <Icon style={{ width: 28, height: 28 }} name="bell-outline" {...props} />
-// )
-
-export const AddIcon = (props: IconProps) => (
-  <Icon
-    style={{ width: 28, height: 28 }}
-    name="plus-circle-outline"
-    {...props}
-  />
-)
 
 export const MainTabsNavigator = (): JSX.Element => {
   const { t } = useTranslation('tabs')
   const { data: me } = useMe()
   const { updateUserIds } = useOnlineUsers()
 
+  const [appState, setAppState] = useState(AppState.currentState)
+
   useEffect(() => {
+    const appState = AppState.addEventListener('change', _handleAppStateChange)
+
     socketUser.on('users', (data) => {
       if (!Array.isArray(data[0])) {
         updateUserIds(data)
@@ -67,20 +35,33 @@ export const MainTabsNavigator = (): JSX.Element => {
     socketUser.emit('check-in', me!.id)
 
     return () => {
+      appState.remove()
       socketUser.off('users')
     }
   }, [])
 
+  const _handleAppStateChange = (nextAppState: AppStateStatus) => {
+    if (appState === 'active' && nextAppState.match(/inactive|background/)) {
+      socketUser.emit('check-out', me!.id)
+    } else if (
+      appState.match(/inactive|background/) &&
+      nextAppState === 'active'
+    ) {
+      socketUser.emit('check-in', me!.id)
+    }
+    setAppState(nextAppState)
+  }
+
   return (
     <Navigator
       tabBar={(props) => (
-        <BottomTabBarContainer
+        <BottomTabBar
           tabs={[
-            { icon: HomeIcon },
-            { icon: RequestIcon },
-            { icon: AddIcon },
-            { icon: MessageIcon },
-            { icon: AccountIcon },
+            { iconName: 'home' },
+            { iconName: 'request-page' },
+            { iconName: 'add-circle' },
+            { iconName: 'chat' },
+            { iconName: 'person' },
             // { icon: NotificationIcon },
           ]}
           {...props}
@@ -98,9 +79,8 @@ export const MainTabsNavigator = (): JSX.Element => {
         options={{ headerShown: false }}
       />
       <Screen
-        name={Routes.REQUEST_CREATE}
-        component={RequestCreateScreen}
-        initialParams={{ id: undefined }}
+        name={Routes.REQUEST_CREATE_NAVIGATOR}
+        component={RequestCreateStackNavigator}
         options={{ headerShown: false }}
       />
       <Screen

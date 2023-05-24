@@ -2,10 +2,11 @@ import { ChatRow, Layout } from '@/components'
 import { useChats } from '@/hooks'
 import { LimitedSearchRequestParams } from '@/types'
 import {
-  Box,
   Button,
   Divider,
+  Heading,
   ScrollView,
+  Spacer,
   Spinner,
   Text,
   VStack,
@@ -43,9 +44,13 @@ export const ChatsScreen = (): JSX.Element => {
           ))}
         </VStack>
       ) : (
-        <Box>
-          <Text>Немає чатів</Text>
-        </Box>
+        <Layout centered={true}>
+          <Heading>Немає чатів</Heading>
+          <Spacer my={3} />
+          <Text>
+            Ви можете почати спілкуватись з людиною на сторінці з запитом
+          </Text>
+        </Layout>
       )}
       {data?.hasMore && (
         <Button onPress={handleLoadMore} mt={3}>

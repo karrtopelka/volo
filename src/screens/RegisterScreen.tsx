@@ -1,9 +1,13 @@
-import { CardAttribute, ControlledInput, SelectLanguage } from '@/components'
+import {
+  Card,
+  CardAttribute,
+  ControlledInput,
+  SelectLanguageContainer,
+} from '@/components'
 import { useAuthContext, useMutationWrapper, useSignUp } from '@/hooks'
-import { Button, Card, CheckBox, Spinner, Text } from '@ui-kitten/components'
-import { Box, VStack } from 'native-base'
+import { Box, Button, Checkbox, VStack } from 'native-base'
 import { useTranslation } from 'react-i18next'
-import { Image, Keyboard, TouchableWithoutFeedback, View } from 'react-native'
+import { Image, Keyboard, TouchableWithoutFeedback } from 'react-native'
 import { useForm, Controller } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -11,12 +15,6 @@ import { NavigationProp, useNavigation } from '@react-navigation/native'
 import { AuthStackParamList } from '@/types'
 import { Routes } from '@/constants'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-
-const LoadingIndicator = () => (
-  <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-    <Spinner status="basic" size="small" />
-  </View>
-)
 
 const registerSchema = yup.object({
   email: yup.string().email().required(),
@@ -87,21 +85,13 @@ export const RegisterScreen = ({ route }: RegisterScreenProps): JSX.Element => {
             resizeMode="contain"
           />
           <Card
-            disabled={true}
-            header={
-              <Box alignSelf="center">
-                <Text category="h4">{t('register.title')!}</Text>
-              </Box>
-            }
-            footer={
+            title={t('register.title')!}
+            footerActions={
               <VStack space={1}>
-                <Button
-                  onPress={handleSubmit(onSubmit)}
-                  accessoryLeft={isLoading ? LoadingIndicator : undefined}
-                >
-                  {isLoading ? '' : t('register.submit')!}
+                <Button onPress={handleSubmit(onSubmit)} isLoading={isLoading}>
+                  {t('register.submit')!}
                 </Button>
-                <Button onPress={onLoginClick} appearance="ghost">
+                <Button onPress={onLoginClick} variant="ghost">
                   {t('shared.login')!}
                 </Button>
               </VStack>
@@ -144,19 +134,18 @@ export const RegisterScreen = ({ route }: RegisterScreenProps): JSX.Element => {
               <Controller
                 control={control}
                 name="isRemember"
-                render={({ field: { onChange, value } }) => (
-                  <CheckBox checked={value} onChange={() => onChange(!value)}>
+                render={({ field: { onChange } }) => (
+                  <Checkbox
+                    value="Remember me"
+                    onChange={(isSelected) => onChange(isSelected)}
+                  >
                     {t('isRemember')!}
-                  </CheckBox>
+                  </Checkbox>
                 )}
               />
             </VStack>
           </Card>
-          <Card disabled={true}>
-            <CardAttribute title={t('common:language')!}>
-              <SelectLanguage />
-            </CardAttribute>
-          </Card>
+          <SelectLanguageContainer />
         </VStack>
       </TouchableWithoutFeedback>
     </Box>

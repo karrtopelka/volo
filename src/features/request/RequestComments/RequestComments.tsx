@@ -1,26 +1,15 @@
 import { Comments, MainTabsParamList } from '@/types'
-import {
-  Button,
-  Card,
-  Divider,
-  Icon,
-  IconElement,
-  IconProps,
-  Text,
-} from '@ui-kitten/components'
-import { HStack, VStack } from 'native-base'
+import { Divider, Text, IconButton, VStack } from 'native-base'
 import { RequestComment } from '../RequestComment'
 import { NavigationProp, useNavigation } from '@react-navigation/native'
 import { Routes } from '@/constants'
+import { Card } from '@/components'
+import { MaterialIcons } from '@expo/vector-icons'
 
 export type RequestCommentsProps = {
   requestId: number
   comments: Comments
 }
-
-const AddIcon = (props: IconProps): IconElement => (
-  <Icon {...props} name="plus-circle-outline" />
-)
 
 export const RequestComments = ({
   requestId,
@@ -31,20 +20,20 @@ export const RequestComments = ({
   return (
     <>
       <Card
-        disabled={true}
-        header={
-          <HStack justifyContent="space-between" alignItems="center">
-            <Text category="h4">Коментарі</Text>
-            <Button
-              appearance="ghost"
-              accessoryLeft={AddIcon}
-              onPress={() =>
-                navigation.navigate(Routes.REQUEST_ADD_COMMENT, {
-                  id: requestId,
-                })
-              }
-            />
-          </HStack>
+        title="Коментарі"
+        titleAction={
+          <IconButton
+            size="lg"
+            _icon={{
+              as: MaterialIcons,
+              name: 'add-circle-outline',
+            }}
+            onPress={() =>
+              navigation.navigate(Routes.REQUEST_ADD_COMMENT, {
+                id: requestId,
+              })
+            }
+          />
         }
       >
         <VStack space={3}>

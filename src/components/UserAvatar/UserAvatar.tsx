@@ -1,25 +1,30 @@
 import { Routes } from '@/constants'
 import { MainTabsParamList } from '@/types'
 import { NavigationProp, useNavigation } from '@react-navigation/native'
-import { Avatar, Pressable } from 'native-base'
+import { Avatar, IAvatarProps, Pressable } from 'native-base'
 
 type UserAvatarProps = {
   uri?: string | null
-  size: string
-  id?: number
-}
+  userId: number
+} & IAvatarProps
 
-export const UserAvatar = ({ uri, size, id }: UserAvatarProps) => {
+export const UserAvatar = ({ uri, size, userId, ...rest }: UserAvatarProps) => {
   const navigation = useNavigation<NavigationProp<MainTabsParamList>>()
 
   const handleUserAvatarPress = () =>
-    navigation.navigate(Routes.USER_ACCOUNT, { id })
+    navigation.navigate(Routes.ACCOUNT_VIEW, { id: userId })
 
   return (
-    <Pressable onPress={handleUserAvatarPress}>
+    <Pressable
+      onPress={handleUserAvatarPress}
+      _pressed={{
+        opacity: 0.5,
+      }}
+    >
       <Avatar
         size={size}
         source={uri ? { uri } : require('@assets/icon.png')}
+        {...rest}
       />
     </Pressable>
   )

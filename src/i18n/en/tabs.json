@@ -5,5 +5,7 @@
   "feed": "Feed",
   "feed_all": "All",
   "feed_donation": "Donation",
-  "feed_support": "Support"
+  "feed_support": "Support",
+  "personalData": "Personal data",
+  "interests": "Interests"
 }

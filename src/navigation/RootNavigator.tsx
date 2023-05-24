@@ -4,7 +4,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { MainTabsNavigator } from './MainTabsNavigator'
 import { useAuthContext } from '@/hooks'
 import { Layout } from '@/components'
-import { Text } from '@ui-kitten/components'
 import { AuthStackNavigator } from './AuthStackNavigator'
 import { useEffect, useState } from 'react'
 import { NoAccessScreen } from '@/screens'
@@ -13,6 +12,7 @@ import {
   getNetworkStateAsync,
   NetworkState,
 } from 'expo-network'
+import { Spinner } from 'native-base'
 
 const { Screen, Navigator } = createNativeStackNavigator<RootStackParamList>()
 
@@ -33,7 +33,7 @@ export const RootNavigator = () => {
   if (isLoggedIn === undefined || networkState === null) {
     return (
       <Layout centered={true}>
-        <Text>Loading....</Text>
+        <Spinner />
       </Layout>
     )
   }

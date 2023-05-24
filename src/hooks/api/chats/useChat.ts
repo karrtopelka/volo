@@ -1,8 +1,8 @@
-import { useQuery, UseQueryResult } from '@tanstack/react-query'
+import { useInfiniteQuery, UseInfiniteQueryResult } from '@tanstack/react-query'
 import {
-  Chat,
   LimitedSearchRequestParams,
-  PaginatedListResponse,
+  Message,
+  PaginatedCursorResponse,
 } from '@/types'
 import { unwrapErrorResponse, unwrapResponse } from '@/utils/unwrapResponse'
 import { REACT_QUERY_KEYS } from '@/constants'
@@ -16,18 +16,30 @@ export type UseChatProps = {
 export const useChat = ({
   id,
   params,
-}: UseChatProps): UseQueryResult<PaginatedListResponse<Chat>, Error> => {
+}: UseChatProps): UseInfiniteQueryResult<
+  PaginatedCursorResponse<Message>,
+  Error
+> => {
   const client = useApiClient()
 
-  return useQuery(
+  return useInfiniteQuery(
     REACT_QUERY_KEYS.CHAT.map((key) =>
       key === ':id' && id ? id.toString() : key
     ),
-    () =>
+    ({ pageParam = null }) =>
       client
-        .get(`/chats/${id}/`, { params })
+        .get(`/chats/${id}/`, {
+          params: {
+            ...params,
+            cursor: pageParam,
+          },
+        })
         .then(unwrapResponse)
         .catch(unwrapErrorResponse),
-    { enabled: !!id, staleTime: 60 * 60 * 24 }
+    {
+      enabled: !!id,
+      getNextPageParam: (lastPage: PaginatedCursorResponse<Message>) =>
+        lastPage.next,
+    }
   )
 }

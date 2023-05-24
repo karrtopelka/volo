@@ -1,5 +1,4 @@
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
-import { TopTabBarContainer } from './TopTabBarContainer'
 import { Routes } from '@/constants'
 import { FeedDonationScreen, FeedScreen, FeedSupportScreen } from '@/screens'
 import { useTranslation } from 'react-i18next'
@@ -11,21 +10,29 @@ export const FeedTabsNavigator = (): JSX.Element => {
 
   return (
     <Navigator
-      tabBar={(props) => (
-        <TopTabBarContainer
-          tabs={[
-            { title: t('feed_all')! },
-            { title: t('feed_donation')! },
-            { title: t('feed_support')! },
-          ]}
-          {...props}
-        />
-      )}
       initialRouteName={Routes.FEED_ALL}
+      screenOptions={{
+        tabBarActiveTintColor: 'black',
+        tabBarIndicatorStyle: {
+          backgroundColor: 'black',
+        },
+      }}
     >
-      <Screen name={Routes.FEED_ALL} component={FeedScreen} />
-      <Screen name={Routes.FEED_DONATION} component={FeedDonationScreen} />
-      <Screen name={Routes.FEED_SUPPORT} component={FeedSupportScreen} />
+      <Screen
+        name={Routes.FEED_ALL}
+        options={{ title: t('feed_all')! }}
+        component={FeedScreen}
+      />
+      <Screen
+        name={Routes.FEED_DONATION}
+        options={{ title: t('feed_donation')! }}
+        component={FeedDonationScreen}
+      />
+      <Screen
+        name={Routes.FEED_SUPPORT}
+        options={{ title: t('feed_support')! }}
+        component={FeedSupportScreen}
+      />
     </Navigator>
   )
 }

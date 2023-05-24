@@ -1,11 +1,10 @@
-import { Layout, RequestCard } from '@/components'
+import { Card, Layout, RequestCard } from '@/components'
 import { Routes } from '@/constants'
 import { RequestsFilterContainer } from '@/features'
 import { useMyRequests } from '@/hooks'
 import { MainTabsParamList, RequestSearchRequestParams } from '@/types'
 import { NavigationProp, useNavigation } from '@react-navigation/native'
-import { Button, Spinner, Text } from '@ui-kitten/components'
-import { ScrollView, VStack, View } from 'native-base'
+import { Button, ScrollView, Spinner, VStack, View, Text } from 'native-base'
 import { useState } from 'react'
 
 export const RequestsScreen = (): JSX.Element => {
@@ -21,24 +20,22 @@ export const RequestsScreen = (): JSX.Element => {
   }
 
   const handleAddRequest = () =>
-    navigation.navigate(Routes.REQUEST_CREATE, {
-      id: undefined,
-    })
+    navigation.navigate(Routes.REQUEST_CREATE_NAVIGATOR)
 
   if (isLoading) {
     return (
       <Layout centered={true}>
-        <Spinner />
+        <Spinner size="sm" />
       </Layout>
     )
   }
 
   return (
     <View>
-      <RequestsFilterContainer params={params} setParams={setParams} />
-      {!!data?.data.length ? (
-        <ScrollView>
-          <VStack space={5} m={3} alignItems="stretch">
+      <ScrollView>
+        <RequestsFilterContainer params={params} setParams={setParams} />
+        {!!data?.data.length ? (
+          <VStack space={5} m={3}>
             <>
               {data?.data.map((request) => (
                 <RequestCard
@@ -53,21 +50,21 @@ export const RequestsScreen = (): JSX.Element => {
               )}
             </>
           </VStack>
-        </ScrollView>
-      ) : (
-        <>
-          {params.type ?? params.status ?? params.fromDate ? (
-            <VStack space={5} mx={15} mt={15} alignItems="center">
-              <Text>За заданими параметрами нічого не знайдено</Text>
+        ) : (
+          <Card mx={3}>
+            <VStack space={5} alignItems="center">
+              {params.type ?? params.status ?? params.fromDate ? (
+                <Text>За заданими параметрами нічого не знайдено</Text>
+              ) : (
+                <>
+                  <Text>Ви ще не створили жодного запиту</Text>
+                  <Button onPress={handleAddRequest}>Створити</Button>
+                </>
+              )}
             </VStack>
-          ) : (
-            <VStack space={5} mx={15} mt={15} alignItems="center">
-              <Text>Ви ще не створили жодного запиту</Text>
-              <Button onPress={handleAddRequest}>Створити</Button>
-            </VStack>
-          )}
-        </>
-      )}
+          </Card>
+        )}
+      </ScrollView>
     </View>
   )
 }
