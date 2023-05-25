@@ -32,14 +32,17 @@ export const ChatScreen = ({ route }: ChatScreenProps): JSX.Element => {
     data: messages,
     isLoading,
     fetchNextPage,
-  } = useChat({ id, params: { offset: 0 } })
+    isFetchingNextPage,
+    hasNextPage,
+    isInitialLoading,
+  } = useChat({ id, params: { limit: 25 } })
 
   const { data: me } = useMe()
   const { userIds } = useOnlineUsers()
 
   const navigation = useNavigation<NavigationProp<MainTabsParamList>>()
 
-  const handleLoadMore = () => fetchNextPage()
+  const handleLoadMore = () => hasNextPage && fetchNextPage()
 
   useEffect(() => {
     socketChat.emit('joinRoom', id)
@@ -133,7 +136,7 @@ export const ChatScreen = ({ route }: ChatScreenProps): JSX.Element => {
     })
   }
 
-  if (isLoading) {
+  if (isLoading || isInitialLoading) {
     return (
       <Layout centered={true}>
         <Spinner size="sm" />
@@ -150,7 +153,7 @@ export const ChatScreen = ({ route }: ChatScreenProps): JSX.Element => {
       loadEarlier={messages?.pages[messages.pages.length - 1]?.next !== null}
       infiniteScroll={true}
       onLoadEarlier={handleLoadMore}
-      isLoadingEarlier={isLoading}
+      isLoadingEarlier={isFetchingNextPage}
       user={{
         _id: me!.id,
         name: me?.name ?? me?.email,

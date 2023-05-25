@@ -33,6 +33,7 @@
     "expo-location": "~15.1.1",
     "expo-network": "~5.2.1",
     "expo-permissions": "^14.1.1",
+    "expo-splash-screen": "~0.18.2",
     "expo-status-bar": "^1.4.4",
     "i18next": "^22.4.13",
     "i18next-browser-languagedetector": "^7.0.1",

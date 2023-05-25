@@ -57,7 +57,7 @@ export const RequestScreen = ({ route }: RequestScreenProps): JSX.Element => {
   }
 
   return (
-    <ScrollView backgroundColor="white" px={3}>
+    <ScrollView backgroundColor="white" px={3} nestedScrollEnabled={true}>
       {data ? (
         <VStack space={3} my={5}>
           <AppleHeader

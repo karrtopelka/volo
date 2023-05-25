@@ -1,12 +1,12 @@
 import axios from 'axios'
-import { CancellablePromise, SearchRequestParams } from '@/types'
+import { CancellablePromise, AllRequestParams } from '@/types'
 import { useQuery, UseQueryResult } from '@tanstack/react-query'
 import { unwrapErrorResponse, unwrapResponse } from '@/utils'
 import { useApiClient } from './useApiClient'
 
 export type QueryListType<TQueryFnData, TData, TError> = {
   url: string
-  params?: SearchRequestParams
+  params?: AllRequestParams
   options?: {
     enabled?: boolean
     retry?: boolean

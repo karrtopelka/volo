@@ -1,18 +1,9 @@
-import { RequestCard } from '@/components'
-import { useUserRequests } from '@/hooks'
+import { RequestCard, RequestCardSkeleton } from '@/components'
+import { useMe, useUserRequests } from '@/hooks'
 import { MainTabsParamList } from '@/types'
-import { MaterialIcons } from '@expo/vector-icons'
+import { flatListKeyExtractor } from '@/utils'
 import { NavigationProp, useNavigation } from '@react-navigation/native'
-import {
-  Box,
-  HStack,
-  ScrollView,
-  Spinner,
-  useToast,
-  Text,
-  IconButton,
-} from 'native-base'
-import { useState } from 'react'
+import { Box, Spinner, useToast, Text, FlatList, Spacer } from 'native-base'
 
 export type AccountRequestsContainerProps = {
   userId: number | undefined
@@ -21,12 +12,14 @@ export type AccountRequestsContainerProps = {
 export const AccountRequestsContainer = ({
   userId,
 }: AccountRequestsContainerProps): JSX.Element => {
-  const [limit, setLimit] = useState(5)
-  const { data, isLoading } = useUserRequests(userId, { limit })
+  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useUserRequests(userId, {})
   const { show } = useToast()
+  const { data: me } = useMe()
   const navigation = useNavigation<NavigationProp<MainTabsParamList>>()
 
-  const handleLimit = () => setLimit((prev) => prev + 5)
+  const handleLoadMore = () => hasNextPage && fetchNextPage()
+  const isOwnProfile = () => userId === me?.id
 
   if (!userId) {
     show({
@@ -46,43 +39,22 @@ export const AccountRequestsContainer = ({
   }
 
   if (isLoading) {
-    return (
-      <HStack space={3} alignSelf="center" m={5}>
-        <Box>
-          <Spinner size="sm" />
-        </Box>
-        <Text>Loading</Text>
-      </HStack>
-    )
+    return <RequestCardSkeleton />
   }
 
   return (
-    <ScrollView horizontal={true}>
-      <HStack space={3}>
-        {data && !!data.data.length ? (
-          data.data.map((request) => (
-            <RequestCard
-              key={request.id}
-              request={request}
-              isSelfRequest={true}
-            />
-          ))
-        ) : (
-          <Text>Не знайдено жодного запиту</Text>
-        )}
-        {data?.hasMore && (
-          <IconButton
-            size="lg"
-            variant="filled"
-            _icon={{
-              as: MaterialIcons,
-              name: 'add-circle-outline',
-            }}
-            onPress={handleLimit}
-            disabled={isLoading}
-          />
-        )}
-      </HStack>
-    </ScrollView>
+    <FlatList
+      horizontal={true}
+      data={data?.pages.map((page) => page.data).flat()}
+      keyExtractor={flatListKeyExtractor}
+      renderItem={({ item }) => (
+        <RequestCard request={item} isSelfRequest={isOwnProfile()} />
+      )}
+      onEndReached={handleLoadMore}
+      onEndReachedThreshold={0.3}
+      ListFooterComponent={isFetchingNextPage ? <Spinner /> : null}
+      ItemSeparatorComponent={() => <Spacer mx={2} />}
+      ListEmptyComponent={<Text>Не знайдено жодного запиту</Text>}
+    />
   )
 }

@@ -1,4 +1,4 @@
-import { Card, CardAttribute, ControlledInput } from '@/components'
+import { Card, CardAttribute, ControlledTextArea } from '@/components'
 import { useMutationWrapper, usePostComment } from '@/hooks'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useNavigation } from '@react-navigation/native'
@@ -58,12 +58,11 @@ export const RequestAddCommentForm = ({
       }
     >
       <CardAttribute title="Коментар">
-        <ControlledInput
+        <ControlledTextArea
           control={control}
           name="content"
           placeholder="Введіть коментар"
-          multiline={true}
-          numberOfLines={3}
+          totalLines={3}
         />
       </CardAttribute>
     </Card>

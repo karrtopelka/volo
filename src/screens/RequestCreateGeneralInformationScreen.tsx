@@ -76,8 +76,7 @@ export const RequestCreateGeneralInformationScreen = (): JSX.Element => {
                   control={control}
                   name="description"
                   placeholder="Введіть опис запиту"
-                  numberOfLines={6}
-                  multiline={true}
+                  totalLines={6}
                 />
               </CardAttribute>
               <CardAttribute title="Необхідна сума">
