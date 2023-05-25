@@ -17,15 +17,10 @@ import ImageView from 'react-native-image-viewing'
 import { Image } from 'expo-image'
 import { RemovePhotoButton } from './RemovePhotoButton'
 
-export type EntityPhoto = {
-  id: number
-  link: string
-}
-
 export type RequestManagePhotosProps = {
-  photos: EntityPhoto[]
-  onPickImage: (attachments: ImagePickerAsset[]) => void
-  onRemove: (photoId: number) => void
+  photos: string[]
+  onPickImage: (attachments: ImagePickerAsset[]) => Promise<void>
+  onRemove: (photoUri: string) => Promise<void>
   isLoading?: boolean
 }
 
@@ -36,7 +31,7 @@ export const RequestManagePhotos = ({
   isLoading,
 }: RequestManagePhotosProps): JSX.Element => {
   const { show } = useToast()
-  const pickImage = useImagePicker()
+  const pickImage = useImagePicker({})
   const [isImageLoading, setIsImageLoading] = useState(false)
 
   const handleAddImage = async (): Promise<void> => {
@@ -75,22 +70,31 @@ export const RequestManagePhotos = ({
 
   return (
     <HStack flexWrap="wrap">
-      {photos?.map(({ id, link }, index) => (
-        <Box key={id} width="27%" height={24} mb={4} mr={4} position="relative">
+      {photos?.map((photoUrl, index) => (
+        <Box
+          key={photoUrl}
+          width="27%"
+          height={24}
+          mb={4}
+          mr={4}
+          position="relative"
+        >
           <Pressable
             onPress={() => handleImagePress(index)}
             style={{ flex: 1, width: '100%' }}
           >
             <Image
               source={{
-                uri: isUrl(link) ? link : `data:image/jpeg;base64,${link}`,
+                uri: isUrl(photoUrl)
+                  ? photoUrl
+                  : `data:image/jpeg;base64,${photoUrl}`,
               }}
               contentFit="cover"
               transition={500}
               style={{ flex: 1, width: '100%' }}
             />
           </Pressable>
-          <RemovePhotoButton id={id} onRemove={onRemove} />
+          <RemovePhotoButton uri={photoUrl} onRemove={onRemove} />
         </Box>
       ))}
 
@@ -117,7 +121,11 @@ export const RequestManagePhotos = ({
       </Center>
 
       <ImageView
-        images={photos?.map(({ link }) => ({ uri: link })) ?? []}
+        images={
+          photos?.map((photoUrl) => ({
+            uri: photoUrl,
+          })) ?? []
+        }
         imageIndex={imageIndex}
         visible={visible}
         onRequestClose={() => setIsVisible(false)}

@@ -84,14 +84,14 @@ export type RequestPostGeneralInformation = Pick<
 export type RequestPostCategory = RequestPostGeneralInformation &
   Pick<Request, 'categoryId' | 'type' | 'status'>
 
-export type RequestPostPhotos = RequestPostCategory & {
-  attachments: string[]
-}
-
-export type RequestPostAdditionalInformation = RequestPostPhotos &
+export type RequestPostAdditionalInformation = RequestPostCategory &
   Pick<Request, 'monobankBucketLink'> & {
     tags: number[]
   }
+
+export type RequestPostPhotos = RequestPostCategory & {
+  attachments: string[]
+}
 
 export type RequestPost = Pick<
   Request,

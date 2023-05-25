@@ -41,3 +41,8 @@ export const REQUEST_FROM_DATE = [
     value: new Date().setMonth(new Date().getMonth() - 1).toString(),
   },
 ]
+
+export enum FORM_DATA_TYPES {
+  AVATAR = 'avatar',
+  REQUEST = 'request',
+}

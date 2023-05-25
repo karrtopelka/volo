@@ -19,7 +19,7 @@ export const RequestComment = ({
     <VStack flex={1} space={2}>
       <HStack justifyContent="space-between">
         <Heading size="sm" bold={true}>
-          {comment.author?.name ?? comment.author.email}
+          {comment.author?.name ?? comment.author.email.split('@')[0]}
         </Heading>
         <Text size="xs" color="gray.400" h="auto" w="auto">
           {dayjs(comment.createdAt).format('DD MMM YYYY HH:mm')}

@@ -3,7 +3,7 @@ import * as yup from 'yup'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { USER_ROLES } from '@/constants'
-import { UserRole } from '@/types'
+import { BucketNames, UserRole } from '@/types'
 import { Keyboard, TouchableWithoutFeedback } from 'react-native'
 import {
   Card,
@@ -18,18 +18,18 @@ import { useTranslation } from 'react-i18next'
 
 const accountEditSchema = yup.object({
   email: yup.string().email().required(),
-  name: yup.string(),
-  avatar: yup.string(),
-  role: yup.string(),
-  phoneNumber: yup.string(),
+  name: yup.string().nullable(),
+  avatar: yup.string().nullable(),
+  role: yup.string().required(),
+  phoneNumber: yup.string().nullable(),
 })
 
 export type AccountEditFormData = {
   email: string
-  name: string
-  avatar: string
+  name: string | null
+  avatar: string | null
   role: string
-  phoneNumber: string
+  phoneNumber: string | null
 }
 
 export const AccountEditScreen = (): JSX.Element => {
@@ -43,10 +43,10 @@ export const AccountEditScreen = (): JSX.Element => {
     resolver: yupResolver(accountEditSchema),
     defaultValues: {
       email: user?.email ?? '',
-      name: user?.name ?? '',
-      avatar: user?.avatar ?? '',
-      role: user?.role ?? '',
-      phoneNumber: user?.phoneNumber ?? '',
+      name: user?.name ?? null,
+      avatar: user?.avatar ?? null,
+      role: user?.role ?? UserRole.VOLUNTEER,
+      phoneNumber: user?.phoneNumber ?? null,
     },
   })
 
@@ -91,7 +91,11 @@ export const AccountEditScreen = (): JSX.Element => {
                     />
                   </CardAttribute>
                   <CardAttribute title="Аватар">
-                    <ControlledPhotoInput control={control} name="avatar" />
+                    <ControlledPhotoInput
+                      control={control}
+                      name="avatar"
+                      bucketName={BucketNames.AVATARS}
+                    />
                   </CardAttribute>
                   <CardAttribute title="Роль">
                     <ControlledSelect

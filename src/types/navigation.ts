@@ -1,9 +1,9 @@
 import { Routes } from '@/constants'
 import { LocationObject } from 'expo-location'
 import {
+  RequestPostAdditionalInformation,
   RequestPostCategory,
   RequestPostGeneralInformation,
-  RequestPostPhotos,
 } from './api'
 
 export type RootStackParamList = {
@@ -32,11 +32,11 @@ export type MainTabsParamList = {
   [Routes.REQUEST_CREATE_INITIAL]: undefined
   [Routes.REQUEST_CREATE_GENERAL_INFORMATION]: undefined
   [Routes.REQUEST_CREATE_CATEGORY]: { data: RequestPostGeneralInformation }
-  [Routes.REQUEST_CREATE_PHOTOS]: {
+  [Routes.REQUEST_CREATE_ADDITIONAL_INFORMATION]: {
     data: RequestPostCategory
   }
-  [Routes.REQUEST_CREATE_ADDITIONAL_INFORMATION]: {
-    data: RequestPostPhotos
+  [Routes.REQUEST_CREATE_PHOTOS]: {
+    data: RequestPostAdditionalInformation
   }
 
   [Routes.CHAT_NAVIGATOR]: undefined

@@ -14,7 +14,7 @@ export const transformMessageToGiftedChat = (
     createdAt: new Date(message.createdAt),
     user: {
       _id: message.senderId,
-      name: message.sender.name ?? message.sender.email,
+      name: message.sender.name ?? message.sender.email.split('@')[0],
     },
   }
 }
@@ -32,7 +32,7 @@ export const transformMultipleMessagesToGiftedChat = (
     createdAt: new Date(message.createdAt),
     user: {
       _id: message.senderId,
-      name: message.sender.name ?? message.sender.email,
+      name: message.sender.name ?? message.sender.email.split('@')[0],
     },
   }))
 }

@@ -36,7 +36,10 @@ export const AccountScreen = ({ route }: AccountScreenProps): JSX.Element => {
   useEffect(() => {
     if (!isOwnAccount()) {
       navigation.setOptions({
-        title: guestUser?.name ?? guestUser?.email ?? 'Акаунт користувача',
+        title:
+          guestUser?.name ??
+          guestUser?.email.split('@')[0] ??
+          'Акаунт користувача',
       })
     }
 

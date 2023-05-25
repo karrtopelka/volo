@@ -103,7 +103,7 @@ export const AccountInformation = ({
         </HStack>
       </VStack>
       <Heading alignSelf="center" size="lg">
-        {data?.name ?? data?.email}
+        {data?.name ?? data?.email.split('@')[0]}
       </Heading>
       {data?.name && (
         <CardAttribute title={t('email')}>{data?.email}</CardAttribute>

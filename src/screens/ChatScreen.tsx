@@ -156,7 +156,7 @@ export const ChatScreen = ({ route }: ChatScreenProps): JSX.Element => {
       isLoadingEarlier={isFetchingNextPage}
       user={{
         _id: me!.id,
-        name: me?.name ?? me?.email,
+        name: me?.name ?? me?.email.split('@')[0],
         avatar: me?.avatar ?? '@assets/icon.png',
       }}
       scrollToBottom={true}
