@@ -1,6 +1,7 @@
 import { Card, Layout } from '@/components'
 import { Routes } from '@/constants'
 import { MainTabsParamList } from '@/types'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { NavigationProp, useNavigation } from '@react-navigation/native'
 import {
   Box,
@@ -8,17 +9,59 @@ import {
   Checkbox,
   Divider,
   Heading,
+  Skeleton,
   Text,
   VStack,
 } from 'native-base'
+import { useEffect, useState } from 'react'
 
 export const RequestCreateInitialScreen = (): JSX.Element => {
+  const [checkingIfSkipScreen, setCheckingIfSkipScreen] = useState(true)
+  const [isChecked, setIsChecked] = useState(false)
   const navigation = useNavigation<NavigationProp<MainTabsParamList>>()
 
-  const handleCreateRequest = () =>
-    navigation.navigate(Routes.REQUEST_CREATE_GENERAL_INFORMATION)
+  const handleCreateRequest = () => {
+    if (isChecked) {
+      AsyncStorage.setItem('showInitialRequestCreateScreen', 'true')
+    }
 
-  const handleEditRequests = () => navigation.navigate(Routes.REQUEST_NAVIGATOR)
+    return navigation.navigate(Routes.REQUEST_CREATE_GENERAL_INFORMATION)
+  }
+
+  const handleEditRequests = () => {
+    if (isChecked) {
+      AsyncStorage.setItem('showInitialRequestCreateScreen', 'true')
+    }
+
+    navigation.navigate(Routes.REQUEST_NAVIGATOR)
+  }
+
+  useEffect(() => {
+    const checkAsyncStorage = async () => {
+      const skipScreen = await AsyncStorage.getItem(
+        'showInitialRequestCreateScreen'
+      )
+
+      if (skipScreen) {
+        return navigation.navigate(Routes.REQUEST_CREATE_GENERAL_INFORMATION)
+      }
+      setCheckingIfSkipScreen(false)
+    }
+
+    checkAsyncStorage()
+  }, [])
+
+  if (checkingIfSkipScreen) {
+    return (
+      <Layout centered={true}>
+        <VStack space={4}>
+          <Skeleton h={40} />
+          <Skeleton.Text mt={4} lines={2} />
+          <Skeleton h={10} />
+        </VStack>
+      </Layout>
+    )
+  }
 
   return (
     <Layout centered={true}>
@@ -52,7 +95,11 @@ export const RequestCreateInitialScreen = (): JSX.Element => {
           В подальшому для редагування заходьте відразу на сторінку запитів, та
           обирайте потрібний
         </Text>
-        <Checkbox value="dont show again">
+        <Checkbox
+          value="dont show again"
+          isChecked={isChecked}
+          onChange={() => setIsChecked((prev) => !prev)}
+        >
           Більше не показувати цю сторінку
         </Checkbox>
       </VStack>

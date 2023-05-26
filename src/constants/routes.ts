@@ -21,6 +21,7 @@ export enum Routes {
   REQUESTS = 'Requests',
   ACCOUNT_REQUESTS = 'AccountRequests',
   REQUEST = 'Request',
+  REQUEST_INFO = 'RequestInfo',
 
   REQUEST_CREATE = 'RequestCreate',
   REQUEST_CREATE_NAVIGATOR = 'RequestCreateNavigator',
@@ -30,7 +31,13 @@ export enum Routes {
   REQUEST_CREATE_PHOTOS = 'RequestCreatePhotos',
   REQUEST_CREATE_ADDITIONAL_INFORMATION = 'RequestCreateAdditionalInformation',
 
+  REQUEST_EDIT_NAVIGATOR = 'RequestEditNavigator',
   REQUEST_EDIT = 'RequestEdit',
+  REQUEST_EDIT_GENERAL_INFORMATION = 'RequestEditGeneralInformation',
+  REQUEST_EDIT_CATEGORY = 'RequestEditCategory',
+  REQUEST_EDIT_PHOTOS = 'RequestEditPhotos',
+  REQUEST_EDIT_ADDITIONAL_INFORMATION = 'RequestEditAdditionalInformation',
+
   REQUEST_ADD_COMMENT = 'RequestAddComment',
 
   CHAT_NAVIGATOR = 'ChatNavigator',
@@ -39,4 +46,20 @@ export enum Routes {
   CREATE_CHAT = 'CreateChat',
 
   NO_ACCESS = 'NoAccess',
+}
+
+export enum RequestCreateRoutes {
+  INITIAL = Routes.REQUEST_CREATE_INITIAL,
+  GENERAL_INFORMATION = Routes.REQUEST_CREATE_GENERAL_INFORMATION,
+  CATEGORY = Routes.REQUEST_CREATE_CATEGORY,
+  PHOTOS = Routes.REQUEST_CREATE_PHOTOS,
+  ADDITIONAL_INFORMATION = Routes.REQUEST_CREATE_ADDITIONAL_INFORMATION,
+}
+
+export enum RequestEditRoutes {
+  INITIAL = Routes.REQUEST_EDIT,
+  GENERAL_INFORMATION = Routes.REQUEST_EDIT_GENERAL_INFORMATION,
+  CATEGORY = Routes.REQUEST_EDIT_CATEGORY,
+  PHOTOS = Routes.REQUEST_EDIT_PHOTOS,
+  ADDITIONAL_INFORMATION = Routes.REQUEST_EDIT_ADDITIONAL_INFORMATION,
 }

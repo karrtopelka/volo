@@ -1,10 +1,11 @@
 import { Request } from '@/types'
-import { HStack, VStack, Icon, Text, Heading, Divider } from 'native-base'
+import { HStack, VStack, Icon, Text, Heading, Divider, Link } from 'native-base'
 import { RequestCategory } from '../RequestCategory'
 import { RequestCollectedAmount } from '../RequestCollectedAmount'
 import { Card, CardAttribute, Tag } from '@/components'
 import { useTranslation } from 'react-i18next'
 import { MaterialIcons } from '@expo/vector-icons'
+import { RequestStatus } from './RequestStatus'
 
 export type RequestGeneralInformationProps = {
   data: Request
@@ -35,6 +36,7 @@ export const RequestGeneralInformation = ({
       <VStack space={5}>
         <Text>{data.description}</Text>
         <Divider />
+        <RequestStatus status={data.status} />
         <RequestCollectedAmount
           totalCollected={data.totalCollected}
           goalAmount={data.goalAmount}
@@ -51,6 +53,11 @@ export const RequestGeneralInformation = ({
             ))}
           </HStack>
         </CardAttribute>
+        {data.monobankBucketLink && (
+          <CardAttribute title="Посилання на monoБанку">
+            <Link href={data.monobankBucketLink}>Натисніть, щоб перейти</Link>
+          </CardAttribute>
+        )}
       </VStack>
     </Card>
   )

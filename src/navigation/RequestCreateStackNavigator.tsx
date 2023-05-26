@@ -35,17 +35,17 @@ export const RequestCreateStackNavigator = (): JSX.Element => (
       }}
     />
     <Screen
-      name={Routes.REQUEST_CREATE_PHOTOS}
-      component={RequestCreatePhotosScreen}
-      options={{
-        headerTitle: 'Фотознимки',
-      }}
-    />
-    <Screen
       name={Routes.REQUEST_CREATE_ADDITIONAL_INFORMATION}
       component={RequestCreateAdditionalInformationScreen}
       options={{
         headerTitle: 'Додаткова інформація',
+      }}
+    />
+    <Screen
+      name={Routes.REQUEST_CREATE_PHOTOS}
+      component={RequestCreatePhotosScreen}
+      options={{
+        headerTitle: 'Фотознимки',
       }}
     />
   </Navigator>

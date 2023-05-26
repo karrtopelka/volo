@@ -38,7 +38,7 @@ const ReviewCard = ({ review }: ReviewCardProps) => {
         <HStack space={5} justifyContent="space-between" flex={1}>
           <VStack space={0.5} alignItems="flex-start">
             <Text bold fontSize="md">
-              {reviewer?.name ?? reviewer?.email}
+              {reviewer?.name ?? reviewer?.email.split('@')[0]}
             </Text>
             <Box
               w="75%"

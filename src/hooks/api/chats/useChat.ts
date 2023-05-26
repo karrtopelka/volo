@@ -1,16 +1,12 @@
 import { useInfiniteQuery, UseInfiniteQueryResult } from '@tanstack/react-query'
-import {
-  LimitedSearchRequestParams,
-  Message,
-  PaginatedCursorResponse,
-} from '@/types'
+import { CursorRequestParams, Message, PaginatedCursorResponse } from '@/types'
 import { unwrapErrorResponse, unwrapResponse } from '@/utils/unwrapResponse'
 import { REACT_QUERY_KEYS } from '@/constants'
 import { useApiClient } from '../useApiClient'
 
 export type UseChatProps = {
   id: number | undefined
-  params: LimitedSearchRequestParams
+  params: CursorRequestParams
 }
 
 export const useChat = ({

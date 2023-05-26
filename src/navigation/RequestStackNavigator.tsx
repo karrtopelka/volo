@@ -5,9 +5,9 @@ import {
   AccountScreen,
   CreateChatScreen,
   RequestAddCommentScreen,
-  RequestScreen,
-  RequestsScreen,
+  MyRequestsScreen,
 } from '@/screens'
+import { RequestInfoStackNavigator } from './RequestInfoStackNavigator'
 
 const { Screen, Navigator } = createNativeStackNavigator<MainTabsParamList>()
 
@@ -15,24 +15,19 @@ export const RequestStackNavigator = (): JSX.Element => (
   <Navigator initialRouteName={Routes.REQUESTS}>
     <Screen
       name={Routes.REQUESTS}
-      component={RequestsScreen}
+      component={MyRequestsScreen}
       options={{ headerTitle: 'Мої запити' }}
     />
     <Screen
-      name={Routes.REQUEST}
-      component={RequestScreen}
-      options={{ headerTitle: 'Запит' }}
+      name={Routes.REQUEST_INFO}
+      component={RequestInfoStackNavigator}
+      options={{ headerShown: false }}
     />
     <Screen
       name={Routes.REQUEST_ADD_COMMENT}
       component={RequestAddCommentScreen}
       options={{ headerTitle: 'Додати коментар' }}
     />
-    {/* <Screen
-      name={Routes.REQUEST_CREATE}
-      component={RequestCreateScreen}
-      options={{ headerShown: false }}
-    /> */}
     <Screen
       name={Routes.ACCOUNT}
       component={AccountScreen}

@@ -3,7 +3,19 @@ import * as ImagePicker from 'expo-image-picker'
 import { PermissionStatus } from 'expo-permissions'
 import { useToast } from 'native-base'
 
-export const useImagePicker = () => {
+export type UseImagePickerProps = {
+  options?: ImagePicker.ImagePickerOptions | undefined
+}
+
+export const useImagePicker = ({
+  options = {
+    mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    allowsEditing: false,
+    quality: 0.5,
+    allowsMultipleSelection: true,
+    selectionLimit: 5,
+  },
+}: UseImagePickerProps) => {
   const toast = useToast()
 
   return async (): Promise<ImagePicker.ImagePickerAsset[] | null> => {
@@ -21,14 +33,7 @@ export const useImagePicker = () => {
       }
     }
 
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: false,
-      base64: true,
-      quality: 0.5,
-      allowsMultipleSelection: true,
-      selectionLimit: 5,
-    })
+    const result = await ImagePicker.launchImageLibraryAsync(options)
 
     return !result.canceled ? result.assets : null
   }

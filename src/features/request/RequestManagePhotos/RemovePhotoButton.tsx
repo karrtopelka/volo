@@ -2,16 +2,16 @@ import { Icon, IconButton } from 'native-base'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 
 export type RemovePhotoButtonProps = {
-  id: number
-  onRemove: (photoId: number) => void
+  uri: string
+  onRemove: (photoUri: string) => Promise<void>
 }
 
 export const RemovePhotoButton = ({
-  id,
+  uri,
   onRemove,
 }: RemovePhotoButtonProps): JSX.Element => {
   const handleRemove = async () => {
-    await onRemove(id)
+    await onRemove(uri)
   }
 
   return (

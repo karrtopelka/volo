@@ -81,29 +81,44 @@ export type RequestPostGeneralInformation = Pick<
   'title' | 'description' | 'goalAmount' | 'totalCollected'
 >
 
-export type RequestPostCategory = RequestPostGeneralInformation &
-  Pick<Request, 'categoryId' | 'type' | 'status'>
+export type RequestPostCategory = Pick<
+  Request,
+  'categoryId' | 'type' | 'status'
+>
 
-export type RequestPostPhotos = RequestPostCategory & {
+export type RequestPostCategoryStep = RequestPostGeneralInformation &
+  RequestPostCategory
+
+export type RequestPostAdditionalInformation = Pick<
+  Request,
+  'monobankBucketLink'
+> & {
+  tags: number[]
+}
+
+export type RequestPostAdditionalInformationStep =
+  RequestPostAdditionalInformation & RequestPostCategoryStep
+
+export type RequestPostPhotos = {
   attachments: string[]
 }
 
-export type RequestPostAdditionalInformation = RequestPostPhotos &
-  Pick<Request, 'monobankBucketLink'> & {
-    tags: number[]
-  }
+export type RequestPostPhotosStep = RequestPostPhotos &
+  RequestPostAdditionalInformationStep
 
-export type RequestPost = Pick<
-  Request,
-  | 'title'
-  | 'description'
-  | 'categoryId'
-  | 'type'
-  | 'status'
-  | 'goalAmount'
-  | 'totalCollected'
-  | 'monobankBucketLink'
-> & { tags: number[]; attachments: string[] }
+export type RequestPost = Partial<
+  Pick<
+    Request,
+    | 'title'
+    | 'description'
+    | 'categoryId'
+    | 'type'
+    | 'status'
+    | 'goalAmount'
+    | 'totalCollected'
+    | 'monobankBucketLink'
+  > & { tags: number[]; attachments: string[] }
+>
 
 export type Attachment = {
   id: number

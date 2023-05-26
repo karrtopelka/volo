@@ -1,31 +1,17 @@
 import 'react-native-url-polyfill/auto'
-import {
-  AspectRatio,
-  Box,
-  HStack,
-  Heading,
-  Stack,
-  Text,
-  Image,
-  VStack,
-  Center,
-  Pressable,
-} from 'native-base'
+import { HStack, IBoxProps, Text, VStack } from 'native-base'
 import { MainTabsParamList, Request } from '@/types'
 import { useTranslation } from 'react-i18next'
 import dayjs from 'dayjs'
-import { RequestTypeTag } from '../RequestTypeTag'
-import {
-  CommonActions,
-  NavigationProp,
-  useNavigation,
-} from '@react-navigation/native'
+import { NavigationProp, useNavigation } from '@react-navigation/native'
 import { Routes } from '@/constants'
+import { Card } from '../Card'
+import { RequestImage } from './RequestImage'
 
 export type RequestCardProps = {
   request: Request
   isSelfRequest?: boolean
-  maxW?: number | string
+  maxW?: IBoxProps['maxW']
 }
 
 export const RequestCard = ({
@@ -36,137 +22,55 @@ export const RequestCard = ({
   const { i18n } = useTranslation()
   const navigation = useNavigation<NavigationProp<MainTabsParamList>>()
 
-  const hasImages = request.attachments.length > 0
-
   const handleCardClick = () =>
-    navigation.dispatch(
-      CommonActions.navigate({
-        name: Routes.REQUEST_NAVIGATOR,
+    navigation.navigate(Routes.REQUEST_NAVIGATOR, {
+      screen: Routes.REQUEST_INFO,
+      params: {
+        screen: Routes.REQUEST,
         params: {
-          screen: Routes.REQUEST,
-          params: {
-            id: request.id,
-            isSelfRequest,
-          },
+          id: request.id,
+          isSelfRequest,
         },
-      })
-    )
+      },
+    })
 
   return (
-    <Pressable onPress={handleCardClick}>
-      <Box
-        maxW={maxW}
-        rounded="lg"
-        overflow="hidden"
-        borderColor="coolGray.200"
-        borderWidth="1"
-        _dark={{
-          borderColor: 'coolGray.600',
-          backgroundColor: 'gray.700',
-        }}
-        _web={{
-          shadow: 2,
-          borderWidth: 0,
-        }}
-        _light={{
-          backgroundColor: 'gray.50',
-        }}
-      >
-        <Box overflow="hidden" flex="1">
-          <AspectRatio w="100%" ratio={16 / 9}>
-            <Image
-              source={
-                hasImages
-                  ? {
-                      uri: request.attachments[0].fileUrl,
-                    }
-                  : require('@assets/request-placeholder.png')
-              }
-              alt="no_image"
-              resizeMode="cover"
-              w="full"
-              h="full"
-              p="0"
-            />
-          </AspectRatio>
-          <RequestTypeTag typeTag={request.type} />
-          {request.totalCollected && request.goalAmount && (
-            <Center
-              bg="green.500"
+    <Card
+      onPress={handleCardClick}
+      topImage={
+        <RequestImage
+          attachments={request.attachments}
+          type={request.type}
+          totalCollected={request.totalCollected}
+          goalAmount={request.goalAmount}
+        />
+      }
+      title={request.title.trim()}
+      shortDescription={
+        i18n.language === 'uk'
+          ? request.category.nameUk
+          : request.category.nameEn
+      }
+      maxW={maxW}
+    >
+      <VStack space={2}>
+        <Text fontWeight="400" isTruncated={request.description.length > 50}>
+          {request.description.trim()}
+        </Text>
+        <HStack alignItems="center" space={4} justifyContent="space-between">
+          <HStack alignItems="center">
+            <Text
+              color="coolGray.600"
               _dark={{
-                bg: `green.400`,
+                color: 'warmGray.200',
               }}
-              position="absolute"
-              top="0"
-              right="0"
-              px="3"
-              py="1.5"
-              borderBottomLeftRadius={4}
+              fontWeight="400"
             >
-              <Text color="warmGray.50" fontWeight={700} fontSize="xs">
-                Зібрано {request.totalCollected} / {request.goalAmount}
-              </Text>
-            </Center>
-          )}
-        </Box>
-        <Stack p="4" space={3} justifyContent="space-between" flex="1">
-          <VStack space={2}>
-            <Stack space={2}>
-              <Heading size="md" ml="-1">
-                {request.title}
-              </Heading>
-              <Text
-                fontSize="xs"
-                _light={{
-                  color: 'violet.500',
-                }}
-                _dark={{
-                  color: 'violet.400',
-                }}
-                fontWeight="500"
-                ml="-0.5"
-                mt="-1"
-              >
-                {i18n.language === 'uk'
-                  ? request.category.nameUk
-                  : request.category.nameEn}
-              </Text>
-            </Stack>
-            <Text fontWeight="400">
-              {request.description.length > 50 ? (
-                <>
-                  {request.description.substring(0, 50).trim()}...
-                  <Text
-                    color="violet.500"
-                    _dark={{
-                      color: 'violet.400',
-                    }}
-                    fontWeight="400"
-                  >
-                    {' '}
-                    Читати далі
-                  </Text>
-                </>
-              ) : (
-                request.description
-              )}
+              {dayjs(request.createdAt).fromNow()}
             </Text>
-          </VStack>
-          <HStack alignItems="center" space={4} justifyContent="space-between">
-            <HStack alignItems="center">
-              <Text
-                color="coolGray.600"
-                _dark={{
-                  color: 'warmGray.200',
-                }}
-                fontWeight="400"
-              >
-                {dayjs(request.createdAt).fromNow()}
-              </Text>
-            </HStack>
           </HStack>
-        </Stack>
-      </Box>
-    </Pressable>
+        </HStack>
+      </VStack>
+    </Card>
   )
 }

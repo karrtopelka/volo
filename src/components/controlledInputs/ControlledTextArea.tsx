@@ -1,7 +1,7 @@
 import {
   FormControl,
   ITextAreaProps,
-  Input,
+  TextArea,
   WarningOutlineIcon,
 } from 'native-base'
 import { ComponentProps } from 'react'
@@ -13,7 +13,7 @@ export type ControlledTextAreaProps<T extends FieldValues> = {
   formControlProps?: Partial<ComponentProps<typeof FormControl>>
   label?: string
   labelProps?: Partial<ComponentProps<typeof FormControl.Label>>
-} & Partial<ITextAreaProps> &
+} & ITextAreaProps &
   ControlledFieldProps<T>
 
 export const ControlledTextArea = <T extends FieldValues>({
@@ -22,7 +22,7 @@ export const ControlledTextArea = <T extends FieldValues>({
   label,
   control,
   name,
-  ...inputProps
+  ...textAreaProps
 }: ControlledTextAreaProps<T>): JSX.Element => {
   const {
     field: { onChange, value },
@@ -36,7 +36,13 @@ export const ControlledTextArea = <T extends FieldValues>({
     <FormControl {...formControlProps} isInvalid={!!error}>
       {label && <FormControl.Label {...labelProps}>{label}</FormControl.Label>}
 
-      <Input value={value} onChangeText={onChange} h={20} {...inputProps} />
+      <TextArea
+        autoCompleteType={false}
+        value={value}
+        onChangeText={onChange}
+        h={20}
+        {...textAreaProps}
+      />
 
       {error && (
         <FormControl.ErrorMessage

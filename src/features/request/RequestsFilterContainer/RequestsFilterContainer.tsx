@@ -60,12 +60,12 @@ export const RequestsFilterContainer = ({
 
     setParams((prev) => ({
       ...prev,
-      fromDate: item,
+      fromDate: +item,
     }))
   }
 
   return (
-    <Card m={3} title="Фільтр" sectionsPadding={3} sectionSpace={1}>
+    <Card title="Фільтр" sectionsPadding={3} sectionSpace={1}>
       <HStack space={3} py={2}>
         <VStack space={2} flex={1}>
           <Text size="sm" h="auto">

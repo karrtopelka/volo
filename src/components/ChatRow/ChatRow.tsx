@@ -19,7 +19,7 @@ export const ChatRow = ({ chat }: ChatRowProps): JSX.Element => {
   const handleChatClick = () =>
     navigation.navigate(Routes.CHAT, {
       id: chat.id,
-      recipientName: recipient.name ?? recipient.email,
+      recipientName: recipient.name ?? recipient.email.split('@')[0],
       recipientId: recipient.id,
     })
 
@@ -43,7 +43,7 @@ export const ChatRow = ({ chat }: ChatRowProps): JSX.Element => {
             w="full"
           >
             <Text bold fontSize="md">
-              {recipient.name ?? recipient.email}
+              {recipient.name ?? recipient.email.split('@')[0]}
             </Text>
             <Text fontSize="xs">{dayjs(lastMessage.createdAt).fromNow()}</Text>
           </HStack>

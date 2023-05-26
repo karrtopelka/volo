@@ -11,10 +11,14 @@ import { Image, Keyboard, TouchableWithoutFeedback } from 'react-native'
 import { useForm, Controller } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { NavigationProp, useNavigation } from '@react-navigation/native'
+import {
+  NavigationProp,
+  RouteProp,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native'
 import { AuthStackParamList } from '@/types'
 import { Routes } from '@/constants'
-import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
 const registerSchema = yup.object({
   email: yup.string().email().required(),
@@ -35,12 +39,8 @@ export type RegisterFormData = {
   isRemember: boolean
 }
 
-type RegisterScreenProps = NativeStackScreenProps<
-  AuthStackParamList,
-  Routes.REGISTER
->
-
-export const RegisterScreen = ({ route }: RegisterScreenProps): JSX.Element => {
+export const RegisterScreen = (): JSX.Element => {
+  const route = useRoute<RouteProp<AuthStackParamList, Routes.REGISTER>>()
   const { t } = useTranslation('auth')
   const { login } = useAuthContext()
   const navigation = useNavigation<NavigationProp<AuthStackParamList>>()

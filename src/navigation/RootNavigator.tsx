@@ -13,6 +13,7 @@ import {
   NetworkState,
 } from 'expo-network'
 import { Spinner } from 'native-base'
+import { hideAsync } from 'expo-splash-screen'
 
 const { Screen, Navigator } = createNativeStackNavigator<RootStackParamList>()
 
@@ -28,6 +29,8 @@ export const RootNavigator = () => {
 
   useEffect(() => {
     getNetworkState()
+
+    hideAsync()
   }, [])
 
   if (isLoggedIn === undefined || networkState === null) {

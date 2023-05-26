@@ -2,8 +2,8 @@ import { Box, VStack, Button, Spinner, KeyboardAvoidingView } from 'native-base'
 import * as yup from 'yup'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { USER_ROLES } from '@/constants'
-import { UserRole } from '@/types'
+import { Routes, USER_ROLES } from '@/constants'
+import { BucketNames, MainTabsParamList, UserRole } from '@/types'
 import { Keyboard, TouchableWithoutFeedback } from 'react-native'
 import {
   Card,
@@ -15,26 +15,27 @@ import {
 } from '@/components'
 import { useMe, useMutationWrapper, usePatchUsers } from '@/hooks'
 import { useTranslation } from 'react-i18next'
+import { NavigationProp, useNavigation } from '@react-navigation/native'
 
 const accountEditSchema = yup.object({
   email: yup.string().email().required(),
-  name: yup.string(),
-  avatar: yup.string(),
-  role: yup.string(),
-  phoneNumber: yup.string(),
+  name: yup.string().nullable(),
+  avatar: yup.string().nullable(),
+  role: yup.string().required(),
+  phoneNumber: yup.string().nullable(),
 })
 
 export type AccountEditFormData = {
   email: string
-  name: string
-  avatar: string
+  name: string | null
+  avatar: string | null
   role: string
-  phoneNumber: string
+  phoneNumber: string | null
 }
 
 export const AccountEditScreen = (): JSX.Element => {
   const { i18n } = useTranslation('account')
-
+  const navigation = useNavigation<NavigationProp<MainTabsParamList>>()
   const { mutateAsync: updateUser, isLoading: isUpdateUserLoading } =
     useMutationWrapper(usePatchUsers)
   const { data: user } = useMe()
@@ -43,15 +44,26 @@ export const AccountEditScreen = (): JSX.Element => {
     resolver: yupResolver(accountEditSchema),
     defaultValues: {
       email: user?.email ?? '',
-      name: user?.name ?? '',
-      avatar: user?.avatar ?? '',
-      role: user?.role ?? '',
-      phoneNumber: user?.phoneNumber ?? '',
+      name: user?.name ?? null,
+      avatar: user?.avatar ?? null,
+      role: user?.role ?? UserRole.VOLUNTEER,
+      phoneNumber: user?.phoneNumber ?? null,
     },
   })
 
   const onSubmit = async (data: AccountEditFormData) => {
-    await updateUser({ ...data, role: data.role as UserRole })
+    await updateUser(
+      { ...data, role: data.role as UserRole },
+      {
+        successMessageKey: 'Дані успішно оновлено',
+        errorMessageKey: 'Не вдалося оновити дані',
+        onSuccess: () => {
+          navigation.navigate(Routes.ACCOUNT, {
+            id: user!.id,
+          })
+        },
+      }
+    )
   }
 
   return (
@@ -91,7 +103,11 @@ export const AccountEditScreen = (): JSX.Element => {
                     />
                   </CardAttribute>
                   <CardAttribute title="Аватар">
-                    <ControlledPhotoInput control={control} name="avatar" />
+                    <ControlledPhotoInput
+                      control={control}
+                      name="avatar"
+                      bucketName={BucketNames.AVATARS}
+                    />
                   </CardAttribute>
                   <CardAttribute title="Роль">
                     <ControlledSelect

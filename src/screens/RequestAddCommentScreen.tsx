@@ -4,7 +4,7 @@ import { RequestAddCommentForm } from '@/features'
 import { useRequest } from '@/hooks'
 import { MainTabsParamList } from '@/types'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { Box, Spinner, VStack, Text, Heading } from 'native-base'
+import { Box, VStack, Text, Heading, Skeleton } from 'native-base'
 import { Keyboard, TouchableWithoutFeedback } from 'react-native'
 
 type RequestAddCommentScreenProps = NativeStackScreenProps<
@@ -20,8 +20,9 @@ export const RequestAddCommentScreen = ({
 
   if (isLoading) {
     return (
-      <Layout centered={true}>
-        <Spinner size="sm" />
+      <Layout>
+        <Skeleton.Text my={6} lines={3} />
+        <Skeleton my={2} h="48" />
       </Layout>
     )
   }

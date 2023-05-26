@@ -26,7 +26,7 @@ export const REQUEST_STATUSES = [
 
 export const REQUEST_FROM_DATE = [
   {
-    labelUk: '24 години',
+    labelUk: 'Останні 24 години',
     labelEn: '24 hours',
     value: new Date().setDate(new Date().getDate() - 1).toString(),
   },
@@ -41,3 +41,8 @@ export const REQUEST_FROM_DATE = [
     value: new Date().setMonth(new Date().getMonth() - 1).toString(),
   },
 ]
+
+export enum FORM_DATA_TYPES {
+  AVATAR = 'avatar',
+  REQUEST = 'request',
+}

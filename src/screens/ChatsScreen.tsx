@@ -1,62 +1,58 @@
-import { ChatRow, Layout } from '@/components'
+import { ChatRow, ChatsSkeleton, Layout } from '@/components'
 import { useChats } from '@/hooks'
-import { LimitedSearchRequestParams } from '@/types'
+import { Chat } from '@/types'
+import { flatListKeyExtractor } from '@/utils'
 import {
-  Button,
   Divider,
+  FlatList,
   Heading,
-  ScrollView,
   Spacer,
   Spinner,
-  Text,
   VStack,
+  Text,
 } from 'native-base'
-import { useState } from 'react'
+
+const renderData = ({ item }: { item: Chat }): JSX.Element => (
+  <VStack>
+    <ChatRow chat={item} />
+    <Divider borderColor="gray.300" mt={2} />
+  </VStack>
+)
+
+const renderEmptyList = (): JSX.Element => (
+  <Layout centered={true}>
+    <Heading>Немає чатів</Heading>
+    <Spacer my={3} />
+    <Text>Ви можете почати спілкуватись з людиною на сторінці з запитом</Text>
+  </Layout>
+)
 
 export const ChatsScreen = (): JSX.Element => {
-  const [params, setParams] = useState<LimitedSearchRequestParams>({
-    limit: 10,
-    offset: 0,
-  })
-  const { data, isLoading } = useChats(params)
+  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useChats({})
 
-  const handleLoadMore = () => {
-    setParams((prev) => ({ ...prev, limit: (prev.limit ?? 10) + 10 }))
-  }
+  const handleLoadMore = () => hasNextPage && fetchNextPage()
 
   if (isLoading) {
     return (
-      <Layout centered={true}>
-        <Spinner size="sm" />
+      <Layout>
+        <ChatsSkeleton />
       </Layout>
     )
   }
 
   return (
-    <ScrollView mx={3} my={3}>
-      {!!data?.data?.length ? (
-        <VStack space={1}>
-          {data.data.map((chat) => (
-            <VStack key={chat.id}>
-              <ChatRow chat={chat} />
-              <Divider borderColor="gray.300" mt={2} />
-            </VStack>
-          ))}
-        </VStack>
-      ) : (
-        <Layout centered={true}>
-          <Heading>Немає чатів</Heading>
-          <Spacer my={3} />
-          <Text>
-            Ви можете почати спілкуватись з людиною на сторінці з запитом
-          </Text>
-        </Layout>
-      )}
-      {data?.hasMore && (
-        <Button onPress={handleLoadMore} mt={3}>
-          Завантажити більше
-        </Button>
-      )}
-    </ScrollView>
+    <Layout>
+      <FlatList
+        data={data?.pages.map((page) => page.data).flat()}
+        keyExtractor={flatListKeyExtractor}
+        renderItem={renderData}
+        onEndReached={handleLoadMore}
+        onEndReachedThreshold={0.3}
+        ListFooterComponent={isFetchingNextPage ? <Spinner /> : null}
+        ItemSeparatorComponent={Divider}
+        ListEmptyComponent={renderEmptyList}
+      />
+    </Layout>
   )
 }

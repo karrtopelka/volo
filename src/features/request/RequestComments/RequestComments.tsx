@@ -36,22 +36,20 @@ export const RequestComments = ({
           />
         }
       >
-        <VStack space={3}>
-          {!!comments.length ? (
-            comments.map((comment, index) => {
-              const isLast = index === comments.length - 1
+        {!!comments.length ? (
+          comments.map((comment, index) => {
+            const isLast = index === comments.length - 1
 
-              return (
-                <VStack space={3} key={comment.id}>
-                  <RequestComment key={comment.id} comment={comment} />
-                  {!isLast && <Divider />}
-                </VStack>
-              )
-            })
-          ) : (
-            <Text>Коментарі відсутні</Text>
-          )}
-        </VStack>
+            return (
+              <VStack space={3} key={comment.id} my={2}>
+                <RequestComment key={comment.id} comment={comment} />
+                {!isLast && <Divider my={2} />}
+              </VStack>
+            )
+          })
+        ) : (
+          <Text>Коментарі відсутні</Text>
+        )}
       </Card>
     </>
   )

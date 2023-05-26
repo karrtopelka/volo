@@ -74,8 +74,7 @@ export const CreateChatForm = ({
               name="message"
               control={control}
               placeholder="Тут ви можете написати повідомлення"
-              multiline={true}
-              numberOfLines={4}
+              totalLines={4}
             />
           </Card>
         </TouchableWithoutFeedback>
