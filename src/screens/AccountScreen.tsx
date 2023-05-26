@@ -10,18 +10,21 @@ import MyReviews from '@/features/account/MyReviews/MyReviews'
 import { useAuthContext, useMe } from '@/hooks'
 import { useUser } from '@/hooks/api/useUser'
 import { MainTabsParamList } from '@/types'
-import { NavigationProp, useNavigation } from '@react-navigation/native'
-import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import {
+  NavigationProp,
+  RouteProp,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native'
 import { Button, ScrollView, VStack } from 'native-base'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-type AccountScreenProps = NativeStackScreenProps<
-  MainTabsParamList,
-  Routes.ACCOUNT | Routes.ACCOUNT_VIEW
->
-
-export const AccountScreen = ({ route }: AccountScreenProps): JSX.Element => {
+export const AccountScreen = (): JSX.Element => {
+  const route =
+    useRoute<
+      RouteProp<MainTabsParamList, Routes.ACCOUNT | Routes.ACCOUNT_VIEW>
+    >()
   const { id } = route.params
   const { data: me } = useMe()
   const isOwnAccount = () => me?.id === id
@@ -71,7 +74,7 @@ export const AccountScreen = ({ route }: AccountScreenProps): JSX.Element => {
             />
           </Card>
           <Card title={t('requests')!}>
-            <AccountRequestsContainer userId={data?.id} />
+            <AccountRequestsContainer userId={id} />
           </Card>
           {!!data?.receivedReviews.length && (
             <Card title={t('reviews')!}>

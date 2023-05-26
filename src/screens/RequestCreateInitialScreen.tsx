@@ -9,17 +9,24 @@ import {
   Checkbox,
   Divider,
   Heading,
+  Skeleton,
   Text,
   VStack,
 } from 'native-base'
 import { useEffect, useState } from 'react'
 
 export const RequestCreateInitialScreen = (): JSX.Element => {
+  const [checkingIfSkipScreen, setCheckingIfSkipScreen] = useState(true)
   const [isChecked, setIsChecked] = useState(false)
   const navigation = useNavigation<NavigationProp<MainTabsParamList>>()
 
-  const handleCreateRequest = () =>
-    navigation.navigate(Routes.REQUEST_CREATE_GENERAL_INFORMATION)
+  const handleCreateRequest = () => {
+    if (isChecked) {
+      AsyncStorage.setItem('showInitialRequestCreateScreen', 'true')
+    }
+
+    return navigation.navigate(Routes.REQUEST_CREATE_GENERAL_INFORMATION)
+  }
 
   const handleEditRequests = () => {
     if (isChecked) {
@@ -36,12 +43,25 @@ export const RequestCreateInitialScreen = (): JSX.Element => {
       )
 
       if (skipScreen) {
-        navigation.navigate(Routes.REQUEST_NAVIGATOR)
+        return navigation.navigate(Routes.REQUEST_CREATE_GENERAL_INFORMATION)
       }
+      setCheckingIfSkipScreen(false)
     }
 
     checkAsyncStorage()
   }, [])
+
+  if (checkingIfSkipScreen) {
+    return (
+      <Layout centered={true}>
+        <VStack space={4}>
+          <Skeleton h={40} />
+          <Skeleton.Text mt={4} lines={2} />
+          <Skeleton h={10} />
+        </VStack>
+      </Layout>
+    )
+  }
 
   return (
     <Layout centered={true}>

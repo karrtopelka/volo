@@ -4,13 +4,16 @@ import {
   Layout,
   TagSelectOption,
 } from '@/components'
+import { Routes } from '@/constants'
 import {
   useInterests,
   useMe,
   useMutationWrapper,
   usePatchInterests,
 } from '@/hooks'
+import { MainTabsParamList } from '@/types'
 import { yupResolver } from '@hookform/resolvers/yup'
+import { NavigationProp, useNavigation } from '@react-navigation/native'
 import { Box, Button, Spinner, VStack } from 'native-base'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -34,6 +37,7 @@ export const AccountEditInterestsScreen = (): JSX.Element => {
     mutateAsync: updateUserInterests,
     isLoading: isUpdateUserInterestsLoading,
   } = useMutationWrapper(usePatchInterests)
+  const navigation = useNavigation<NavigationProp<MainTabsParamList>>()
 
   const { control, handleSubmit } = useForm<AccountEditInterestsFormData>({
     resolver: yupResolver(accountEditInterestsSchema),
@@ -57,7 +61,15 @@ export const AccountEditInterestsScreen = (): JSX.Element => {
   }, [interests])
 
   const onSubmit = async (data: AccountEditInterestsFormData) => {
-    await updateUserInterests(data)
+    await updateUserInterests(data, {
+      successMessageKey: 'Дані успішно оновлено',
+      errorMessageKey: 'Не вдалося оновити дані',
+      onSuccess: () => {
+        navigation.navigate(Routes.ACCOUNT, {
+          id: user!.id,
+        })
+      },
+    })
   }
 
   if (isUpdateUserInterestsLoading) {

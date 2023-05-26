@@ -3,11 +3,7 @@ import { HStack, IBoxProps, Text, VStack } from 'native-base'
 import { MainTabsParamList, Request } from '@/types'
 import { useTranslation } from 'react-i18next'
 import dayjs from 'dayjs'
-import {
-  CommonActions,
-  NavigationProp,
-  useNavigation,
-} from '@react-navigation/native'
+import { NavigationProp, useNavigation } from '@react-navigation/native'
 import { Routes } from '@/constants'
 import { Card } from '../Card'
 import { RequestImage } from './RequestImage'
@@ -27,18 +23,16 @@ export const RequestCard = ({
   const navigation = useNavigation<NavigationProp<MainTabsParamList>>()
 
   const handleCardClick = () =>
-    navigation.dispatch(
-      CommonActions.navigate({
-        name: Routes.REQUEST_NAVIGATOR,
+    navigation.navigate(Routes.REQUEST_NAVIGATOR, {
+      screen: Routes.REQUEST_INFO,
+      params: {
+        screen: Routes.REQUEST,
         params: {
-          screen: Routes.REQUEST,
-          params: {
-            id: request.id,
-            isSelfRequest,
-          },
+          id: request.id,
+          isSelfRequest,
         },
-      })
-    )
+      },
+    })
 
   return (
     <Card

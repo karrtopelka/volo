@@ -4,7 +4,7 @@ import {
   ControlledInput,
   ControlledTextArea,
 } from '@/components'
-import { FormComponentProps } from '@/types'
+import { FormComponentProps, Request } from '@/types'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Box, Button, KeyboardAvoidingView, VStack } from 'native-base'
 import { useForm } from 'react-hook-form'
@@ -15,7 +15,7 @@ import * as yup from 'yup'
 const requestCreateGeneralInformationSchema = yup.object({
   title: yup.string().required(),
   description: yup.string().required(),
-  goalAmount: yup.number(),
+  goalAmount: yup.number().nullable(),
   totalCollected: yup
     .number()
     .test(
@@ -26,15 +26,14 @@ const requestCreateGeneralInformationSchema = yup.object({
 
         return value === undefined || value < goalAmount
       }
-    ),
+    )
+    .nullable(),
 })
 
 export type RequestCreateGeneralInformationFormData = {
-  title: string
-  description: string
-  goalAmount: number | null
-  totalCollected: number | null
-}
+  totalCollected: string | null
+  goalAmount: string | null
+} & Pick<Request, 'title' | 'description'>
 
 export const RequestGeneralInformationForm = ({
   defaultValues,

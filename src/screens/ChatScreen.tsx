@@ -2,10 +2,14 @@ import { Layout } from '@/components'
 import { Routes } from '@/constants'
 import { useChat, useMe } from '@/hooks'
 import { MainTabsParamList, Message, PaginatedListResponse } from '@/types'
-import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { Spinner, View } from 'native-base'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { NavigationProp, useNavigation } from '@react-navigation/native'
+import {
+  NavigationProp,
+  RouteProp,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native'
 import { socketChat, transformMultipleMessagesToGiftedChat } from '@/utils'
 import { GiftedChat, IMessage } from 'react-native-gifted-chat'
 import {
@@ -17,9 +21,8 @@ import { Platform } from 'react-native'
 import { useOnlineUsers } from '@/contexts'
 import { useQueryClient } from '@tanstack/react-query'
 
-type ChatScreenProps = NativeStackScreenProps<MainTabsParamList, Routes.CHAT>
-
-export const ChatScreen = ({ route }: ChatScreenProps): JSX.Element => {
+export const ChatScreen = (): JSX.Element => {
+  const route = useRoute<RouteProp<MainTabsParamList, Routes.CHAT>>()
   const { id, recipientName, recipientId } = route.params
   const [inputText, setInputText] = useState('')
   const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout | null>(

@@ -2,8 +2,8 @@ import { Box, VStack, Button, Spinner, KeyboardAvoidingView } from 'native-base'
 import * as yup from 'yup'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { USER_ROLES } from '@/constants'
-import { BucketNames, UserRole } from '@/types'
+import { Routes, USER_ROLES } from '@/constants'
+import { BucketNames, MainTabsParamList, UserRole } from '@/types'
 import { Keyboard, TouchableWithoutFeedback } from 'react-native'
 import {
   Card,
@@ -15,6 +15,7 @@ import {
 } from '@/components'
 import { useMe, useMutationWrapper, usePatchUsers } from '@/hooks'
 import { useTranslation } from 'react-i18next'
+import { NavigationProp, useNavigation } from '@react-navigation/native'
 
 const accountEditSchema = yup.object({
   email: yup.string().email().required(),
@@ -34,7 +35,7 @@ export type AccountEditFormData = {
 
 export const AccountEditScreen = (): JSX.Element => {
   const { i18n } = useTranslation('account')
-
+  const navigation = useNavigation<NavigationProp<MainTabsParamList>>()
   const { mutateAsync: updateUser, isLoading: isUpdateUserLoading } =
     useMutationWrapper(usePatchUsers)
   const { data: user } = useMe()
@@ -51,7 +52,18 @@ export const AccountEditScreen = (): JSX.Element => {
   })
 
   const onSubmit = async (data: AccountEditFormData) => {
-    await updateUser({ ...data, role: data.role as UserRole })
+    await updateUser(
+      { ...data, role: data.role as UserRole },
+      {
+        successMessageKey: 'Дані успішно оновлено',
+        errorMessageKey: 'Не вдалося оновити дані',
+        onSuccess: () => {
+          navigation.navigate(Routes.ACCOUNT, {
+            id: user!.id,
+          })
+        },
+      }
+    )
   }
 
   return (

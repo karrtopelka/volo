@@ -33,9 +33,10 @@ export const RequestAdditionalInformationForm = ({
   const [tagsSelect, setTagsSelect] = useState<TagSelectOption[]>([])
   const { i18n } = useTranslation()
 
-  const { control, handleSubmit } =
+  const { control, handleSubmit, reset } =
     useForm<RequestCreateAdditionalInformationFormData>({
       resolver: yupResolver(requestCreateAdditionalInformationSchema),
+      defaultValues,
     })
 
   useEffect(() => {
@@ -47,6 +48,9 @@ export const RequestAdditionalInformationForm = ({
       }))
 
       setTagsSelect(tagsSelect)
+      reset({
+        tags: defaultValues?.tags,
+      })
     }
 
     return () => setTagsSelect([])

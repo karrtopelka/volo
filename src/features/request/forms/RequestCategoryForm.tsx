@@ -21,7 +21,7 @@ const requestCreateCategorySchema = yup.object({
 })
 
 export type RequestCreateCategoryFormData = {
-  categoryId: number
+  categoryId: string
   type: string
   status: string | null
 }
@@ -36,9 +36,11 @@ export const RequestCategoryForm = ({
   const { data: categories } = useCategories()
   const [categoriesSelect, setCategoriesSelect] = useState<SelectOption[]>([])
 
-  const { control, handleSubmit } = useForm<RequestCreateCategoryFormData>({
-    resolver: yupResolver(requestCreateCategorySchema),
-  })
+  const { control, handleSubmit, reset } =
+    useForm<RequestCreateCategoryFormData>({
+      resolver: yupResolver(requestCreateCategorySchema),
+      defaultValues,
+    })
 
   useEffect(() => {
     if (categories) {
@@ -49,6 +51,13 @@ export const RequestCategoryForm = ({
       }))
 
       setCategoriesSelect(categoriesSelect)
+
+      defaultValues &&
+        reset({
+          categoryId: categoriesSelect.find(
+            (item) => item.value === defaultValues?.categoryId
+          )!.value,
+        })
     }
 
     return () => setCategoriesSelect([])

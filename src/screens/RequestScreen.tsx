@@ -7,28 +7,27 @@ import {
 } from '@/features'
 import { useRequest } from '@/hooks'
 import { MainTabsParamList } from '@/types'
-import { NavigationProp, useNavigation } from '@react-navigation/native'
-import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import {
+  NavigationProp,
+  RouteProp,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native'
 import dayjs from 'dayjs'
 import { Box, Button, ScrollView, VStack } from 'native-base'
 import { useEffect } from 'react'
 import AppleHeader from 'react-native-apple-header'
 
-type RequestScreenProps = NativeStackScreenProps<
-  MainTabsParamList,
-  Routes.REQUEST
->
-
-export const RequestScreen = ({ route }: RequestScreenProps): JSX.Element => {
-  const { id, isSelfRequest } = route.params
-  const { data, isLoading } = useRequest({ id })
+export const RequestScreen = (): JSX.Element => {
+  const { params } = useRoute<RouteProp<MainTabsParamList, Routes.REQUEST>>()
+  const { data, isLoading } = useRequest({ id: params.id })
   const navigation = useNavigation<NavigationProp<MainTabsParamList>>()
 
-  const handleNavigateToEditScreen = () => {
-    // return navigation.navigate(Routes.REQUEST_CREATE, {
-    //   id,
-    // })
-  }
+  const handleNavigateToEditScreen = () =>
+    navigation.navigate(Routes.REQUEST_EDIT_NAVIGATOR, {
+      screen: Routes.REQUEST_EDIT,
+      params: { id: params.id },
+    })
 
   const handleNavigateToUserAccount = () =>
     navigation.navigate(Routes.ACCOUNT, { id: data!.user.id })
@@ -37,7 +36,7 @@ export const RequestScreen = ({ route }: RequestScreenProps): JSX.Element => {
     navigation.navigate(Routes.CREATE_CHAT, { recipientId: data!.user.id })
 
   useEffect(() => {
-    if (isSelfRequest) {
+    if (params.isSelfRequest) {
       navigation.setOptions({
         headerRight: () => (
           <Button variant="ghost" onPress={handleNavigateToEditScreen}>
@@ -46,7 +45,7 @@ export const RequestScreen = ({ route }: RequestScreenProps): JSX.Element => {
         ),
       })
     }
-  }, [isSelfRequest, id])
+  }, [])
 
   if (isLoading) {
     return (
@@ -76,10 +75,10 @@ export const RequestScreen = ({ route }: RequestScreenProps): JSX.Element => {
               <RequestAttachments attachments={data.attachments} />
             )}
             <RequestGeneralInformation data={data} />
-            {!isSelfRequest && (
+            {!params.isSelfRequest && (
               <Button onPress={handleCreateChat}>Звʼязатись з людиною</Button>
             )}
-            <RequestComments comments={data.comments} requestId={id} />
+            <RequestComments comments={data.comments} requestId={params.id} />
           </VStack>
         </VStack>
       ) : (
