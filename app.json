@@ -11,7 +11,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "infoPlist": {
         "NSAppTransportSecurity": {
@@ -24,7 +26,13 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.FOREGROUND_SERVICE",
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -42,9 +50,17 @@
           "photosPermission": "The app accesses your photos to let you share them with your friends."
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "b2e0e97f-d480-4355-8c27-608202e1224d"
+      }
+    },
+    "owner": "karrtopelka"
   },
   "infoPlist": {
-    "NSAppTransportSecurity": { "NSAllowsArbitraryLoads": true }
+    "NSAppTransportSecurity": {
+      "NSAllowsArbitraryLoads": true
+    }
   }
 }

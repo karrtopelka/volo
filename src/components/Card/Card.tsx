@@ -22,6 +22,7 @@ export type CardProps = {
   footerActions?: React.ReactNode
   sectionsPadding?: IVStackProps['p']
   sectionSpace?: IVStackProps['space']
+  sectionProps?: IVStackProps
   status?: 'info' | 'success' | 'warning' | 'error'
   onPress?: () => void
   topImage?: React.ReactNode
@@ -86,6 +87,7 @@ export const Card = ({
   footerActions,
   sectionsPadding = '6',
   sectionSpace = '5',
+  sectionProps,
   status,
   children,
   onPress,
@@ -116,7 +118,7 @@ export const Card = ({
       {...rest}
     >
       {topImage}
-      <VStack p={sectionsPadding} space={sectionSpace}>
+      <VStack p={sectionsPadding} space={sectionSpace} {...sectionProps}>
         {renderCardHeader({
           title,
           titleProps,

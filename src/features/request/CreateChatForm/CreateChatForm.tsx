@@ -1,18 +1,14 @@
 import { Card, ControlledTextArea } from '@/components'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Keyboard } from 'react-native'
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
+import { Keyboard, TouchableWithoutFeedback } from 'react-native'
 import { useForm } from 'react-hook-form'
 import { useMutationWrapper, usePostChat } from '@/hooks'
-import {
-  CommonActions,
-  NavigationProp,
-  useNavigation,
-} from '@react-navigation/native'
+import { NavigationProp, useNavigation } from '@react-navigation/native'
 import { MainTabsParamList } from '@/types'
 import { Routes } from '@/constants'
-import { KeyboardAvoidingView, VStack, Button } from 'native-base'
+import { Button } from 'native-base'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 const createChatFormSchema = yup.object({
   message: yup.string().required(),
@@ -41,44 +37,49 @@ export const CreateChatForm = ({
       {
         successMessageKey: 'Чат створено',
         errorMessageKey: 'Виникла помилка при створенні',
-        onSuccess: (data) =>
-          navigation.dispatch(
-            CommonActions.navigate({
-              name: Routes.CHAT_NAVIGATOR,
-              params: {
-                screen: Routes.CHAT,
-                params: {
-                  id: data.id,
-                },
-              },
-            })
-          ),
+        onSuccess: (data) => {
+          const recipient = data.users.find((user) => user.id === recipientId)!
+          const recipientName = recipient?.name ?? recipient.email.split('@')[0]
+
+          return navigation.navigate(Routes.CHAT_NAVIGATOR, {
+            screen: Routes.CHAT,
+            params: {
+              id: data.id,
+              recipientId,
+              recipientName,
+            },
+          })
+        },
       }
     )
   }
 
   return (
-    <KeyboardAvoidingView behavior="padding" enabled={true} flex={1}>
-      <VStack space={3} p={2} justifyContent="flex-end">
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <Card
-            title="Нове повідомлення"
-            shortDescription="Напишіть до прикладу що ви хочете дізнатись"
-            footerActions={
-              <Button isLoading={isLoading} onPress={handleSubmit(onSubmit)}>
-                Надіслати
-              </Button>
-            }
-          >
-            <ControlledTextArea
-              name="message"
-              control={control}
-              placeholder="Тут ви можете написати повідомлення"
-              totalLines={4}
-            />
-          </Card>
-        </TouchableWithoutFeedback>
-      </VStack>
-    </KeyboardAvoidingView>
+    <KeyboardAwareScrollView
+      style={{ flex: 1 }}
+      contentContainerStyle={{ flex: 1 }}
+      keyboardShouldPersistTaps="handled"
+      scrollEnabled={true}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <Card
+          title="Нове повідомлення"
+          shortDescription="Напишіть до прикладу що ви хочете дізнатись"
+          footerActions={
+            <Button isLoading={isLoading} onPress={handleSubmit(onSubmit)}>
+              Надіслати
+            </Button>
+          }
+          m={4}
+        >
+          <ControlledTextArea
+            name="message"
+            control={control}
+            placeholder="Тут ви можете написати повідомлення"
+            totalLines={4}
+          />
+        </Card>
+      </TouchableWithoutFeedback>
+    </KeyboardAwareScrollView>
   )
 }

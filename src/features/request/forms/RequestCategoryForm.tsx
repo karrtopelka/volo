@@ -8,7 +8,7 @@ import { REQUEST_STATUSES, REQUEST_TYPES } from '@/constants'
 import { useCategories } from '@/hooks'
 import { FormComponentProps } from '@/types'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Box, Button, KeyboardAvoidingView, VStack } from 'native-base'
+import { Box, Button, VStack, View } from 'native-base'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -78,11 +78,7 @@ export const RequestCategoryForm = ({
   )
 
   return (
-    <KeyboardAvoidingView
-      flex={1}
-      behavior="padding"
-      keyboardVerticalOffset={100}
-    >
+    <View>
       <VStack space={3} p={2}>
         <Card shortDescription="Яка на даний момент ситуація з запитом?">
           <VStack space={5}>
@@ -150,6 +146,6 @@ export const RequestCategoryForm = ({
           </Button>
         </Box>
       </VStack>
-    </KeyboardAvoidingView>
+    </View>
   )
 }

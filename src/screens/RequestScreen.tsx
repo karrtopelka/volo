@@ -5,7 +5,7 @@ import {
   RequestComments,
   RequestGeneralInformation,
 } from '@/features'
-import { useRequest } from '@/hooks'
+import { checkIfChatExists, useApiClient, useRequest } from '@/hooks'
 import { MainTabsParamList } from '@/types'
 import {
   NavigationProp,
@@ -22,6 +22,7 @@ export const RequestScreen = (): JSX.Element => {
   const { params } = useRoute<RouteProp<MainTabsParamList, Routes.REQUEST>>()
   const { data, isLoading } = useRequest({ id: params.id })
   const navigation = useNavigation<NavigationProp<MainTabsParamList>>()
+  const client = useApiClient()
 
   const handleNavigateToEditScreen = () =>
     navigation.navigate(Routes.REQUEST_EDIT_NAVIGATOR, {
@@ -32,8 +33,26 @@ export const RequestScreen = (): JSX.Element => {
   const handleNavigateToUserAccount = () =>
     navigation.navigate(Routes.ACCOUNT, { id: data!.user.id })
 
-  const handleCreateChat = () =>
-    navigation.navigate(Routes.CREATE_CHAT, { recipientId: data!.user.id })
+  const handleCreateChat = async () => {
+    const isChatExists = await checkIfChatExists(data!.user.id, client)
+
+    if (!isChatExists) {
+      return navigation.navigate(Routes.CREATE_CHAT, {
+        recipientId: data!.user.id,
+      })
+    }
+
+    const { id, recipientId, recipientName } = isChatExists
+
+    return navigation.navigate(Routes.CHAT_NAVIGATOR, {
+      screen: Routes.CHAT,
+      params: {
+        recipientId,
+        recipientName,
+        id,
+      },
+    })
+  }
 
   useEffect(() => {
     if (params.isSelfRequest) {

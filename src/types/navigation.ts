@@ -79,7 +79,12 @@ export type MainTabsParamList = {
   [Routes.REQUEST_EDIT_ADDITIONAL_INFORMATION]: DynamicDataParam<Request>
   [Routes.REQUEST_EDIT_PHOTOS]: DynamicDataParam<Request>
 
-  [Routes.CHAT_NAVIGATOR]: undefined
+  [Routes.CHAT_NAVIGATOR]:
+    | {
+        screen: Routes.CHAT
+        params: { id: number; recipientName: string; recipientId: number }
+      }
+    | undefined
   [Routes.CHATS]: undefined
   [Routes.CHAT]: { id: number; recipientName: string; recipientId: number }
   [Routes.CREATE_CHAT]: { recipientId: number }
