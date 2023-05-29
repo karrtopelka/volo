@@ -8,11 +8,12 @@ import {
 import { useTags } from '@/hooks'
 import { FormComponentProps } from '@/types'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Box, Button, KeyboardAvoidingView, VStack, View } from 'native-base'
+import { Box, Button, VStack, View } from 'native-base'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import * as yup from 'yup'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 const requestCreateAdditionalInformationSchema = yup.object({
   monobankBucketLink: yup.string(),
@@ -57,10 +58,11 @@ export const RequestAdditionalInformationForm = ({
   }, [tags])
 
   return (
-    <KeyboardAvoidingView
-      flex={1}
-      behavior="padding"
-      keyboardVerticalOffset={100}
+    <KeyboardAwareScrollView
+      style={{ flex: 1 }}
+      contentContainerStyle={{ flex: 1 }}
+      keyboardShouldPersistTaps="handled"
+      scrollEnabled={true}
     >
       <VStack space={3} p={2}>
         <View>
@@ -98,6 +100,6 @@ export const RequestAdditionalInformationForm = ({
           </Button>
         </Box>
       </VStack>
-    </KeyboardAvoidingView>
+    </KeyboardAwareScrollView>
   )
 }

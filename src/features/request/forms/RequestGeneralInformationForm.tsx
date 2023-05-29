@@ -6,11 +6,12 @@ import {
 } from '@/components'
 import { FormComponentProps, Request } from '@/types'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Box, Button, KeyboardAvoidingView, VStack } from 'native-base'
+import { Box, Button, VStack } from 'native-base'
 import { useForm } from 'react-hook-form'
 import { Keyboard } from 'react-native'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import * as yup from 'yup'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 const requestCreateGeneralInformationSchema = yup.object({
   title: yup.string().required(),
@@ -47,7 +48,12 @@ export const RequestGeneralInformationForm = ({
     })
 
   return (
-    <KeyboardAvoidingView behavior="padding" enabled={true} flex={1}>
+    <KeyboardAwareScrollView
+      style={{ flex: 1 }}
+      contentContainerStyle={{ flex: 1 }}
+      keyboardShouldPersistTaps="handled"
+      scrollEnabled={true}
+    >
       <VStack space={3} p={2} justifyContent="flex-end">
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <Card shortDescription="Загальна інформація про запит">
@@ -97,6 +103,6 @@ export const RequestGeneralInformationForm = ({
           </Button>
         </Box>
       </VStack>
-    </KeyboardAvoidingView>
+    </KeyboardAwareScrollView>
   )
 }

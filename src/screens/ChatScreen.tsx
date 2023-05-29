@@ -24,6 +24,7 @@ import { useQueryClient } from '@tanstack/react-query'
 export const ChatScreen = (): JSX.Element => {
   const route = useRoute<RouteProp<MainTabsParamList, Routes.CHAT>>()
   const { id, recipientName, recipientId } = route.params
+
   const [inputText, setInputText] = useState('')
   const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout | null>(
     null

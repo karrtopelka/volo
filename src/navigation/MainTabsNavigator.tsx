@@ -6,13 +6,23 @@ import { useTranslation } from 'react-i18next'
 import { AccountStackNavigator } from './AccountStackNavigator'
 import { RequestStackNavigator } from './RequestStackNavigator'
 import { ChatStackNavigator } from './ChatStackNavigator'
-import { useEffect, useState } from 'react'
-import { socketUser } from '@/utils'
+import { useEffect, useRef, useState } from 'react'
+import { registerForPushNotificationsAsync, socketUser } from '@/utils'
 import { useMe } from '@/hooks'
 import { useOnlineUsers } from '@/contexts'
 import { BottomTabBar } from './BottomTabBar'
 import { RequestCreateStackNavigator } from './RequestCreateStackNavigator'
 import { AppState, AppStateStatus } from 'react-native'
+import * as Notifications from 'expo-notifications'
+import { NavigationProp, useNavigation } from '@react-navigation/native'
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: true,
+  }),
+})
 
 const { Screen, Navigator } = createBottomTabNavigator<MainTabsParamList>()
 
@@ -20,8 +30,16 @@ export const MainTabsNavigator = (): JSX.Element => {
   const { t } = useTranslation('tabs')
   const { data: me } = useMe()
   const { updateUserIds } = useOnlineUsers()
+  const navigation = useNavigation<NavigationProp<MainTabsParamList>>()
 
+  const [expoPushToken, setExpoPushToken] = useState<string | undefined>('')
+  const [notification, setNotification] = useState<
+    false | Notifications.Notification
+  >(false)
   const [appState, setAppState] = useState(AppState.currentState)
+
+  const notificationListener = useRef<undefined | Notifications.Subscription>()
+  const responseListener = useRef<undefined | Notifications.Subscription>()
 
   useEffect(() => {
     const appState = AppState.addEventListener('change', _handleAppStateChange)
@@ -34,9 +52,37 @@ export const MainTabsNavigator = (): JSX.Element => {
 
     socketUser.emit('check-in', me!.id)
 
+    registerForPushNotificationsAsync().then((token) => setExpoPushToken(token))
+
+    notificationListener.current =
+      Notifications.addNotificationReceivedListener((notification) => {
+        setNotification(notification)
+      })
+
+    responseListener.current =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        const {
+          notification: {
+            request: {
+              content: {
+                data: { screen },
+              },
+            },
+          },
+        } = response
+
+        if (screen) {
+          navigation.navigate(screen)
+        }
+      })
+
     return () => {
       appState.remove()
       socketUser.off('users')
+      Notifications.removeNotificationSubscription(
+        notificationListener.current!
+      )
+      Notifications.removeNotificationSubscription(responseListener.current!)
     }
   }, [])
 
