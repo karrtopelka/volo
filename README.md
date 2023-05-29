@@ -9,8 +9,6 @@ commit](https://img.shields.io/github/last-commit/karrtopelka/volo.svg)
 ![GitHub stars](https://img.shields.io/github/stars/karrtopelka/volo)
 ![GitHub forks](https://img.shields.io/github/forks/karrtopelka/volo)
 
-[![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=karrtopelka&repo=volo&theme=tokyonight&layout=compact&show_icons=true)](https://github.com/karrtopelka/volo)
-
 # Max (Karrtopelka) Plotitsyn
 
 [![Codewars Badge](https://www.codewars.com/users/karrtopelka/badges/large)](https://www.codewars.com/users/karrtopelka)
