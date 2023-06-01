@@ -1,8 +1,9 @@
 import { Layout } from '@/components'
-import { Text } from 'native-base'
+import { FeedRequestsContainer } from '@/features/feed/FeedRequestContainer'
+import { RequestType } from '@/types'
 
 export const FeedSupportScreen = (): JSX.Element => (
   <Layout centered={true}>
-    <Text>Feed support screen</Text>
+    <FeedRequestsContainer type={RequestType.COLLECTION} />
   </Layout>
 )

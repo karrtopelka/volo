@@ -1,8 +1,9 @@
 import { Layout } from '@/components'
-import { Text } from 'native-base'
+import { FeedRequestsContainer } from '@/features/feed/FeedRequestContainer'
+import { RequestType } from '@/types'
 
 export const FeedDonationScreen = (): JSX.Element => (
   <Layout centered={true}>
-    <Text>Feed donation screen</Text>
+    <FeedRequestsContainer type={RequestType.FINANCIAL} />
   </Layout>
 )

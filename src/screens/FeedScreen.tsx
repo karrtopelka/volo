@@ -1,16 +1,8 @@
 import { Layout } from '@/components'
-import { Text } from 'native-base'
+import { FeedRequestsContainer } from '@/features/feed/FeedRequestContainer'
 
 export const FeedScreen = (): JSX.Element => (
-  // const { i18n } = useTranslation()
-  // const [params, setParams] = useState<SearchRequestParams>({
-  //   limit: 3,
-  //   offset: 0,
-  //   type: '',
-  //   status: '',
-  // })
-
-  <Layout centered={true}>
-    <Text>Feed screen</Text>
+  <Layout>
+    <FeedRequestsContainer />
   </Layout>
 )
