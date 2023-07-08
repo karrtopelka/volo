@@ -4,8 +4,10 @@
   "account_edit": "Edit",
   "feed": "Feed",
   "feed_all": "All",
-  "feed_donation": "Donation",
-  "feed_support": "Support",
+  "feed_financial": "Financial",
+  "feed_collection": "Collection",
+  "feed_material": "Material",
+  "feed_things": "Things",
   "personalData": "Personal data",
   "interests": "Interests"
 }

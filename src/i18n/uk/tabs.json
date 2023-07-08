@@ -4,8 +4,10 @@
   "account_edit": "Змінити акаунт",
   "feed": "Стрічка",
   "feed_all": "Усі",
-  "feed_donation": "Кошти",
-  "feed_support": "Запити",
+  "feed_financial": "Фінанси",
+  "feed_collection": "Збори",
+  "feed_material": "Матеріальні",
+  "feed_things": "Речі",
   "personalData": "Особисті дані",
   "interests": "Інтереси"
 }
